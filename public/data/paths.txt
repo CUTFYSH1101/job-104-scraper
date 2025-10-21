@@ -1,0 +1,75 @@
+./data\7.5公里內 所有工程師\2025-04-11\analysis_results\keywords.csv
+./data\7.5公里內 所有工程師\2025-04-11\claude\6.8公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-04-11\processing\6.8公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-06-13\analysis_results\keywords.csv
+./data\7.5公里內 所有工程師\2025-06-13\claude\6.8公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-06-13\processing\6.8公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-07-12\analysis_results\keywords.csv
+./data\7.5公里內 所有工程師\2025-07-12\claude\7.5公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-07-12\processing\7.5公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-08-24\analysis_results\keywords.csv
+./data\7.5公里內 所有工程師\2025-08-24\claude\7.5公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-08-24\processing\7.5公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-09-02\analysis_results\keywords.csv
+./data\7.5公里內 所有工程師\2025-09-02\claude\7.5公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-09-02\processing\7.5公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-09-09\analysis_results\keywords.csv
+./data\7.5公里內 所有工程師\2025-09-09\claude\7.5公里內 所有工程師.csv
+./data\7.5公里內 所有工程師\2025-09-09\processing\7.5公里內 所有工程師.csv
+./data\9.6公里內 所有工程師\2025-09-09\analysis_results\keywords.csv
+./data\9.6公里內 所有工程師\2025-09-09\claude\9.6公里內 所有工程師.csv
+./data\9.6公里內 所有工程師\2025-09-09\processing\9.6公里內 所有工程師.csv
+./data\9.6公里內 所有工程師\2025-10-09\analysis_results\keywords.csv
+./data\9.6公里內 所有工程師\2025-10-09\claude\9.6公里內 所有工程師.csv
+./data\9.6公里內 所有工程師\2025-10-09\processing\9.6公里內 所有工程師.csv
+./data\全台中\2025-04-05\analysis_results\keywords.csv
+./data\全台中\2025-04-05\claude\台中市 - AI工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - Android工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - Internet程式設計師.csv
+./data\全台中\2025-04-05\claude\台中市 - iOS工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - MIS程式設計師.csv
+./data\全台中\2025-04-05\claude\台中市 - UI設計師.csv
+./data\全台中\2025-04-05\claude\台中市 - UX設計師.csv
+./data\全台中\2025-04-05\claude\台中市 - 全端工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 其他資訊專業人員.csv
+./data\全台中\2025-04-05\claude\台中市 - 前端工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 後端工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 測試人員.csv
+./data\全台中\2025-04-05\claude\台中市 - 演算法工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 系統分析師.csv
+./data\全台中\2025-04-05\claude\台中市 - 網路管理工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 網頁設計師.csv
+./data\全台中\2025-04-05\claude\台中市 - 資料工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 資料庫管理人員.csv
+./data\全台中\2025-04-05\claude\台中市 - 資訊助理.csv
+./data\全台中\2025-04-05\claude\台中市 - 資訊設備管制人員.csv
+./data\全台中\2025-04-05\claude\台中市 - 軟韌體測試工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 軟體工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 通訊軟體工程師.csv
+./data\全台中\2025-04-05\claude\台中市 - 遊戲企劃.csv
+./data\全台中\2025-04-05\claude\台中市 - 電玩程式設計師.csv
+./data\全台中\2025-04-05\processing\台中市 - AI工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - Android工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - Internet程式設計師.csv
+./data\全台中\2025-04-05\processing\台中市 - iOS工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - MIS程式設計師.csv
+./data\全台中\2025-04-05\processing\台中市 - UI設計師.csv
+./data\全台中\2025-04-05\processing\台中市 - UX設計師.csv
+./data\全台中\2025-04-05\processing\台中市 - 全端工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 其他資訊專業人員.csv
+./data\全台中\2025-04-05\processing\台中市 - 前端工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 後端工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 測試人員.csv
+./data\全台中\2025-04-05\processing\台中市 - 演算法工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 系統分析師.csv
+./data\全台中\2025-04-05\processing\台中市 - 網路管理工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 網頁設計師.csv
+./data\全台中\2025-04-05\processing\台中市 - 資料工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 資料庫管理人員.csv
+./data\全台中\2025-04-05\processing\台中市 - 資訊助理.csv
+./data\全台中\2025-04-05\processing\台中市 - 資訊設備管制人員.csv
+./data\全台中\2025-04-05\processing\台中市 - 軟韌體測試工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 軟體工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 通訊軟體工程師.csv
+./data\全台中\2025-04-05\processing\台中市 - 遊戲企劃.csv
+./data\全台中\2025-04-05\processing\台中市 - 電玩程式設計師.csv

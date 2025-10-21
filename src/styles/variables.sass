@@ -1,0 +1,47 @@
+$gray: #eee
+$blue: #3b82f6
+$dark: #111
+$px10: 10px
+$px20: 20px
+$px30: 30px
+$translucent: 0.6
+$btnBlue: #456ddf
+$btnWhite: #eff6ff
+$infinity: 99999px
+
+=size($w, $h:$w)
+  width: $w
+  height: $h
+
+=absCenter()
+  position: absolute
+  transform: translate(-50%, -50%)
+  left: 50%
+  top: 50%
+
+=absVerticalCenter()
+  position: absolute
+  transform: translateY(-50%)
+  top: 50%
+
+=absHorizontalCenter()
+  position: absolute
+  transform: translateX(-50%)
+  left: 50%
+
+=ripple($c:rgba(white, $translucent))
+  overflow: hidden
+  position: relative
+
+  &:before
+    content: ""
+    display: block
+    background: $c
+    +absCenter
+    +size(0)
+    border-radius: 50%
+    transition: 0.5s ease-in-out
+
+  &:hover
+    &:before
+      +size(300px)

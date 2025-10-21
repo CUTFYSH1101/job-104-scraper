@@ -1,0 +1,33 @@
+@use "@/styles/variables.sass" as var
+
+// 允許子元素定位，如書籤
+=relative()
+  position: relative
+
+// 左側job
+.job
+  width: 400px
+  border: solid 1px var.$gray
+  padding: 20px
+  word-wrap: break-word
+  border-radius: 5px
+  margin: 0 var.$px10 var.$px10 0
+  display: inline-block
+  vertical-align: top
+  font-weight: 600
+  opacity: 0.9
+  +relative()
+
+  &:hover
+    background-color: #ffeedf
+
+.cell
+  display: block
+  margin-bottom: 10px
+
+a
+  text-decoration: none
+  color: #1654b9 !important
+
+  &:hover
+    color: #4e91ff
