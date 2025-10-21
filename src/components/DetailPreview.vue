@@ -105,7 +105,7 @@ export default {
 
       let mode = parseInt(e.key)
       if (mode <= 0) return
-      if (!Object.keys(this.detail)[mode - 1]) return
+      if (!this.detail || !Object.keys(this.detail)[mode - 1]) return
 
       this.modeHidden = false
       this.keyName = Object.keys(this.detail)[mode - 1]

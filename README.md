@@ -1,6 +1,11 @@
 ### 推送到github
 npm install gh-pages --save-dev
 
+git init
+git config --global --add safe.directory 'T:/Programing_RightPath/_WebAndHTML/JS Hahow動畫互動網頁特效入門/4. js/vue-project'
+git remote add origin https://github.com/CUTFYSH1101/job-104-scraper.git
+git pull
+用Fork這款軟體，強制推送master到遠端資料庫origin，所有選項都打勾 詳情看notion教學
 ---
 
 # vue-project

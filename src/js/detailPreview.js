@@ -61,7 +61,8 @@ export function currentDetailPath() {
 }
 
 export async function openDetails() {
-    if (config.oldDetailPath && config.oldDetailPath === currentDetailPath()) return config.oldDetails
+    if (config.oldDetailPath && config.oldDetailPath === currentDetailPath())
+        return config.oldDetails
 
     let details = await utils.loadDetails(currentDetailPath())
     config.oldDetails = details
@@ -80,6 +81,7 @@ function setHoverJob(val) {
 }
 
 export function setCurrentPath(val) {
+    if (utils.isFalsy(val)) console.warn('所設定的新路徑為空')
     config.currentPath = val
 }
 

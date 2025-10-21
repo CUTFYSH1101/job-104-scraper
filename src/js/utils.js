@@ -158,7 +158,7 @@ export async function loadJobs(filepath, onSuccess = filepath => {
 
         // dropna
         jobs = jobs.filter(job => joinDictValues(job, '').trim().length > 0 && job['網址'].trim().length > 0)
-        onSuccess(filepath)
+        onSuccess?.(filepath)
         return jobs
     } catch (e) {
         console.error(e)
