@@ -21,10 +21,14 @@
           {{ tag }}
         </span>
         </div>
-        <div class="cell">關鍵字比例：{{ toPercent(job.skillRate) }}</div>
-        <HorizontalBar :width="toPercent(job.skillRate)"></HorizontalBar>
-        <div class="cell">關鍵字比重：{{ toPercent(job.skillWeight) }}</div>
-        <HorizontalBar :width="toPercent(job.skillWeight)"></HorizontalBar>
+        <div v-if="job.skillRate && job.skillWeight">  <!-- 避免undefined顯示NaN -->
+          <div class="cell">關鍵字比例：{{ toPercent(job.skillRate) }}</div>
+          <HorizontalBar :width="toPercent(job.skillRate)"></HorizontalBar>
+          <div class="cell hint--bottom" :aria-label="job.skillWeightHint">
+            關鍵字比重：{{ toPercent(job.skillWeight) }}
+          </div>
+          <HorizontalBar :width="toPercent(job.skillWeight)"></HorizontalBar>
+        </div>
       </div>
     </div>
     <div v-else>
@@ -44,7 +48,7 @@
 import * as utils from '@/js/utils.js'
 import * as config from '@/js/config.js'
 import Batcher from '@/js/batcher.js'
-import {getTags} from "@/js/utils.js";
+import {getTags, prefixEach} from "@/js/utils.js";
 import HorizontalBar from "@/components/HorizontalBar.vue"
 import {userHoverJob, userLeaveJob} from "@/js/detailPreview.js"
 import Bookmark from "@/components/Bookmark.vue"
@@ -124,26 +128,25 @@ export default {
         let not = this.notKeywords.filter(key => !this.jobIncludesKeyword(job, key))  // 全都不包含算符合一次
         let count = must.length + not.length
         job.skillRate = count / total
-        console.log('rate')
       })
+      console.log('rate')
     },
     // 對這份工作來說，關鍵字佔多重，越重表示這份工作越符合你
     async calcuWeightForeachJob() {
       await batcher.forEach(this.processedJobs, job => {
-        let total = utils.getTags(job).length
+        let total = getTags(job).length
         let must = this.mustKeywords.filter(key => this.jobIncludesKeyword(job, key))
         let not = this.notKeywords.filter(key => this.jobIncludesKeyword(job, key))  // 每有一個就扣分
         let score = must.length - not.length
         if (score < 0) score = 0
         if (score > total) score = total
         job.skillWeight = score / total
-        job.skillWeightHint = `+${must.join('+')}-${not.join('-')}=${score} => ${score}/${total}=${job.skillWeight}`
-        console.log('weight')
+        job.skillWeightHint = `${prefixEach(must, '+')}${prefixEach(not, '-')}=${score} => ${score}/${total}=${job.skillWeight}`
       })
+      console.log('weight')
     },
     // 按照搜尋結果排序
     sortJobs() {
-      console.log('排序工作')
       this.processedJobs.sort((a, b) => {
         if (a.skillRate > b.skillRate) return -1
         else if (a.skillRate < b.skillRate) return 1
@@ -151,6 +154,7 @@ export default {
         else if (a.skillWeight < b.skillWeight) return 1
         else return 0
       })
+      console.log('排序工作')
     },
     async calcuTotalRate() {
       // python佔6成，表示個別關鍵字佔整體市場多少工作

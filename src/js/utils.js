@@ -89,6 +89,10 @@ String.prototype.format = function(args) {
     return result
 }
 
+export function prefixEach(arr, separator) {
+    return isFalsy(arr) ? '' : separator + arr.join(separator)
+}
+
 export function toPercent(f) {
     f *= 100
     f = parseFloat(f.toFixed(2))
