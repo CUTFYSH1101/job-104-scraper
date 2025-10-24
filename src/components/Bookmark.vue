@@ -29,6 +29,7 @@ export default {
   inset: 0
   margin: 0
   box-sizing: border-box
+  z-index: -1  // 避免遮擋原來的a標籤造成無法click
 
   // 跟job圓角一致
   border-radius: 5px
