@@ -1,6 +1,6 @@
 <template>
   <div class="job-search-container">
-    <div>
+    <div class="main-tool">
       <Download :data="filterJobs" format="job" csv-name="job-search.csv" class="float-panel"></Download>
       <div v-show="keyword" class="hint">共{{ filterJobs.length }}筆搜尋結果</div>
     </div>
@@ -130,6 +130,11 @@ export default {
   margin-bottom: 1rem
   +rwd.mobile
     float: left
+
++rwd.mobile
+  .main-tool
+    display: flex
+    flex-direction: column
 </style>
 
 <style lang="sass">
