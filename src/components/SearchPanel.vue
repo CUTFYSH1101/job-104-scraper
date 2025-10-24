@@ -1,5 +1,5 @@
 <template>
-  <div class="font-bold">
+  <div class="font-bold" v-if="!isMobile">
     <div class="float-right ml-5 mb-5">
       <div class="input-wrapper">
         <i class="fa fa-search input-icon opacity-60"></i>
@@ -18,11 +18,31 @@
       </button>
     </div>
   </div>
+
+  <!-- 手機版 -->
+  <div v-else>
+    <div class="input-wrapper">
+      <i class="fa fa-search input-icon opacity-60"></i>
+      <input class="search-input" type="text" v-model="keyword" v-on:keydown.enter="addHistory()"
+             placeholder="例：python django -高級">
+      <button class="search-btn" @click="addHistory()"><i class="fa fa-plus"></i></button>
+    </div>
+    <ChangeOpenFile></ChangeOpenFile>
+    <div>
+      <div class="mt-2 opacity-80">搜尋紀錄</div>
+      <button class="historyBtn opacity-60 cursor-pointer"
+              v-for="history in historyKeywords"
+              @click="keyword = history">
+        {{ history }}
+      </button>
+    </div>
+  </div>
 </template>
 
 <script>
 import {setCookie, getCookie} from '@/js/utils'
 import ChangeOpenFile from '@/components/ChangeOpenFile.vue'
+import {isMobile} from '@/js/rwd.js'
 
 export default {
   components: {ChangeOpenFile},
@@ -50,6 +70,9 @@ export default {
         this.$emit('change', this.keyword)  // keywordJobSearch step 1
       },
     },
+    isMobile() {
+      return isMobile.value
+    }
   },
   mounted() {
     this.historyKeywords = getCookie('historyKeywords')  // 初始化時先載入cookie
@@ -60,6 +83,7 @@ export default {
 
 <style scoped lang="sass">
 @use "@/styles/variables.sass" as var
+@use "@/styles/rwd.sass"
 
 // input
 .input-wrapper
@@ -111,7 +135,7 @@ export default {
     filter: brightness(95%)
 
 // 手機
-@media screen and (max-width: 768px)
++rwd.mobile
   *
     border-color: #ccc !important
   .prompt

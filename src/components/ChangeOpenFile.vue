@@ -9,8 +9,6 @@
 import * as utils from "@/js/utils.js"
 import {setCurrentPath} from "@/js/detailPreview.js"
 
-let paths = await utils.loadText('./data/paths.txt')
-
 export default {
   data() {
     return {
@@ -18,7 +16,9 @@ export default {
       currentPath: '',
     }
   },
-  mounted() {
+  async mounted() {
+    // isMobile 改變會重建元件並重新執行 mounted，但外層 script 不會重載，所以必須在 mounted 指派
+    let paths = await utils.loadText('./data/paths.txt')
     paths = paths.split(/\r?\n/)
     this.thePathsHavingKeyword = paths.filter(path => path.includes('claude'))
   },

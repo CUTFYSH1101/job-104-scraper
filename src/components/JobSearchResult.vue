@@ -122,9 +122,14 @@ export default {
 <style scoped lang="sass" src="@/styles/jobs.sass"></style>
 
 <style scoped lang="sass">
+@use "@/styles/rwd"
+
 .float-panel
-  position: absolute
-  right: 2rem
+  float: right
+  margin-right: 2rem
+  margin-bottom: 1rem
+  +rwd.mobile
+    float: left
 </style>
 
 <style lang="sass">
