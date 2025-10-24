@@ -1,7 +1,7 @@
 <template>
   <div class="keyword-coverage">
     <div v-if="!isKeywordEmpty">
-      <div class="analysis lineBlock mb-5">
+      <div class="analysis line-block mb-5">
         <div v-for="[key, value] in Object.entries(skillRateDict)" class="analysis-cell">
           {{ key }}佔{{ toPercent(value) }}
           <HorizontalBar :width="toPercent(value)"></HorizontalBar>
@@ -15,7 +15,7 @@
         <Bookmark :job="job"></Bookmark>
         <a class="cell" :href="job.網址" target="_blank">{{ job.工作名稱 }}</a>
         <div class="cell">
-        <span class="inlineBlock"
+        <span class="inline-block"
               v-for="tag in getTags(job)"
               :class="{highlight: tagInKeywords(tag)}">
           {{ tag }}
@@ -33,7 +33,7 @@
         <Bookmark :job="job"></Bookmark>
         <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class="cell">
-          <span class="inlineBlock" v-for="tag in getTags(job)">{{ tag }}</span>
+          <span class="inline-block" v-for="tag in getTags(job)">{{ tag }}</span>
         </div>
       </div>
     </div>
@@ -220,7 +220,7 @@ export default {
 <style lang="sass">
 @use "@/styles/variables.sass" as var
 
-.keyword-coverage .inlineBlock
+.keyword-coverage .inline-block
   display: inline-block
   padding: 5px 10px
   margin: 5px

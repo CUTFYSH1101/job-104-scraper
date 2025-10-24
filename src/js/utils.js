@@ -49,6 +49,10 @@ export function count(arr, func) {
     return arr.filter(func).length
 }
 
+export function insert(arr, index, value) {
+    return arr.toSpliced(index, 0, value)
+}
+
 export function sum(arr) {
     return arr.reduce((acc, cur) => acc + cur, 0)
 }

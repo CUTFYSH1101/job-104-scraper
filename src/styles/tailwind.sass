@@ -1,0 +1,24 @@
+// tailwind spacing，例如p-5表示padding: calc(var(--spacing) * <number>)
+$spacing: 0.25rem
+=ml($n)
+  margin-left: $spacing * $n
+
+=mr($n)
+  margin-right: $spacing * $n
+
+=mt($n)
+  margin-top: $spacing * $n
+
+=mb($n)
+  margin-bottom: $spacing * $n
+
+=mx($n)
+  margin-left: $spacing * $n
+  margin-right: $spacing * $n
+
+=my($n)
+  margin-top: $spacing * $n
+  margin-bottom: $spacing * $n
+
+=m($n)
+  margin: $spacing * $n

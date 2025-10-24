@@ -1,7 +1,7 @@
 <template>
-  <div class="font-bold" v-if="!isMobile">
-    <div class="float-right ml-5 mb-5">
-      <div class="input-wrapper">
+  <div class="font-bold top-panel">
+    <div class="tool-panel">  <!-- 工具區 -->
+      <div class="input-wrapper">  <!-- 搜尋框 -->
         <i class="fa fa-search input-icon opacity-60"></i>
         <input class="search-input" type="text" v-model="keyword" v-on:keydown.enter="addHistory()"
                placeholder="例：python django -高級">
@@ -9,28 +9,9 @@
       </div>
       <ChangeOpenFile></ChangeOpenFile>
     </div>
-    <div>
-      <div class="mt-2 opacity-80 inline-block">搜尋紀錄</div>
-      <button class="historyBtn opacity-60 cursor-pointer inline-block"
-              v-for="history in historyKeywords"
-              @click="keyword = history">
-        {{ history }}
-      </button>
-    </div>
-  </div>
-
-  <!-- 手機版 -->
-  <div v-else>
-    <div class="input-wrapper">
-      <i class="fa fa-search input-icon opacity-60"></i>
-      <input class="search-input" type="text" v-model="keyword" v-on:keydown.enter="addHistory()"
-             placeholder="例：python django -高級">
-      <button class="search-btn" @click="addHistory()"><i class="fa fa-plus"></i></button>
-    </div>
-    <ChangeOpenFile></ChangeOpenFile>
-    <div>
-      <div class="mt-2 opacity-80">搜尋紀錄</div>
-      <button class="historyBtn opacity-60 cursor-pointer"
+    <div class="history-panel">  <!-- 搜尋紀錄 -->
+      <div class="m-2 opacity-80 inline-block">搜尋紀錄</div>
+      <button class="m-1 history-btn opacity-60 cursor-pointer inline-block"
               v-for="history in historyKeywords"
               @click="keyword = history">
         {{ history }}
@@ -40,25 +21,25 @@
 </template>
 
 <script>
-import {setCookie, getCookie} from '@/js/utils'
+import { setCookie, getCookie, insert } from '@/js/utils'
 import ChangeOpenFile from '@/components/ChangeOpenFile.vue'
-import {isMobile} from '@/js/rwd.js'
 
 export default {
-  components: {ChangeOpenFile},
+  components: { ChangeOpenFile },
   data() {
     return {
       localKeyword: '',
-      historyKeywords: [],
+      historyKeywords: []
     }
   },
   methods: {
     addHistory() {
-      this.historyKeywords.push(this.localKeyword)
+      this.historyKeywords = insert(this.historyKeywords, 0, this.localKeyword)  // pushFirst
       this.historyKeywords = [...new Set(this.historyKeywords)]
+      this.historyKeywords = this.historyKeywords.slice(0, 20)  // 限制在20筆以內
       this.localKeyword = ''
       setCookie('historyKeywords', this.historyKeywords)
-    },
+    }
   },
   computed: {
     keyword: {
@@ -68,24 +49,27 @@ export default {
       set(val) {
         this.localKeyword = val
         this.$emit('change', this.keyword)  // keywordJobSearch step 1
-      },
-    },
-    isMobile() {
-      return isMobile.value
+      }
     }
   },
   mounted() {
     this.historyKeywords = getCookie('historyKeywords')  // 初始化時先載入cookie
     if (!this.historyKeywords) this.historyKeywords = []
-  },
+  }
 }
 </script>
 
 <style scoped lang="sass">
 @use "@/styles/variables.sass" as var
 @use "@/styles/rwd.sass"
+@use "@/styles/tailwind.sass" as tw
 
-// input
+.tool-panel
+  float: right
+  +tw.ml(5)
+  +tw.mb(5)
+
+// <editor-fold desc="搜尋框">
 .input-wrapper
   position: relative
 
@@ -123,24 +107,30 @@ export default {
 
   &:focus, &:active
     border: solid 1px var.$dark
+// </editor-fold>
 
-.historyBtn
+// <editor-fold desc="歷史紀錄">
+.history-btn
   border: solid 1px var.$gray
   background-color: white
   border-radius: var.$infinity
   padding: 0.5rem 1rem
-  margin: 5px
 
   &:hover
     filter: brightness(95%)
+// </editor-fold>
 
 // 手機
 +rwd.mobile
   *
     border-color: #ccc !important
-  .prompt
-    flex-direction: column !important
-  .historyBtn
+  .top-panel
+    display: flex
+    flex-direction: column
+  .tool-panel
+    float: left
+    margin-left: initial
+  .history-btn
     border: none
     color: black
     background-color: var.$gray

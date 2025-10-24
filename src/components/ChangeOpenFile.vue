@@ -44,9 +44,10 @@ export default {
 
 <style scoped lang="sass">
 @use "@/styles/variables.sass" as var
+@use "@/styles/rwd.sass"
+@use "@/styles/tailwind.sass" as tw
 
 .select
-  position: absolute
   margin: var.$px20
   padding: var.$px10 var.$px20
   font-size: 14px
@@ -65,4 +66,8 @@ export default {
     padding: var.$px10
     border-bottom: solid 2px var.$gray
     border-radius: var.$infinity
+
++rwd.mobile
+  .select
+    margin-left: initial
 </style>
