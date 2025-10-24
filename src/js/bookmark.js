@@ -2,9 +2,20 @@ import {ref} from 'vue'  // reactive只能用於物件陣列, ref使用時要加
 import {setLocalStorage, getLocalStorage} from "@/js/utils.js"  // 永久保存我的最愛
 
 let bookmark = ref({})  // 變更時觸發Vue更新畫面
+let colorMap = [
+  'hsl(0,95%,65%)',
+  'hsl(27,95%,65%)',
+  'hsl(55,95%,65%)',
+  'hsl(135,95%,65%)',
+  'hsl(220,95%,65%)',
+  'hsl(245,95%,65%)',
+  'hsl(270,95%,65%)']
+
+export function getColorMap() {
+  return colorMap
+}
 
 function setBookmark(jobHref, index) {
-    let colorMap = ['purple', 'blue', 'green', 'orange']
     if (index < 0 || index >= colorMap.length) return
     bookmark.value[jobHref] = colorMap[index]
     setLocalStorage('bookmark', bookmark.value)
@@ -45,4 +56,4 @@ export function stopListening() {
 if (getLocalStorage('bookmark') !== null)
     bookmark.value = getLocalStorage('bookmark')
 
-export default {getBookmark, startListening, stopListening}
+export default {getBookmark, startListening, stopListening, getColorMap}

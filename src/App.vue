@@ -20,6 +20,11 @@
                 @click="activeTab='skillRecommend'">
           <i class="fas fa-pie-chart h-4 w-4"></i> 相關技能(1+1/1+2/1+3)
         </button>
+        <button class="tab"
+                :class="{active: activeTab==='bookmark'}"
+                @click="activeTab='bookmark'">
+          <i class="fas fa-star h-4 w-4"></i> 書籤清單
+        </button>
       </div>
       <hr>
       <div class="block">
@@ -40,6 +45,7 @@ import JobSearchResult from "@/components/JobSearchResult.vue"
 import KeywordCoverageResult from "@/components/KeywordCoverageResult.vue"
 import SkillRecommendResult from "@/components/SkillRecommendResult.vue"
 import DetailPreview from "@/components/DetailPreview.vue"
+import BookmarkResult from '@/components/BookmarkResult.vue'
 
 export default {
   components: {
@@ -48,12 +54,13 @@ export default {
     KeywordCoverageResult,
     SkillRecommendResult,
     DetailPreview,
+    BookmarkResult,
   },
   data() {
     return {
       jobs: [],
       keyword: '',
-      tabs: ['jobSearch', 'keywordCoverage', 'skillRecommend'],
+      tabs: ['jobSearch', 'keywordCoverage', 'skillRecommend', 'bookmark'],
       activeTab: 'jobSearch',
     }
   },
