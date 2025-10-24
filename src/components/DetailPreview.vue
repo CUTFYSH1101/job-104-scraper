@@ -2,7 +2,7 @@
   <transition name="fade" mode="out-in">  <!-- 套用動畫 -->
     <div class="job-preview"
          @wheel.prevent="zoom"
-         v-if="!hidden && !modeHidden"
+         v-if="!hidden && !modeHidden && !isMobile"
          @mousemove="showDetail"
          @mouseleave="hideDetail">  <!-- 移動和縮放 -->
       <div v-if="includesDetail">  <!-- 內容用一個div裝著 -->
@@ -19,6 +19,7 @@ import {hoverJobDetail, config, updateBodyWidthHeight, showDetail, hideDetail} f
 import {dictIncludes} from '@/js/utils.js'
 import Satisfied from "@/js/satisfied.js"
 import {setCookie, getCookie} from "@/js/utils.js"
+import {isMobile} from '@/js/rwd.js'
 
 export default {
   data() {
@@ -72,7 +73,7 @@ export default {
       this.assignStyle()
     },
     assignStyle() {
-      if (this.hidden || this.modeHidden) return
+      if (this.hidden || this.modeHidden || this.isMobile) return
       this.contentDomElement = this.$el.querySelector('p:not(.salary)')
       if (!this.contentDomElement) return
 
@@ -120,6 +121,7 @@ export default {
       if (this.contentLength >= content.length) return content
       else return content.slice(0, this.contentLength) + '...'
     },
+    isMobile,
   },
   watch: {
     domElement(newVal) {
@@ -132,6 +134,8 @@ export default {
               top: y + 'px',
             })
         config.onSetPos = async pos => {
+          if (this.isMobile) return
+
           if (this.init && this.modeHidden) {
             await this.$nextTick()
             await this.loadDetail()
