@@ -32,11 +32,8 @@
           <component :is="activeTab + 'Result'" :keyword="keyword" :jobs="jobs"></component>
         </keep-alive>
       </div>
-      <DetailPreviewMobile v-if="isMobile"></DetailPreviewMobile>
-      <DetailPreview v-else></DetailPreview>
     </main>
     <footer class="page-footer bg-stone-300 text-stone-700">© Elico.org - 版權所有</footer>
-    <Padding v-if="isMobile"></Padding>
   </div>
 </template>
 
@@ -45,11 +42,7 @@ import SearchPanel from '@/components/SearchPanel.vue'
 import JobSearchResult from '@/components/JobSearchResult.vue'
 import KeywordCoverageResult from '@/components/KeywordCoverageResult.vue'
 import SkillRecommendResult from '@/components/SkillRecommendResult.vue'
-import DetailPreview from '@/components/DetailPreview.vue'
-import DetailPreviewMobile from '@/components/DetailPreviewMobile.vue'
-import Padding from '@/components/BlankPadding.vue'
 import BookmarkResult from '@/components/BookmarkResult.vue'
-import { isMobile } from '@/js/rwd.js'
 import { jobs } from '@/js/jobsLoader.js'
 
 export default {
@@ -58,9 +51,6 @@ export default {
     JobSearchResult,
     KeywordCoverageResult,
     SkillRecommendResult,
-    DetailPreview,
-    DetailPreviewMobile,
-    Padding,
     BookmarkResult,
   },
   data() {
@@ -76,7 +66,6 @@ export default {
     },
   },
   computed: {
-    isMobile,
     jobs,
   },
 }
