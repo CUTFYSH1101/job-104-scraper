@@ -50,11 +50,8 @@ export default {
 @use "@/styles/tailwind" as tw
 
 .container
-  position: fixed
-  left: 0
-  bottom: 0
   +var.size(calc(100dvw - #{tw.$spacing * 4}), 50vh)
-  padding: 0
+  padding: 0  // 貼邊
   box-sizing: border-box
 
 .job-preview

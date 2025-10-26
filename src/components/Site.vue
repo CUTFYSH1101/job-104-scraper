@@ -77,7 +77,6 @@ export default {
 @use "@/styles/variables" as var
 // 讓頁腳footer固定在底部，無論main高度如何
 .site
-  min-height: 100dvh
   display: grid
   grid-template-rows: auto 1fr auto
   grid-template-columns: minmax(0, 1fr)

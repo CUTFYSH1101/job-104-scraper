@@ -1,7 +1,7 @@
 <template>
   <div class="split-screen">
-    <Site></Site>
-    <DetailPreviewMobile v-if="isMobile"></DetailPreviewMobile>
+    <Site class="site"></Site>
+    <DetailPreviewMobile v-if="isMobile" class="detail"></DetailPreviewMobile>
     <DetailPreview v-else></DetailPreview>
   </div>
 </template>
@@ -23,3 +23,18 @@ export default {
   },
 }
 </script>
+
+<style scoped lang="sass">
+.split-screen
+  display: flex
+  flex-direction: column
+  height: 100vh
+  overflow: hidden  // 隱藏原本整個畫面的滾動軸
+.site
+  flex: 1
+  overflow-y: auto  // 只在該範圍顯示滾動軸
+.detail
+  flex: 50vh
+  flex-grow: 0
+  flex-shrink: 0
+</style>
