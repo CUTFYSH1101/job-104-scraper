@@ -50,6 +50,7 @@ import DetailPreviewMobile from '@/components/DetailPreviewMobile.vue'
 import Padding from '@/components/BlankPadding.vue'
 import BookmarkResult from '@/components/BookmarkResult.vue'
 import { isMobile } from '@/js/rwd.js'
+import { jobs } from '@/js/jobsLoader.js'
 
 export default {
   components: {
@@ -64,7 +65,6 @@ export default {
   },
   data() {
     return {
-      jobs: [],
       keyword: '',
       tabs: ['jobSearch', 'keywordCoverage', 'skillRecommend', 'bookmark'],
       activeTab: 'jobSearch',
@@ -77,6 +77,7 @@ export default {
   },
   computed: {
     isMobile,
+    jobs,
   },
 }
 </script>

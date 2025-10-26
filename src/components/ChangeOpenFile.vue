@@ -7,7 +7,7 @@
 
 <script>
 import * as utils from '@/js/utils.js'
-import { setCurrentPath } from '@/js/detailPreview.js'
+import { loadAndSetJobs } from '@/js/jobsLoader.js'
 
 export default {
   data() {
@@ -31,9 +31,7 @@ export default {
     async currentPath(newVal) {
       let currentPath = newVal.replace(/\\/g, '/')  // 避免watch被觸發兩次，不使用this.去重複賦值
       try {
-        let jobs = await utils.loadJobs(currentPath, setCurrentPath)
-        if (jobs && jobs.length > 0)
-          window.vm.jobs = jobs
+        await loadAndSetJobs(currentPath)
       } catch {
         console.error('檔案路徑不存在')
       }
