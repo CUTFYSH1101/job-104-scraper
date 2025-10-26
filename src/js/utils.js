@@ -42,7 +42,7 @@ export function includes(str, compare) {
  */
 export function dictIncludes(dict, compare) {
   if (isFalsy(dict)) return false
-  return Object.keys(dict).includes(compare)
+  return Object.keys(dict).includes(compare)  // `compare in dict`也可
 }
 
 export function count(arr, func) {

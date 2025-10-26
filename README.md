@@ -1,3 +1,45 @@
+### 找不到App.vue檔案
+
+```commandline
+Failed to resolve import "@/App.vue" from "src/main.js". Does the file exist?
+```
+
+```commandline
+Failed to parse source for import analysis because the content contains invalid JS syntax. Install @vitejs/plugin-vue to handle .vue files.
+```
+
+##### 造成問題的原因：
+
+有進程占用了 5173 這個 port 導致 Vue 自動切到 5174，也就是說 `http://localhost:5173/` 連不到，要改成 `http://localhost:5174/`
+
+##### 解決方式：
+
+1. 重啟環境`npm run dev`後點選新網址
+2. 關閉占用5173的進程
+
+二擇一，以下是關閉占用進程的方法
+
+```commandline
+# 查看誰在使用 5173 port
+netstat -ano | findstr :5173
+
+# 會看到類似這樣的輸出：
+# TCP    0.0.0.0:5173    0.0.0.0:0    LISTENING    12345
+# 最後的數字（12345）就是 Process ID (PID)
+
+# 關閉該進程（用上面查到的 PID）
+taskkill /PID 12345 /F
+```
+
+或是關閉全部進程
+
+```commandline
+# 一次關閉所有 Node.js 進程
+taskkill /IM node.exe /F
+```
+
+---
+
 ### 推送到github
 
 npm install gh-pages --save-dev
