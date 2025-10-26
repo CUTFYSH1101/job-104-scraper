@@ -40,11 +40,11 @@
 </template>
 
 <script>
-import SearchPanel from "@/components/SearchPanel.vue"
-import JobSearchResult from "@/components/JobSearchResult.vue"
-import KeywordCoverageResult from "@/components/KeywordCoverageResult.vue"
-import SkillRecommendResult from "@/components/SkillRecommendResult.vue"
-import DetailPreview from "@/components/DetailPreview.vue"
+import SearchPanel from '@/components/SearchPanel.vue'
+import JobSearchResult from '@/components/JobSearchResult.vue'
+import KeywordCoverageResult from '@/components/KeywordCoverageResult.vue'
+import SkillRecommendResult from '@/components/SkillRecommendResult.vue'
+import DetailPreview from '@/components/DetailPreview.vue'
 import BookmarkResult from '@/components/BookmarkResult.vue'
 
 export default {

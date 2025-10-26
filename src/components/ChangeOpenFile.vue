@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import * as utils from "@/js/utils.js"
-import {setCurrentPath} from "@/js/detailPreview.js"
+import * as utils from '@/js/utils.js'
+import { setCurrentPath } from '@/js/detailPreview.js'
 
 export default {
   data() {

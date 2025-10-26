@@ -20,21 +20,21 @@ export default {
       this.jobToData()
       if (!this.processedData || this.processedData.length === 0) return
 
-      let csvString = ""
+      let csvString = ''
       this.processedData.forEach(row => {
         row.forEach(cell => {
           if (cell === undefined || cell === null) return
           if (utils.includes(cell, ','))
             cell = '"' + cell + '"'
-          csvString += cell + ","
+          csvString += cell + ','
         })
-        csvString += "\r\n"
+        csvString += '\r\n'
       })
 
-      csvString = "data:application/csv," + encodeURIComponent('\ufeff' + csvString)
-      let anchor = document.createElement("a")
-      anchor.setAttribute("href", csvString)
-      anchor.setAttribute("download", this.csvName)
+      csvString = 'data:application/csv,' + encodeURIComponent('\ufeff' + csvString)
+      let anchor = document.createElement('a')
+      anchor.setAttribute('href', csvString)
+      anchor.setAttribute('download', this.csvName)
       document.body.appendChild(anchor)
       anchor.click()
     },

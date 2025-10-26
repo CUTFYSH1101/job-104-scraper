@@ -48,16 +48,16 @@
 import * as utils from '@/js/utils.js'
 import * as config from '@/js/config.js'
 import Batcher from '@/js/batcher.js'
-import {getTags, prefixEach} from "@/js/utils.js";
-import HorizontalBar from "@/components/HorizontalBar.vue"
-import {userHoverJob, userLeaveJob} from "@/js/detailPreview.js"
-import Bookmark from "@/components/Bookmark.vue"
+import { getTags, prefixEach } from '@/js/utils.js'
+import HorizontalBar from '@/components/HorizontalBar.vue'
+import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
+import Bookmark from '@/components/Bookmark.vue'
 
 let batcher = new Batcher()
 batcher.batch = 10
 
 export default {
-  name: "KeywordCoverageResult",
+  name: 'KeywordCoverageResult',
   components: {
     Bookmark,
     HorizontalBar,
@@ -194,7 +194,7 @@ export default {
       // 檢查別名
       for (let key of this.mustKeywords)
         if (config.keywordAliases[key] &&
-            config.keywordAliases[key].some(alias => tag.toLowerCase() === alias))
+          config.keywordAliases[key].some(alias => tag.toLowerCase() === alias))
           return true
 
       return this.mustKeywords.includes(tag.toLowerCase())

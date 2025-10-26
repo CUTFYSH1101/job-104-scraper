@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import {getBookmark, startListening, stopListening} from '@/js/bookmark.js'
+import { getBookmark, startListening, stopListening } from '@/js/bookmark.js'
 
 export default {
   props: ['job'],

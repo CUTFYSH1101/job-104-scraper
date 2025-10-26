@@ -15,11 +15,11 @@
   </transition>
 </template>
 <script>
-import {hoverJobDetail, config, updateBodyWidthHeight, showDetail, hideDetail} from '@/js/detailPreview.js'
-import {dictIncludes} from '@/js/utils.js'
-import Satisfied from "@/js/satisfied.js"
-import {setCookie, getCookie} from "@/js/utils.js"
-import {isMobile} from '@/js/rwd.js'
+import { hoverJobDetail, config, updateBodyWidthHeight, showDetail, hideDetail } from '@/js/detailPreview.js'
+import { dictIncludes } from '@/js/utils.js'
+import Satisfied from '@/js/satisfied.js'
+import { setCookie, getCookie } from '@/js/utils.js'
+import { isMobile } from '@/js/rwd.js'
 
 export default {
   data() {
@@ -129,10 +129,10 @@ export default {
       })
       else {
         let assignPos = (x, y) =>
-            Object.assign(this.domElement.style, {
-              left: x + 'px',
-              top: y + 'px',
-            })
+          Object.assign(this.domElement.style, {
+            left: x + 'px',
+            top: y + 'px',
+          })
         config.onSetPos = async pos => {
           if (this.isMobile) return
 
@@ -187,7 +187,7 @@ export default {
   },
   mounted() {
     config.onHideDetail = () => this.hidden = true
-    config.onShowDetail = async () => {
+    config.onShowDetail = async() => {
       this.hidden = false
       await this.$nextTick()  // 等待vue元素載入完成，才不會undefined
       this.domElement = this.$el

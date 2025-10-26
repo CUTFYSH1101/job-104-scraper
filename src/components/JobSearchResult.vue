@@ -16,13 +16,13 @@
 </template>
 
 <script>
-import Download from "@/components/Download.vue"
-import * as utils from "@/js/utils.js"
-import {userHoverJob, userLeaveJob} from "@/js/detailPreview.js"
-import Bookmark from "@/components/Bookmark.vue"
+import Download from '@/components/Download.vue'
+import * as utils from '@/js/utils.js'
+import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
+import Bookmark from '@/components/Bookmark.vue'
 
 export default {
-  name: "JobSearchResult",
+  name: 'JobSearchResult',
   components: {
     Download,
     Bookmark,
@@ -42,10 +42,10 @@ export default {
         if (keyword.includes('-')) {
           let keyword_ = keyword.toLowerCase().split(/\s+/)
           let must = keyword_
-              .filter(key => key.charAt(0) !== '-')
+            .filter(key => key.charAt(0) !== '-')
           let not = keyword_
-              .filter(key => key.charAt(0) === '-')
-              .map(key => key.substring(1))
+            .filter(key => key.charAt(0) === '-')
+            .map(key => key.substring(1))
           return this.jobs.filter(job => {
             let content = utils.getContent(job).toLowerCase()
             if (!must.every(word => content.includes(word))) return false
@@ -65,15 +65,15 @@ export default {
       // 只有一個負面關鍵字
       if (keyword.includes('-'))
         return this.jobs.filter(job =>
-            !utils.getContent(job)
-                .toLowerCase()
-                .includes(keyword.toLowerCase()))
+          !utils.getContent(job)
+            .toLowerCase()
+            .includes(keyword.toLowerCase()))
 
       // 只有一個正向關鍵字
       return this.jobs.filter(job =>
-          utils.getContent(job)
-              .toLowerCase()
-              .includes(keyword.toLowerCase()))
+        utils.getContent(job)
+          .toLowerCase()
+          .includes(keyword.toLowerCase()))
     },
   },
   methods: {
