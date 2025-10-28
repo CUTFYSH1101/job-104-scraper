@@ -15,6 +15,7 @@
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
 import { dictIncludes } from '@/js/utils.js'
 import { start, update, stop, config as teConfig } from '@/js/touchEvent.js'
+import Vec2 from '@/js/vec2.js'
 
 export default {
   data() {
@@ -24,6 +25,7 @@ export default {
       contentLength: 50,
 
       dragging: false,
+      startsAtBottom: true,
     }
   },
   computed: {
@@ -60,9 +62,11 @@ export default {
         '永結無情遊，相期邈雲漢。'
     }
 
+    let pressPos = new Vec2(0, 0)
     teConfig.onLongPress = (p1, p2) => {
       console.log('長按', p1.toString(), p2.toString())
       this.dragging = true
+      pressPos.set(p1.x, p1.y)
     }
     teConfig.onStop = (p1, p2) => {
       console.log('停在', p1.toString(), p2.toString())
@@ -71,16 +75,22 @@ export default {
         left: 0,
         top: 0,
         height: '100%',
+        transform: 'initial',
       })
+      this.dragging = false
     }
     teConfig.onUpdate = (p1, p2) => {
+      if (!this.dragging) return
       console.log('更新座標', p1.toString(), p2.toString())
       let pos = p1.clone()
       let h = this.$refs['drag-preview'].offsetHeight
-      let scale = 1
+      // 「從原本被按住的地方」跟著手指拖曳
+      pos.x -= pressPos.x
+      pos.y -= this.startsAtBottom ? (pressPos.y - h) : (pressPos.y)
       // 正負20%內產生吸附的感覺
-      if (pos.y >= h * 1.2) pos.y = h
-      else if (pos.y <= h * 0.8) pos.y = 0
+      let scale = 1
+      if (p1.y <= h * 0.8 && teConfig.isPanUp()) pos.set(0, 0)
+      else if (p1.y >= h * 1.2 && teConfig.isPanDown()) pos.set(0, h)
       else scale = 0.9
       Object.assign(this.$refs['drag-preview'].style, {
         position: 'fixed',
@@ -107,14 +117,13 @@ export default {
   +var.size(100%, 100%)
   padding: var.$px10
   background-color: white
-  box-sizing: border-box
   position: relative
 
 .drag-preview
-  +var.size(100%, 100%)
+  +var.size(100%, 100%)  // 不含margin、padding的部分
   background-color: rgba(orange, 0.4)
   z-index: 1
   position: absolute
-  left: 0
+  left: 0  // 設置到左上角無視padding
   top: 0
 </style>

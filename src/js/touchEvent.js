@@ -27,6 +27,8 @@ export let config = {
   },
   onUpdate: (p1, p2) => {
   },
+  isPanUp: () => p1.y < oldP1.y,
+  isPanDown: () => p1.y > oldP1.y,
 }
 
 export function start(e) {
@@ -36,14 +38,14 @@ export function start(e) {
   updatePos(e)  // 開始時更新座標
   listener = setTimeout(() => {
     updatePos(e)  // 時間到時更新座標，偵測是否還在原地
-    if (!isMoving()) config.onLongPress?.(p1, p2)
+    if (!isPanning()) config.onLongPress?.(p1, p2)
   }, timeoutMs)
 }
 
 export function update(e) {
   updatePos(e)
   config.onUpdate?.(p1, p2)  // 更新座標後再把座標傳給事件
-  if (listener && isMoving()) clearTimeout(listener)  // 更新座標後發現移動了就停止監聽
+  if (listener && isPanning()) clearTimeout(listener)  // 更新座標後發現移動了就停止監聽
 }
 
 export function stop() {
@@ -54,7 +56,7 @@ export function stop() {
   config.onStop?.(p1, p2)
 }
 
-function isMoving() {
+function isPanning() {
   return Vec2.distance(oldP1, p1) >= moveThresholdPx
 }
 
