@@ -31,6 +31,7 @@ export function useTouchEvent() {
   }
 
   function start(e) {
+    e.preventDefault()
     if (listener) clearTimeout(listener)
     hasStopped = false
 
@@ -42,6 +43,7 @@ export function useTouchEvent() {
   }
 
   function update(e) {
+    e.preventDefault()
     updatePos(e)
     config.onUpdate?.(p1, p2)  // 更新座標後再把座標傳給事件
     if (listener && isPanning()) clearTimeout(listener)  // 更新座標後發現移動了就停止監聽
