@@ -6,6 +6,7 @@
         <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
         <p v-html="slicedContent"></p>
       </div>
+      <div class="drag-preview" ref="drag-preview"></div>
     </div>
   </div>
 </template>
@@ -13,7 +14,7 @@
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
 import { dictIncludes } from '@/js/utils.js'
-import { start, update, stop, config } from '@/js/touchEvent.js'
+import { start, update, stop, config as teConfig } from '@/js/touchEvent.js'
 
 export default {
   data() {
@@ -59,15 +60,28 @@ export default {
         '永結無情遊，相期邈雲漢。'
     }
 
-    config.onLongPress = (p1, p2) => {
+    teConfig.onLongPress = (p1, p2) => {
       console.log('長按', p1.toString(), p2.toString())
       this.dragging = true
     }
-    config.onStop = (p1, p2) => {
+    teConfig.onStop = (p1, p2) => {
       console.log('停在', p1.toString(), p2.toString())
+      Object.assign(this.$refs['drag-preview'].style, {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        height: '100%',
+      })
     }
-    config.onUpdate = (p1, p2) => {
+    teConfig.onUpdate = (p1, p2) => {
       console.log('更新座標', p1.toString(), p2.toString())
+      let pos = p1
+      Object.assign(this.$refs['drag-preview'].style, {
+        position: 'fixed',
+        left: pos.x + 'px',
+        top: pos.y + 'px',
+        height: '50vh',  // 仿App.vue裡給.detail的高度
+      })
     }
   },
 }
@@ -78,12 +92,22 @@ export default {
 @use "@/styles/tailwind" as tw
 
 .container
-  +var.size(calc(100dvw - #{tw.$spacing * 4}), 50vh)
+  +var.size(100dvw, 50vh)
   padding: 0  // 貼邊
   box-sizing: border-box
 
 .job-preview
   +var.size(100%, 100%)
+  padding: var.$px10
   background-color: white
   box-sizing: border-box
+  position: relative
+
+.drag-preview
+  +var.size(100%, 100%)
+  background-color: rgba(orange, 0.4)
+  z-index: 1
+  position: absolute
+  left: 0
+  top: 0
 </style>
