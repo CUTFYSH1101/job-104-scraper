@@ -1,7 +1,7 @@
 <template>
-  <div class="container" v-on="touchHandlers">  <!-- 用flexbox和order決定拉桿和內容顯示前後 -->
-    <hr class="adjust-pos-bar">  <!-- 拉桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
-    <div class="job-preview">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
+  <div class="container">  <!-- 用flexbox和order決定拉桿和內容顯示前後 -->
+    <div class="resize-slider" v-on="sliderHandlers"></div>  <!-- 拉桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
+    <div class="job-preview" v-on="orderHandlers">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
       <div v-if="detail">
         <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
         <p v-html="slicedContent"></p>
@@ -19,7 +19,8 @@ import { useTouchEvent } from '@/js/touchEvent.js'
 import Vec2 from '@/js/vec2.js'
 import { config as coConfig } from '@/js/changeOrder.js'
 
-let touchDetail = useTouchEvent()
+let orderTouch = useTouchEvent()
+let sliderTouch = useTouchEvent()
 
 export default {
   data() {
@@ -39,12 +40,20 @@ export default {
       else return content.slice(0, this.contentLength) + '...'
     },
 
-    touchHandlers() {
+    orderHandlers() {
       return {
-        touchstart: touchDetail.start,
-        touchmove: touchDetail.update,
-        touchend: touchDetail.stop,
-        touchcancel: touchDetail.stop,
+        touchstart: orderTouch.start,
+        touchmove: orderTouch.update,
+        touchend: orderTouch.stop,
+        touchcancel: orderTouch.stop,
+      }
+    },
+    sliderHandlers() {
+      return {
+        touchstart: sliderTouch.start,
+        touchmove: sliderTouch.update,
+        touchend: sliderTouch.stop,
+        touchcancel: sliderTouch.stop,
       }
     },
   },
@@ -66,25 +75,11 @@ export default {
     }
 
     let pressPos = new Vec2(0, 0)
-    touchDetail.config.onLongPress = (p1, p2) => {
+    orderTouch.config.onLongPress = (p1, p2) => {
       this.dragging = true
       pressPos.set(p1.x, p1.y)
     }
-    touchDetail.config.onStop = (p1, p2) => {
-      if (!this.dragging) return
-      this.dragging = false
-      Object.assign(this.$refs['drag-preview'].style, {
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        height: '100%',
-        transform: 'initial',
-      })
-      coConfig.order = coConfig.endsAtBottom ? 'initial' : -1
-      coConfig.startsAtBottom = coConfig.endsAtBottom
-      setCookie('startsAtBottom', coConfig.startsAtBottom)
-    }
-    touchDetail.config.onUpdate = (p1, p2) => {
+    orderTouch.config.onUpdate = (p1, p2) => {
       if (!this.dragging) return
       let pos = p1.clone()
       let h = this.$refs['drag-preview'].offsetHeight
@@ -109,6 +104,30 @@ export default {
         height: '50vh',  // 仿App.vue裡給.detail的高度
         transform: `scale(${scale})`,
       })
+    }
+    orderTouch.config.onStop = (p1, p2) => {
+      if (!this.dragging) return
+      this.dragging = false
+      Object.assign(this.$refs['drag-preview'].style, {
+        position: 'absolute',
+        left: 0,
+        top: 0,
+        height: '100%',
+        transform: 'initial',
+      })
+      coConfig.order = coConfig.endsAtBottom ? 'initial' : -1
+      coConfig.startsAtBottom = coConfig.endsAtBottom
+      setCookie('startsAtBottom', coConfig.startsAtBottom)
+    }
+
+    sliderTouch.config.onLongPress = (p1, p2) => {
+      console.log('移動桿')
+    }
+    sliderTouch.config.onUpdate = (p1, p2) => {
+      console.log('更新')
+    }
+    sliderTouch.config.onStop = (p1, p2) => {
+      console.log('停止')
     }
   },
 }
@@ -144,4 +163,15 @@ export default {
   position: absolute
   left: 0
   top: 0
+
+// 觸控的區域比顯示的區域大，比較不會按空
+// 離上下空白多一點才不會誤觸其他功能
+.resize-slider
+  margin: 5px 0
+  padding: var.$px10
+
+  &:before
+    display: block
+    content: ''
+    border-bottom: 5px solid #cfcfcf
 </style>

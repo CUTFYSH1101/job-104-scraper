@@ -24,9 +24,9 @@ export function useTouchEvent() {
   let config = {
     onLongPress: (p1, p2) => {
     },
-    onStop: (p1, p2) => {
-    },
     onUpdate: (p1, p2) => {
+    },
+    onStop: (p1, p2) => {
     },
   }
 
