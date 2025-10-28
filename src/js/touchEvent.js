@@ -27,8 +27,6 @@ export let config = {
   },
   onUpdate: (p1, p2) => {
   },
-  isPanUp: () => p1.y < oldP1.y,
-  isPanDown: () => p1.y > oldP1.y,
 }
 
 export function start(e) {

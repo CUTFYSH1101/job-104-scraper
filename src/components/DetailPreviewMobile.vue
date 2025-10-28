@@ -89,8 +89,8 @@ export default {
       pos.y -= this.startsAtBottom ? (pressPos.y - h) : (pressPos.y)
       // 正負20%內產生吸附的感覺
       let scale = 1
-      if (p1.y <= h * 0.8 && teConfig.isPanUp()) pos.set(0, 0)
-      else if (p1.y >= h * 1.2 && teConfig.isPanDown()) pos.set(0, h)
+      if (p1.y <= h * 0.8) pos.set(0, 0)
+      else if (p1.y >= h * 1.2) pos.set(0, h)
       else scale = 0.9
       Object.assign(this.$refs['drag-preview'].style, {
         position: 'fixed',
