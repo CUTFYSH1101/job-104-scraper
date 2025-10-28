@@ -75,7 +75,19 @@ export default {
     }
     teConfig.onUpdate = (p1, p2) => {
       console.log('更新座標', p1.toString(), p2.toString())
-      let pos = p1
+      let pos = p1.clone()
+      let h = this.$refs['drag-preview'].offsetHeight
+      let w = this.$refs['drag-preview'].offsetWidth
+      let bodyHeight = document.documentElement.clientHeight
+      let bodyWidth = document.documentElement.clientWidth
+      if (pos.y + h > bodyHeight)
+        pos.y = bodyHeight - h
+      if (pos.y < 0)
+        pos.y = 0
+      if (pos.x + w > bodyWidth)
+        pos.x = bodyWidth - w
+      if (pos.x < 0)
+        pos.x = 0
       Object.assign(this.$refs['drag-preview'].style, {
         position: 'fixed',
         left: pos.x + 'px',
