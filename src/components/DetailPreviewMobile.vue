@@ -1,5 +1,5 @@
 <template>
-  <div class="container">  <!-- 用flexbox和order決定拉桿和內容顯示前後 -->
+  <div class="container" v-on="touchHandlers">  <!-- 用flexbox和order決定拉桿和內容顯示前後 -->
     <hr class="adjust-pos-bar">  <!-- 拉桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
     <div class="job-preview">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
       <div v-if="detail">
@@ -13,6 +13,7 @@
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
 import { dictIncludes } from '@/js/utils.js'
+import { start, update, stop, config } from '@/js/touchEvent.js'
 
 export default {
   data() {
@@ -20,6 +21,8 @@ export default {
       detail: {},
       keyName: 'content',
       contentLength: 50,
+
+      dragging: false,
     }
   },
   computed: {
@@ -28,7 +31,21 @@ export default {
       let content = this.detail[this.keyName]
       if (this.contentLength >= content.length) return content
       else return content.slice(0, this.contentLength) + '...'
-    }
+    },
+
+    touchHandlers() {
+      return {
+        touchstart: this.start,
+        touchmove: this.update,
+        touchend: this.stop,
+        touchcancel: this.stop,
+      }
+    },
+  },
+  methods: {
+    start,
+    update,
+    stop,
   },
   mounted() {
     this.detail = {
@@ -40,6 +57,17 @@ export default {
         '我歌月徘徊，我舞影零亂。\n' +
         '醒時同交歡，醉後各分散。\n' +
         '永結無情遊，相期邈雲漢。'
+    }
+
+    config.onLongPress = (p1, p2) => {
+      console.log('長按', p1.toString(), p2.toString())
+      this.dragging = true
+    }
+    config.onStop = (p1, p2) => {
+      console.log('停在', p1.toString(), p2.toString())
+    }
+    config.onUpdate = (p1, p2) => {
+      console.log('更新座標', p1.toString(), p2.toString())
     }
   },
 }

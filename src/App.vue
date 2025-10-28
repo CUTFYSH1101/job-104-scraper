@@ -1,12 +1,7 @@
 <template>
   <div class="split-screen">
     <Site class="site"></Site>
-    <DetailPreviewMobile v-if="isMobile" class="detail"
-                         @touchstart="start($event)"
-                         @touchmove="update($event)"
-                         @touchend="stop($event)"
-                         @touchcancel="stop($event)">
-    </DetailPreviewMobile>
+    <DetailPreviewMobile v-if="isMobile" class="detail"></DetailPreviewMobile>
     <DetailPreview v-else></DetailPreview>
   </div>
 </template>
@@ -16,7 +11,6 @@ import Site from '@/components/Site.vue'
 import { isMobile } from '@/js/rwd.js'
 import DetailPreviewMobile from '@/components/DetailPreviewMobile.vue'
 import DetailPreview from '@/components/DetailPreview.vue'
-import { start, update, stop, config } from '@/js/touchEvent.js'
 
 export default {
   components: {
@@ -26,22 +20,6 @@ export default {
   },
   computed: {
     isMobile,
-  },
-  methods: {
-    start,
-    update,
-    stop,
-  },
-  mounted() {
-    config.onLongPress = (p1, p2) => {
-      console.log('長按', p1.toString(), p2.toString())
-    }
-    config.onStop = (p1, p2) => {
-      console.log('停在', p1.toString(), p2.toString())
-    }
-    config.onUpdate = (p1, p2) => {
-      console.log('更新座標', p1.toString(), p2.toString())
-    }
   },
 }
 </script>
