@@ -30,6 +30,7 @@ export default {
       contentLength: 50,
 
       dragging: false,
+      draggingSlider: false,
     }
   },
   computed: {
@@ -120,13 +121,19 @@ export default {
       setCookie('startsAtBottom', coConfig.startsAtBottom)
     }
 
+    let pressSliderPos = new Vec2(0, 0)
     sliderTouch.config.onLongPress = (p1, p2) => {
       console.log('移動桿')
+      this.draggingSlider = true
+      pressSliderPos.set(p1.x, p1.y)
     }
     sliderTouch.config.onUpdate = (p1, p2) => {
+      if (!this.draggingSlider) return
       console.log('更新')
     }
     sliderTouch.config.onStop = (p1, p2) => {
+      if (!this.draggingSlider) return
+      this.draggingSlider = false
       console.log('停止')
     }
   },
