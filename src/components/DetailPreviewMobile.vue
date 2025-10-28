@@ -15,9 +15,11 @@
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
 import { dictIncludes, setCookie, getCookie } from '@/js/utils.js'
-import { start, update, stop, config as teConfig } from '@/js/touchEvent.js'
+import { useTouchEvent } from '@/js/touchEvent.js'
 import Vec2 from '@/js/vec2.js'
 import { config as coConfig } from '@/js/changeOrder.js'
+
+let touchDetail = useTouchEvent()
 
 export default {
   data() {
@@ -39,17 +41,12 @@ export default {
 
     touchHandlers() {
       return {
-        touchstart: this.start,
-        touchmove: this.update,
-        touchend: this.stop,
-        touchcancel: this.stop,
+        touchstart: touchDetail.start,
+        touchmove: touchDetail.update,
+        touchend: touchDetail.stop,
+        touchcancel: touchDetail.stop,
       }
     },
-  },
-  methods: {
-    start,
-    update,
-    stop,
   },
   mounted() {
     this.detail = {
@@ -69,11 +66,11 @@ export default {
     }
 
     let pressPos = new Vec2(0, 0)
-    teConfig.onLongPress = (p1, p2) => {
+    touchDetail.config.onLongPress = (p1, p2) => {
       this.dragging = true
       pressPos.set(p1.x, p1.y)
     }
-    teConfig.onStop = (p1, p2) => {
+    touchDetail.config.onStop = (p1, p2) => {
       if (!this.dragging) return
       this.dragging = false
       Object.assign(this.$refs['drag-preview'].style, {
@@ -87,7 +84,7 @@ export default {
       coConfig.startsAtBottom = coConfig.endsAtBottom
       setCookie('startsAtBottom', coConfig.startsAtBottom)
     }
-    teConfig.onUpdate = (p1, p2) => {
+    touchDetail.config.onUpdate = (p1, p2) => {
       if (!this.dragging) return
       let pos = p1.clone()
       let h = this.$refs['drag-preview'].offsetHeight
