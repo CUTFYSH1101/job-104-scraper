@@ -1,7 +1,11 @@
 <template>
   <div class="split-screen">
     <Site class="site"></Site>
-    <DetailPreviewMobile v-if="isMobile" class="detail"></DetailPreviewMobile>
+    <DetailPreviewMobile
+      v-if="isMobile"
+      class="detail"
+      :style="{order: order}">
+    </DetailPreviewMobile>
     <DetailPreview v-else></DetailPreview>
   </div>
 </template>
@@ -11,6 +15,7 @@ import Site from '@/components/Site.vue'
 import { isMobile } from '@/js/rwd.js'
 import DetailPreviewMobile from '@/components/DetailPreviewMobile.vue'
 import DetailPreview from '@/components/DetailPreview.vue'
+import { config } from '@/js/changeOrder.js'
 
 export default {
   components: {
@@ -20,6 +25,9 @@ export default {
   },
   computed: {
     isMobile,
+    order() {
+      return config.order
+    },
   },
 }
 </script>

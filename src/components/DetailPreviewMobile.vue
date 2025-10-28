@@ -7,6 +7,7 @@
         <p v-html="slicedContent"></p>
       </div>
       <div class="drag-preview" ref="drag-preview"></div>
+      <div class="drag-outline"></div>
     </div>
   </div>
 </template>
@@ -16,6 +17,7 @@ import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPrevie
 import { dictIncludes } from '@/js/utils.js'
 import { start, update, stop, config as teConfig } from '@/js/touchEvent.js'
 import Vec2 from '@/js/vec2.js'
+import { config as coConfig } from '@/js/changeOrder.js'
 
 export default {
   data() {
@@ -25,7 +27,6 @@ export default {
       contentLength: 50,
 
       dragging: false,
-      startsAtBottom: true,
     }
   },
   computed: {
@@ -78,6 +79,10 @@ export default {
         transform: 'initial',
       })
       this.dragging = false
+      let h = this.$refs['drag-preview'].offsetHeight
+      coConfig.endsAtBottom = p1.y >= h
+      coConfig.order = coConfig.endsAtBottom ? 'initial' : -1
+      coConfig.startsAtBottom = coConfig.endsAtBottom
     }
     teConfig.onUpdate = (p1, p2) => {
       if (!this.dragging) return
@@ -86,7 +91,7 @@ export default {
       let h = this.$refs['drag-preview'].offsetHeight
       // 「從原本被按住的地方」跟著手指拖曳
       pos.x -= pressPos.x
-      pos.y -= this.startsAtBottom ? (pressPos.y - h) : (pressPos.y)
+      pos.y -= coConfig.startsAtBottom ? (pressPos.y - h) : (pressPos.y)
       // 正負20%內產生吸附的感覺
       let scale = 1
       if (p1.y <= h * 0.8) pos.set(0, 0)
@@ -125,5 +130,13 @@ export default {
   z-index: 1
   position: absolute
   left: 0  // 設置到左上角無視padding
+  top: 0
+
+.drag-outline
+  +var.size(100%, 100%)
+  box-sizing: border-box
+  border: solid 5px rgba(orange, 0.4)
+  position: absolute
+  left: 0
   top: 0
 </style>

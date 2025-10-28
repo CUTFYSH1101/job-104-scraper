@@ -1,6 +1,6 @@
 <template>
   <div class="event-listener" @mousemove="userHoverJob" @mouseover="userLeaveJob">
-    <div class="bookmark" v-if="getBookmark()" :style="{backgroundColor:getBookmark()}"></div>
+    <div class="bookmark" v-if="getBookmark()" :style="{backgroundColor: getBookmark()}"></div>
   </div>
 </template>
 
