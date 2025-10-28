@@ -6,8 +6,8 @@
         <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
         <p v-html="slicedContent"></p>
       </div>
-      <div class="drag-preview" ref="drag-preview"></div>
-      <div class="drag-outline"></div>
+      <div class="drag-preview" ref="drag-preview" v-if="dragging"></div>
+      <div class="drag-outline" v-if="dragging"></div>
     </div>
   </div>
 </template>
@@ -65,12 +65,12 @@ export default {
 
     let pressPos = new Vec2(0, 0)
     teConfig.onLongPress = (p1, p2) => {
-      console.log('長按', p1.toString(), p2.toString())
       this.dragging = true
       pressPos.set(p1.x, p1.y)
     }
     teConfig.onStop = (p1, p2) => {
-      console.log('停在', p1.toString(), p2.toString())
+      if (!this.dragging) return
+      this.dragging = false
       Object.assign(this.$refs['drag-preview'].style, {
         position: 'absolute',
         left: 0,
@@ -78,15 +78,11 @@ export default {
         height: '100%',
         transform: 'initial',
       })
-      this.dragging = false
-      let h = this.$refs['drag-preview'].offsetHeight
-      coConfig.endsAtBottom = p1.y >= h
       coConfig.order = coConfig.endsAtBottom ? 'initial' : -1
       coConfig.startsAtBottom = coConfig.endsAtBottom
     }
     teConfig.onUpdate = (p1, p2) => {
       if (!this.dragging) return
-      console.log('更新座標', p1.toString(), p2.toString())
       let pos = p1.clone()
       let h = this.$refs['drag-preview'].offsetHeight
       // 「從原本被按住的地方」跟著手指拖曳
@@ -94,8 +90,14 @@ export default {
       pos.y -= coConfig.startsAtBottom ? (pressPos.y - h) : (pressPos.y)
       // 正負20%內產生吸附的感覺
       let scale = 1
-      if (p1.y <= h * 0.8) pos.set(0, 0)
-      else if (p1.y >= h * 1.2) pos.set(0, h)
+      if (p1.y <= h * 0.8) {
+        pos.set(0, 0)
+        coConfig.endsAtBottom = p1.y >= h
+      }
+      else if (p1.y >= h * 1.2) {
+        pos.set(0, h)
+        coConfig.endsAtBottom = p1.y >= h
+      }
       else scale = 0.9
       Object.assign(this.$refs['drag-preview'].style, {
         position: 'fixed',
