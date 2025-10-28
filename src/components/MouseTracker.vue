@@ -18,6 +18,14 @@ export default {
       this.x = e.clientX
       this.y = e.clientY
     })
+    document.body.addEventListener('touchstart', e => {
+      this.x = e.clientX
+      this.y = e.clientY
+    })
+    document.body.addEventListener('touchmove', e => {
+      this.x = e.clientX
+      this.y = e.clientY
+    })
   }
 }
 </script>
