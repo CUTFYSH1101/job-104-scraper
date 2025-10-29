@@ -130,6 +130,9 @@ export default {
       setCookie('startsAtBottom', coConfig.startsAtBottom)
     }
 
+    if (getCookie('detailHeight') !== undefined)
+      coConfig.height = getCookie('detailHeight')
+
     let startHeight = coConfig.height
     let pressSliderPos = new Vec2(0, 0)
     sliderTouch.config.onLongPress = (p1, p2) => {
@@ -160,6 +163,7 @@ export default {
         padding: `5px ${(100 - 20) / 2}vw`,
         backgroundColor: 'transparent',
       })
+      setCookie('detailHeight', coConfig.height)
     }
   },
 }
