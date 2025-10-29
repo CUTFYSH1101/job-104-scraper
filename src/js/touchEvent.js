@@ -16,7 +16,7 @@ export function useTouchEvent() {
   let length = 0
   let touch = null
   let moveThresholdPx = 15  // px像素
-  let timeoutMs = 1500  // ms毫秒
+  let timeoutMs = 1000  // ms毫秒
   let touches = []
   let listener = null
   let hasStopped = false

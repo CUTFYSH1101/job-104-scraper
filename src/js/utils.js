@@ -26,6 +26,10 @@ export function vh2px(vh) {
   return parseFloat(vh) * 0.01 * windowHeight()
 }
 
+export function getCssRoot(varName) {
+  return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
+}
+
 export function getCookie(name) {
   let parts = []
   if (document.cookie.startsWith(`${name}=`))

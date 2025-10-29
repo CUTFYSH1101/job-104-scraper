@@ -2,7 +2,8 @@
 <template>
   <div class="container">  <!-- 用flexbox和order決定拖曳桿和內容顯示前後 -->
     <div class="flex flex-col h-100" :class="{'flex-col-reverse': order === -1}">
-      <div class="resize-slider" v-on="sliderHandlers"></div>  <!-- 拖曳桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
+      <!-- 拖曳桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
+      <div class="resize-slider" v-on="sliderHandlers" ref="resize-slider"></div>
       <div class="job-preview" v-on="orderHandlers">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
         <div v-if="detail">
           <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
@@ -17,7 +18,7 @@
 
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
-import { dictIncludes, setCookie, getCookie, windowHeight, vh2px, px2vh } from '@/js/utils.js'
+import { dictIncludes, setCookie, getCookie, windowHeight, vh2px, px2vh, getCssRoot } from '@/js/utils.js'
 import { useTouchEvent } from '@/js/touchEvent.js'
 import Vec2 from '@/js/vec2.js'
 import { config as coConfig } from '@/js/changeOrder.js'
@@ -99,11 +100,11 @@ export default {
       let scale = 1
       if (p1.y <= halfWindowHeight * 0.8) {
         pos.set(0, 0)
-        coConfig.endsAtBottom = p1.y >= h
+        coConfig.endsAtBottom = false
       }
       else if (p1.y >= halfWindowHeight * 1.2) {
         pos.set(0, halfWindowHeight * 2 - h)
-        coConfig.endsAtBottom = p1.y >= h
+        coConfig.endsAtBottom = true
       }
       else scale = 0.9
       Object.assign(this.$refs['drag-preview'].style, {
@@ -135,6 +136,10 @@ export default {
       this.draggingSlider = true
       pressSliderPos.set(p1.x, p1.y)
       startHeight = coConfig.height
+      Object.assign(this.$refs['resize-slider'].style, {
+        padding: `5px ${(100 - 15) / 2}vw`,
+        backgroundColor: getCssRoot('--drag-orange'),
+      })
     }
     sliderTouch.config.onUpdate = (p1, p2) => {
       if (!this.draggingSlider) return
@@ -151,6 +156,10 @@ export default {
     sliderTouch.config.onStop = (p1, p2) => {
       if (!this.draggingSlider) return
       this.draggingSlider = false
+      Object.assign(this.$refs['resize-slider'].style, {
+        padding: `5px ${(100 - 20) / 2}vw`,
+        backgroundColor: 'transparent',
+      })
     }
   },
 }
@@ -173,12 +182,12 @@ export default {
 
 .drag-preview
   +var.absCover
-  background-color: rgba(orange, 0.4)
+  background-color: var(--drag-orange)
   z-index: 1
 
 .drag-outline
   +var.absCover
-  border: solid 5px rgba(orange, 0.4)
+  border: solid 5px var(--drag-orange)
   box-sizing: border-box
 
 // 觸控的區域比顯示的區域大，比較不會按空
@@ -186,7 +195,8 @@ export default {
 // 從上到下：m5 p5 bt5 p5，共20px
 .resize-slider
   margin: 5px 0
-  padding: 5px 20px
+  padding: 5px calc(#{(100 - 20) / 2}vw)  // 長度為20vw
+  transition: 0.5s
 
   &:before
     display: block
