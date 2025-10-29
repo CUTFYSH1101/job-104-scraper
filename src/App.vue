@@ -4,7 +4,7 @@
     <DetailPreviewMobile
       v-if="isMobile"
       class="detail"
-      :style="{order: order}">
+      :style="{order: order, flexBasis: height}">
     </DetailPreviewMobile>
     <DetailPreview v-else></DetailPreview>
   </div>
@@ -28,6 +28,9 @@ export default {
     order() {
       return config.order
     },
+    height() {
+      return config.height
+    },
   },
 }
 </script>
@@ -42,7 +45,7 @@ export default {
   flex: 1
   overflow-y: auto  // 只在該範圍顯示滾動軸
 .detail
-  flex: 50vh
+  flex-basis: 50vh  // 統一把flex寫成flex-basis
   flex-grow: 0
   flex-shrink: 0
 </style>

@@ -17,7 +17,7 @@
 
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
-import { dictIncludes, setCookie, getCookie } from '@/js/utils.js'
+import { dictIncludes, setCookie, getCookie, windowHeight } from '@/js/utils.js'
 import { useTouchEvent } from '@/js/touchEvent.js'
 import Vec2 from '@/js/vec2.js'
 import { config as coConfig } from '@/js/changeOrder.js'
@@ -89,18 +89,20 @@ export default {
     orderTouch.config.onUpdate = (p1, p2) => {
       if (!this.dragging) return
       let pos = p1.clone()
+      let top = this.$el.offsetTop
       let h = this.$refs['drag-preview'].offsetHeight
+      let halfWindowHeight = windowHeight() / 2
       // 「從原本被按住的地方」跟著手指拖曳
       pos.x -= pressPos.x
-      pos.y -= coConfig.startsAtBottom ? (pressPos.y - h) : (pressPos.y)
-      // 正負20%內產生吸附的感覺
+      pos.y -= (pressPos.y - top)
+      // 中線正負20%內產生吸附的感覺
       let scale = 1
-      if (p1.y <= h * 0.8) {
+      if (p1.y <= halfWindowHeight * 0.8) {
         pos.set(0, 0)
         coConfig.endsAtBottom = p1.y >= h
       }
-      else if (p1.y >= h * 1.2) {
-        pos.set(0, h)
+      else if (p1.y >= halfWindowHeight * 1.2) {
+        pos.set(0, halfWindowHeight * 2 - h)
         coConfig.endsAtBottom = p1.y >= h
       }
       else scale = 0.9
@@ -108,7 +110,7 @@ export default {
         position: 'fixed',
         left: pos.x + 'px',
         top: pos.y + 'px',
-        height: '50vh',  // 仿App.vue裡給.detail的高度
+        height: coConfig.height,  // 仿App.vue裡給.detail的高度
         transform: `scale(${scale})`,
       })
     }
@@ -127,20 +129,27 @@ export default {
       setCookie('startsAtBottom', coConfig.startsAtBottom)
     }
 
+    let startHeight = coConfig.height
     let pressSliderPos = new Vec2(0, 0)
     sliderTouch.config.onLongPress = (p1, p2) => {
-      console.log('移動桿')
       this.draggingSlider = true
       pressSliderPos.set(p1.x, p1.y)
+      startHeight = coConfig.height
     }
     sliderTouch.config.onUpdate = (p1, p2) => {
       if (!this.draggingSlider) return
-      console.log('更新')
+      let displaceY = p1.y - pressSliderPos.y
+      let vh2px = parseFloat(startHeight) * 0.01 * windowHeight()
+      if (coConfig.startsAtBottom) vh2px -= displaceY
+      else vh2px += displaceY
+      let px2vh = vh2px / windowHeight() * 100
+      if (px2vh < 0) px2vh = 0
+      if (px2vh > 100) px2vh = 100
+      coConfig.height = px2vh + 'vh'
     }
     sliderTouch.config.onStop = (p1, p2) => {
       if (!this.draggingSlider) return
       this.draggingSlider = false
-      console.log('停止')
     }
   },
 }

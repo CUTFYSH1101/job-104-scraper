@@ -4,4 +4,5 @@ export let config = reactive({
   order: 'initial',
   startsAtBottom: true,
   endsAtBottom: true,
+  height: '50vh',
 })

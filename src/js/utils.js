@@ -1,3 +1,23 @@
+// 視窗寬度
+export function windowWidth() {
+  return window.innerWidth
+}
+
+// 視窗高度
+export function windowHeight() {
+  return window.innerHeight
+}
+
+// 撇除滾動條，整體可用區域
+export function clientWidth() {
+  return document.documentElement.clientWidth
+}
+
+// 撇除滾動條，整體可用區域
+export function clientHeight() {
+  return document.documentElement.clientHeight
+}
+
 export function getCookie(name) {
   let parts = []
   if (document.cookie.startsWith(`${name}=`))

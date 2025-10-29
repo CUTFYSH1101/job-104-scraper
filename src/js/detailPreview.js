@@ -1,4 +1,5 @@
 import * as utils from '@/js/utils.js'
+import { clientHeight, clientWidth } from '@/js/utils.js'
 
 export let config = {
   hoverJob: {},
@@ -42,8 +43,8 @@ export function showDetail() {
 }
 
 export function updateBodyWidthHeight() {
-  config.bodyWidth = document.documentElement.clientWidth
-  config.bodyHeight = document.documentElement.clientHeight
+  config.bodyWidth = clientWidth()
+  config.bodyHeight = clientHeight()
 }
 
 function setPos(...args) {  // 無法阻擋undefined, null
