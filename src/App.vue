@@ -39,13 +39,13 @@ export default {
 .split-screen
   display: flex
   flex-direction: column
-  height: 100vh
+  height: 100dvh
   overflow: hidden  // 隱藏原本整個畫面的滾動軸
 .site
   flex: 1
   overflow-y: auto  // 只在該範圍顯示滾動軸
 .detail
-  flex-basis: 50vh  // 統一把flex寫成flex-basis
+  flex-basis: 50dvh  // 統一把flex寫成flex-basis
   flex-grow: 0
   flex-shrink: 0
   overflow: hidden

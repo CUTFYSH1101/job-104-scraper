@@ -18,12 +18,12 @@ export function clientHeight() {
   return document.documentElement.clientHeight
 }
 
-export function px2vh(px) {
+export function px2dvh(px) {
   return parseFloat(px) / windowHeight() * 100
 }
 
-export function vh2px(vh) {
-  return parseFloat(vh) * 0.01 * windowHeight()
+export function dvh2px(dvh) {
+  return parseFloat(dvh) * 0.01 * windowHeight()
 }
 
 export function getCssRoot(varName) {

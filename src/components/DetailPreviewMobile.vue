@@ -18,7 +18,7 @@
 
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
-import { dictIncludes, setCookie, getCookie, windowHeight, vh2px, px2vh, getCssRoot } from '@/js/utils.js'
+import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh, getCssRoot } from '@/js/utils.js'
 import { useTouchEvent } from '@/js/touchEvent.js'
 import Vec2 from '@/js/vec2.js'
 import { config as coConfig } from '@/js/changeOrder.js'
@@ -140,27 +140,27 @@ export default {
       pressSliderPos.set(p1.x, p1.y)
       startHeight = coConfig.height
       Object.assign(this.$refs['resize-slider'].style, {
-        padding: `5px ${(100 - 15) / 2}vw`,
+        padding: `5px ${(100 - 15) / 2}dvw`,
         backgroundColor: getCssRoot('--drag-orange'),
       })
     }
     sliderTouch.config.onUpdate = (p1, p2) => {
       if (!this.draggingSlider) return
       let displaceY = p1.y - pressSliderPos.y
-      let minVh = px2vh(20)  // 從上到下：m5 p5 bt5 p5，共20px
-      let px = vh2px(startHeight)
+      let minDvh = px2dvh(20)  // 從上到下：m5 p5 bt5 p5，共20px
+      let px = dvh2px(startHeight)
       if (coConfig.startsAtBottom) px -= displaceY
       else px += displaceY
-      let vh = px2vh(px)
-      if (vh < minVh) vh = minVh
-      if (vh > 100) vh = 100
-      coConfig.height = vh + 'vh'
+      let dvh = px2dvh(px)
+      if (dvh < minDvh) dvh = minDvh
+      if (dvh > 100) dvh = 100
+      coConfig.height = dvh + 'dvh'
     }
     sliderTouch.config.onStop = (p1, p2) => {
       if (!this.draggingSlider) return
       this.draggingSlider = false
       Object.assign(this.$refs['resize-slider'].style, {
-        padding: `5px ${(100 - 20) / 2}vw`,
+        padding: `5px ${(100 - 20) / 2}dvw`,
         backgroundColor: 'transparent',
       })
       setCookie('detailHeight', coConfig.height)
@@ -199,7 +199,7 @@ export default {
 // 從上到下：m5 p5 bt5 p5，共20px
 .resize-slider
   margin: 5px 0
-  padding: 5px calc(#{(100 - 20) / 2}vw)  // 長度為20vw
+  padding: 5px calc(#{(100 - 20) / 2}dvw)  // 長度為20dvw
   transition: 0.5s
 
   &:before

@@ -215,7 +215,7 @@ export default {
 
 .job-preview
   position: fixed
-  width: 40vw
+  width: 40dvw
   height: 400px
   z-index: 999
   border: solid 1px var.$gray
