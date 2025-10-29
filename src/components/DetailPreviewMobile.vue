@@ -1,9 +1,9 @@
 <!-- container決定拖曳框的大小和整體的高度 -->
 <template>
   <div class="container">  <!-- 用flexbox和order決定拉桿和內容顯示前後 -->
-    <div class="flex flex-col h-100">
+    <div class="flex flex-col h-100" :class="{'flex-col-reverse': order === -1}">
       <div class="resize-slider" v-on="sliderHandlers"></div>  <!-- 拉桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
-      <div class="job-preview" v-on="orderHandlers" :style="{order: order}">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
+      <div class="job-preview" v-on="orderHandlers">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
         <div v-if="detail">
           <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
           <p v-html="slicedContent"></p>
