@@ -17,7 +17,7 @@
 
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
-import { dictIncludes, setCookie, getCookie, windowHeight } from '@/js/utils.js'
+import { dictIncludes, setCookie, getCookie, windowHeight, vh2px, px2vh } from '@/js/utils.js'
 import { useTouchEvent } from '@/js/touchEvent.js'
 import Vec2 from '@/js/vec2.js'
 import { config as coConfig } from '@/js/changeOrder.js'
@@ -139,13 +139,14 @@ export default {
     sliderTouch.config.onUpdate = (p1, p2) => {
       if (!this.draggingSlider) return
       let displaceY = p1.y - pressSliderPos.y
-      let vh2px = parseFloat(startHeight) * 0.01 * windowHeight()
-      if (coConfig.startsAtBottom) vh2px -= displaceY
-      else vh2px += displaceY
-      let px2vh = vh2px / windowHeight() * 100
-      if (px2vh < 0) px2vh = 0
-      if (px2vh > 100) px2vh = 100
-      coConfig.height = px2vh + 'vh'
+      let minVh = px2vh(20)  // 從上到下：m5 p5 bt5 p5，共20px
+      let px = vh2px(startHeight)
+      if (coConfig.startsAtBottom) px -= displaceY
+      else px += displaceY
+      let vh = px2vh(px)
+      if (vh < minVh) vh = minVh
+      if (vh > 100) vh = 100
+      coConfig.height = vh + 'vh'
     }
     sliderTouch.config.onStop = (p1, p2) => {
       if (!this.draggingSlider) return
@@ -182,12 +183,14 @@ export default {
 
 // 觸控的區域比顯示的區域大，比較不會按空
 // 離上下空白多一點才不會誤觸其他功能
+// 從上到下：m5 p5 bt5 p5，共20px
 .resize-slider
   margin: 5px 0
-  padding: var.$px10
+  padding: 5px 20px
 
   &:before
     display: block
     content: ''
     border-bottom: 5px solid #cfcfcf
+    border-radius: 10px
 </style>

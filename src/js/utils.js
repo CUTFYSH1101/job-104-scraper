@@ -18,6 +18,14 @@ export function clientHeight() {
   return document.documentElement.clientHeight
 }
 
+export function px2vh(px) {
+  return parseFloat(px) / windowHeight() * 100
+}
+
+export function vh2px(vh) {
+  return parseFloat(vh) * 0.01 * windowHeight()
+}
+
 export function getCookie(name) {
   let parts = []
   if (document.cookie.startsWith(`${name}=`))

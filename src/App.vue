@@ -48,4 +48,5 @@ export default {
   flex-basis: 50vh  // 統一把flex寫成flex-basis
   flex-grow: 0
   flex-shrink: 0
+  overflow: hidden
 </style>
