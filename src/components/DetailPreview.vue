@@ -1,14 +1,15 @@
 <template>
   <transition name="fade" mode="out-in">  <!-- 套用動畫 -->
     <div class="job-preview"
+         :style="posStyle"
          @wheel.prevent="zoom"
          v-if="!hidden && !modeHidden && !isMobile"
          @mousemove="showDetail"
          @mouseleave="hideDetail">  <!-- 移動和縮放 -->
       <div v-if="includesDetail">  <!-- 內容用一個div裝著 -->
         <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
-        <p v-if="keyName === 'content'" class="salary">{{ detail['salary'] }}</p>
-        <p v-html="slicedContent"></p>
+        <p v-if="keyName === 'content'" class="salary" :style="salaryStyle">{{ detail['salary'] }}</p>
+        <p v-html="slicedContent" :style="contentStyle"></p>
       </div>
       <div class="empty" @mousemove="hideOnHoverBlackSpace($event)"></div>
     </div>
@@ -34,6 +35,8 @@ export default {
       hidden: true,
       modeHidden: false,
       keyName: 'content',
+      x: 0,
+      y: 0,
     }
   },
   methods: {
@@ -59,7 +62,6 @@ export default {
         return
       }
       this.includesDetail = true
-      this.assignStyle()
     },
     zoom(e) {
       if (!dictIncludes(this.detail, 'content')) return
@@ -69,31 +71,6 @@ export default {
       this.fontSize -= unit(y) * 0.1
       if (this.fontSize < 0.54) this.fontSize = 0.54
       if (this.fontSize > 1.27) this.fontSize = 1.27
-      this.assignStyle()
-    },
-    assignStyle() {
-      if (this.hidden || this.modeHidden || this.isMobile) return
-      this.contentDomElement = this.$el.querySelector('p:not(.salary)')
-      if (!this.contentDomElement) return
-
-      // 文字為1/2倍時，可容納4倍文字，文字為1/3倍時，可容納9倍文字
-      this.contentLength = Math.floor(this.originLength / (this.fontSize ** 2))
-      Object.assign(this.contentDomElement.style, {
-        fontSize: this.fontSize + 'rem',
-        lineHeight: this.fontSize * 1.2 + 'rem',
-        letterSpacing: this.fontSize + 'px',
-        whiteSpace: 'pre-wrap',
-      })
-
-      let salaryDom = this.$el.querySelector('p.salary')
-      let scale = 0.8
-      if (!salaryDom) return
-      Object.assign(salaryDom.style, {
-        fontSize: this.fontSize * scale + 'rem',
-        lineHeight: this.fontSize * 1.2 * scale + 'rem',
-        letterSpacing: this.fontSize * scale + 'px',
-        opacity: scale,
-      })
     },
 
     async switchMode(e) {  // 0:關閉,其他:不動,切換模式:索引=e.key-1
@@ -109,8 +86,6 @@ export default {
 
       this.modeHidden = false
       this.keyName = Object.keys(this.detail)[mode - 1]
-      await this.$nextTick()
-      this.assignStyle()  // Vue 因為 keyName 改變而重新渲染 DOM，之前套用的樣式會消失，所以要重新套用
     },
   },
   computed: {
@@ -121,50 +96,33 @@ export default {
       else return content.slice(0, this.contentLength) + '...'
     },
     isMobile,
-  },
-  watch: {
-    domElement(newVal) {
-      if (!newVal) config.onSetPos(_ => {
-      })
-      else {
-        let assignPos = (x, y) =>
-          Object.assign(this.domElement.style, {
-            left: x + 'px',
-            top: y + 'px',
-          })
-        config.onSetPos = async pos => {
-          if (this.isMobile) return
-
-          if (this.hidden || this.modeHidden) return
-          await this.$nextTick()  // 等 Vue 同步完變數與畫面，否則 this.domElement 可能還是上一幀已被替換的 DOM
-          await this.loadDetail()  // 更換懸浮視窗的內容
-          updateBodyWidthHeight()  // 即便畫面縮放也ok
-          let x = pos[0], y = pos[1]
-          let w = this.domElement.offsetWidth, h = this.domElement.offsetHeight
-          // 超出右側
-          let overRight = pos[0] + w - config.bodyWidth
-          if (overRight > 0) {
-            x = pos[0] - w  // 放到滑鼠左側
-            if (x < 0) {  // 如果又超出左側，表示左右都放不下
-              let overLeft = -x
-              if (overRight < overLeft)  // 比較放哪邊顯示範圍比較大
-                x = pos[0]  // 放回來
-            }
-          }
-          // 超出下側
-          let overBottom = pos[1] + h - config.bodyHeight
-          if (overBottom > 0) {
-            y = pos[1] - h
-            if (y < 0) {
-              let overTop = -y
-              if (overBottom < overTop)
-                y = pos[1]
-            }
-          }
-          assignPos(x, y)
-        }
+    contentStyle() {
+      // 文字為1/2倍時，可容納4倍文字，文字為1/3倍時，可容納9倍文字
+      this.contentLength = Math.floor(this.originLength / (this.fontSize ** 2))
+      return {
+        fontSize: this.fontSize + 'rem',
+        lineHeight: this.fontSize * 1.2 + 'rem',
+        letterSpacing: this.fontSize + 'px',
+        whiteSpace: 'pre-wrap',
       }
     },
+    salaryStyle() {
+      let scale = 0.8
+      return {
+        fontSize: this.fontSize * scale + 'rem',
+        lineHeight: this.fontSize * 1.2 * scale + 'rem',
+        letterSpacing: this.fontSize * scale + 'px',
+        opacity: scale,
+      }
+    },
+    posStyle() {
+      return {
+        left: this.x + 'px',
+        top: this.y + 'px'
+      }
+    },
+  },
+  watch: {
     hidden(newVal) {
       if (newVal)
         window.removeEventListener('keyup', this.switchMode)
@@ -191,6 +149,40 @@ export default {
       this.modeHidden = getCookie('modeHidden')
     if (getCookie('keyName'))
       this.keyName = getCookie('keyName')
+
+    let assignPos = (x, y) =>
+      [this.x, this.y] = [x, y]
+    config.onSetPos = async pos => {
+      if (this.isMobile) return
+
+      if (this.hidden || this.modeHidden) return
+      await this.$nextTick()  // 等 Vue 同步完變數與畫面，否則 this.domElement 可能還是上一幀已被替換的 DOM
+      await this.loadDetail()  // 更換懸浮視窗的內容
+      updateBodyWidthHeight()  // 即便畫面縮放也ok
+      let x = pos[0], y = pos[1]
+      let w = this.domElement.offsetWidth, h = this.domElement.offsetHeight
+      // 超出右側
+      let overRight = pos[0] + w - config.bodyWidth
+      if (overRight > 0) {
+        x = pos[0] - w  // 放到滑鼠左側
+        if (x < 0) {  // 如果又超出左側，表示左右都放不下
+          let overLeft = -x
+          if (overRight < overLeft)  // 比較放哪邊顯示範圍比較大
+            x = pos[0]  // 放回來
+        }
+      }
+      // 超出下側
+      let overBottom = pos[1] + h - config.bodyHeight
+      if (overBottom > 0) {
+        y = pos[1] - h
+        if (y < 0) {
+          let overTop = -y
+          if (overBottom < overTop)
+            y = pos[1]
+        }
+      }
+      assignPos(x, y)
+    }
   },
 }
 </script>
