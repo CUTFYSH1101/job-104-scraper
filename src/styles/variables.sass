@@ -19,6 +19,14 @@ $infinity: 99999px
   left: 50%
   top: 50%
 
+// 父物件要設定 relative
+// 要覆蓋在上層設定z-index為正整數
+=absCover()
+  +size(100%)   // 不含margin、padding的部分
+  position: absolute
+  left: 0       // 設置到左上角無視padding
+  top: 0
+
 =absVerticalCenter()
   position: absolute
   transform: translateY(-50%)

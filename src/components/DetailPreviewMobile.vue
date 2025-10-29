@@ -1,14 +1,17 @@
+<!-- container決定拖曳框的大小和整體的高度 -->
 <template>
   <div class="container">  <!-- 用flexbox和order決定拉桿和內容顯示前後 -->
-    <div class="resize-slider" v-on="sliderHandlers"></div>  <!-- 拉桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
-    <div class="job-preview" v-on="orderHandlers">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
-      <div v-if="detail">
-        <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
-        <p v-html="slicedContent"></p>
+    <div class="flex flex-col h-100">
+      <div class="resize-slider" v-on="sliderHandlers"></div>  <!-- 拉桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
+      <div class="job-preview" v-on="orderHandlers" :style="{order: order}">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
+        <div v-if="detail">
+          <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
+          <p v-html="slicedContent"></p>
+        </div>
       </div>
-      <div class="drag-preview" ref="drag-preview" v-if="dragging"></div>
-      <div class="drag-outline" v-if="dragging"></div>
     </div>
+    <div class="drag-preview" ref="drag-preview" v-if="dragging"></div>
+    <div class="drag-outline" v-if="dragging"></div>
   </div>
 </template>
 
@@ -41,6 +44,9 @@ export default {
       else return content.slice(0, this.contentLength) + '...'
     },
 
+    order() {
+      return coConfig.order
+    },
     orderHandlers() {
       return {
         touchstart: orderTouch.start,
@@ -147,29 +153,23 @@ export default {
 .container
   +var.size(100dvw, 50vh)
   padding: 0  // 貼邊
-  box-sizing: border-box
-
-.job-preview
-  +var.size(100%, 100%)
-  padding: var.$px10
-  background-color: white
   position: relative
 
+.job-preview
+  width: 100%
+  flex: 1  // 填充調整桿剩餘的高度
+  padding: var.$px10
+  background-color: white
+
 .drag-preview
-  +var.size(100%, 100%)  // 不含margin、padding的部分
+  +var.absCover
   background-color: rgba(orange, 0.4)
   z-index: 1
-  position: absolute
-  left: 0  // 設置到左上角無視padding
-  top: 0
 
 .drag-outline
-  +var.size(100%, 100%)
-  box-sizing: border-box
+  +var.absCover
   border: solid 5px rgba(orange, 0.4)
-  position: absolute
-  left: 0
-  top: 0
+  box-sizing: border-box
 
 // 觸控的區域比顯示的區域大，比較不會按空
 // 離上下空白多一點才不會誤觸其他功能
