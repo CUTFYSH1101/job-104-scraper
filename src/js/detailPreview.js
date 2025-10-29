@@ -20,10 +20,10 @@ export let config = {
   leaveTimer: null,
 }
 
-export function userHoverJob(e, job) {
+export async function userHoverJob(e, job) {
   setHoverJob(job)
-  setPos(e.clientX, e.clientY)
-  showDetail()
+  await showDetail()
+  await setPos(e.clientX, e.clientY)
 }
 
 export function userLeaveJob() {
@@ -34,12 +34,12 @@ export function hideDetail() {
   config.leaveTimer = setTimeout(() => config.onHideDetail?.(), 100)
 }
 
-export function showDetail() {
+export async function showDetail() {
   if (config.leaveTimer) {
     clearTimeout(config.leaveTimer)
     config.leaveTimer = null
   }
-  config.onShowDetail?.()
+  await config.onShowDetail?.()
 }
 
 export function updateBodyWidthHeight() {
@@ -47,11 +47,11 @@ export function updateBodyWidthHeight() {
   config.bodyHeight = clientHeight()
 }
 
-function setPos(...args) {  // 無法阻擋undefined, null
+async function setPos(...args) {  // 無法阻擋undefined, null
   if (utils.isFalsy(args[0])) return
   if (utils.isArray(args[0])) config.pos = args[0]
   else config.pos = [...args]
-  config.onSetPos(config.pos)
+  await config.onSetPos(config.pos)
 }
 
 export function currentDetailPath() {

@@ -31,9 +31,8 @@ export default {
       includesDetail: false,
       domElement: null,
       contentDomElement: null,
-      hidden: false,
+      hidden: true,
       modeHidden: false,
-      init: true,
       keyName: 'content',
     }
   },
@@ -136,12 +135,6 @@ export default {
         config.onSetPos = async pos => {
           if (this.isMobile) return
 
-          if (this.init && this.modeHidden) {
-            await this.$nextTick()
-            await this.loadDetail()
-            if (this.includesDetail) this.init = false
-          }
-
           if (this.hidden || this.modeHidden) return
           await this.$nextTick()  // 等 Vue 同步完變數與畫面，否則 this.domElement 可能還是上一幀已被替換的 DOM
           await this.loadDetail()  // 更換懸浮視窗的內容
@@ -185,11 +178,12 @@ export default {
       setCookie('keyName', newVal)
     },
   },
-  mounted() {
+  created() {
     config.onHideDetail = () => this.hidden = true
     config.onShowDetail = async() => {
       this.hidden = false
       await this.$nextTick()  // 等待vue元素載入完成，才不會undefined
+      await this.loadDetail()
       this.domElement = this.$el
     }
     window.addEventListener('keyup', this.switchMode)
