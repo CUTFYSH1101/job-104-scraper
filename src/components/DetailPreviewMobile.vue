@@ -151,7 +151,7 @@ export default {
 @use "@/styles/tailwind" as tw
 
 .container
-  +var.size(100dvw, 50vh)
+  width: 100%
   padding: 0  // 貼邊
   position: relative
 
