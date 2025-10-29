@@ -12,6 +12,7 @@
         <p v-html="slicedContent" :style="contentStyle"></p>
       </div>
       <div class="empty" @mousemove="hideOnHoverBlackSpace($event)"></div>
+      <KeyHint :keys="['1','2','3','4','5','6','0']"></KeyHint>
     </div>
   </transition>
 </template>
@@ -21,8 +22,12 @@ import { dictIncludes } from '@/js/utils.js'
 import Satisfied from '@/js/satisfied.js'
 import { setCookie, getCookie } from '@/js/utils.js'
 import { isMobile } from '@/js/rwd.js'
+import KeyHint from '@/components/KeyHint.vue'
 
 export default {
+  components: {
+    KeyHint,
+  },
   data() {
     return {
       detail: {},

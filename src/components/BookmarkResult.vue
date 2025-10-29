@@ -13,11 +13,13 @@
       </button>
     </div>
     <div>
-      <div class="job" v-for="(job, i) in filterJobs">
+      <div class="job" v-for="(job, i) in filterJobs" @mousemove="setJobOnHover(job)"
+           @mouseleave="setJobOnHover({})">
         <Bookmark :job="job"></Bookmark>
         <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class="cell">{{ job.工作標籤 }}</div>
         <div class="cell">{{ job.關鍵字 }}</div>
+        <KeyHint :keys="['Q','W','E','R','T','Y','U']" v-if="isHovering(job)"></KeyHint>
       </div>
     </div>
   </div>
@@ -26,10 +28,15 @@
 <script>
 import Bookmark from '@/components/Bookmark.vue'
 import { getColorMap, getBookmark } from '@/js/bookmark.js'
+import KeyHint from '@/components/KeyHint.vue'
+import useKeyHintOnJob from '@/js/keyHintOnJob.js'
+import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
+
+let {isHovering, setJobOnHover} = useKeyHintOnJob()
 
 export default {
   name: 'BookmarkResult',
-  components: { Bookmark },
+  components: { Bookmark, KeyHint },
   props: ['jobs'],
   data() {
     return {
@@ -42,6 +49,10 @@ export default {
       if (this.activeColor === null) return this.jobs.filter(job => getBookmark(job['網址']))
       return this.jobs.filter(job => getBookmark(job['網址']) && getBookmark(job['網址']) === this.activeColor)
     },
+  },
+  methods: {
+    setJobOnHover,
+    isHovering,
   },
 }
 </script>

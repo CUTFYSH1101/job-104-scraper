@@ -10,6 +10,7 @@
         <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class="cell">{{ job.工作標籤 }}</div>
         <div class="cell" v-html="highlightText(job.關鍵字)"></div>
+        <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if="isHovering(job)"></KeyHint>
       </div>
     </div>
   </div>
@@ -20,12 +21,17 @@ import Download from '@/components/Download.vue'
 import * as utils from '@/js/utils.js'
 import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
+import KeyHint from '@/components/KeyHint.vue'
+import useKeyHintOnJob from '@/js/keyHintOnJob.js'
+
+let {isHovering, setJobOnHover} = useKeyHintOnJob()
 
 export default {
   name: 'JobSearchResult',
   components: {
     Download,
     Bookmark,
+    KeyHint,
   },
   props: ['keyword', 'jobs'],
   computed: {
@@ -79,10 +85,13 @@ export default {
   methods: {
     userHoverJob(e, job) {
       userHoverJob(e, job)
+      setJobOnHover(job)
     },
     userLeaveJob() {
       userLeaveJob()
+      setJobOnHover({})
     },
+    isHovering,
 
     checkAndReturnKeyword() {
       let keyword = this.keyword.trim()  // 去除前後空格

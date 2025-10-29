@@ -29,6 +29,7 @@
           </div>
           <HorizontalBar :width="toPercent(job.skillWeight)"></HorizontalBar>
         </div>
+        <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if="isHovering(job)"></KeyHint>
       </div>
     </div>
     <div v-else>
@@ -39,6 +40,7 @@
         <div class="cell">
           <span class="inline-block" v-for="tag in getTags(job)">{{ tag }}</span>
         </div>
+        <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if="isHovering(job)"></KeyHint>
       </div>
     </div>
   </div>
@@ -52,15 +54,20 @@ import { getTags, prefixEach } from '@/js/utils.js'
 import HorizontalBar from '@/components/HorizontalBar.vue'
 import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
+import KeyHint from '@/components/KeyHint.vue'
+import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
+
+let {isHovering, setJobOnHover} = useKeyHintOnJob()
 
 export default {
   name: 'KeywordCoverageResult',
   components: {
     Bookmark,
     HorizontalBar,
+    KeyHint,
   },
   props: ['keyword', 'jobs'],
   data() {
@@ -77,10 +84,13 @@ export default {
   methods: {
     userHoverJob(e, job) {
       userHoverJob(e, job)
+      setJobOnHover(job)
     },
     userLeaveJob() {
       userLeaveJob()
+      setJobOnHover({})
     },
+    isHovering,
 
     getTags,
     async updateResult() {
