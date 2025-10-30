@@ -45,6 +45,7 @@ import SkillRecommendResult from '@/components/SkillRecommendResult.vue'
 import BookmarkResult from '@/components/BookmarkResult.vue'
 import { jobs } from '@/js/jobsLoader.js'
 import JobAtSiteCenter from '@/js/mobile/jobAtSiteCenter.js'
+import { setCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
 
 export default {
   components: {
@@ -65,8 +66,9 @@ export default {
     changeKeyword(val) {
       this.keyword = val  // keywordJobSearch step 2
     },
-    changeJobDetail(e) {
+    async changeJobDetail(e) {
       JobAtSiteCenter.changeJobDetail(e)
+      await setCurrentJobDetail()
     },
   },
   computed: {

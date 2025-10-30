@@ -21,7 +21,7 @@ import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh, getCs
 import { useTouchEvent } from '@/js/mobile/touchEvent.js'
 import Vec2 from '@/js/mobile/vec2.js'
 import { config as coConfig } from '@/js/mobile/changeOrder.js'
-import { currentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
+import { getCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
 
 let orderTouch = useTouchEvent()
 let sliderTouch = useTouchEvent()
@@ -29,7 +29,6 @@ let sliderTouch = useTouchEvent()
 export default {
   data() {
     return {
-      detail: {},
       keyName: 'content',
       contentLength: 50,
 
@@ -39,13 +38,13 @@ export default {
   },
   computed: {
     slicedContent() {
-      setInterval(async() => {
-        console.log('細節', await currentJobDetail())
-      }, 1000)
       if (!dictIncludes(this.detail, this.keyName)) return ''
       let content = this.detail[this.keyName]
       if (this.contentLength >= content.length) return content
       else return content.slice(0, this.contentLength) + '...'
+    },
+    detail() {
+      return getCurrentJobDetail()
     },
 
     order() {
@@ -69,17 +68,6 @@ export default {
     },
   },
   mounted() {
-    this.detail = {
-      'job-href': 'https://www.google.com/',
-      'job': 'google工程師',
-      'content': '舉杯邀明月，對影成三人。\n' +
-        '月既不解飲，影徒隨我身。\n' +
-        '暫伴月將影，行樂須及春。\n' +
-        '我歌月徘徊，我舞影零亂。\n' +
-        '醒時同交歡，醉後各分散。\n' +
-        '永結無情遊，相期邈雲漢。'
-    }
-
     if (getCookie('startsAtBottom') !== undefined) {
       coConfig.startsAtBottom = getCookie('startsAtBottom')
       coConfig.order = coConfig.startsAtBottom ? 'initial' : -1
