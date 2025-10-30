@@ -1,27 +1,28 @@
 <template>
   <div class="keyword-coverage">
-    <div v-if="!isKeywordEmpty">
-      <div class="analysis line-block mb-5">
-        <div v-for="[key, value] in Object.entries(skillRateDict)" class="analysis-cell">
-          {{ key }}佔{{ toPercent(value) }}
-          <HorizontalBar :width="toPercent(value)"></HorizontalBar>
-        </div>
-        <div class="analysis-cell">
-          總共{{ toPercent(skillRateNum) }}
-          <HorizontalBar :width="toPercent(skillRateNum)"></HorizontalBar>
-        </div>
+    <div v-if="!isKeywordEmpty" class="analysis line-block mb-5">
+      <div v-for="[key, value] in Object.entries(skillRateDict)" class="analysis-cell">
+        {{ key }}佔{{ toPercent(value) }}
+        <HorizontalBar :width="toPercent(value)"></HorizontalBar>
       </div>
-      <div class="job" v-for="job in processedJobs" @mousemove="userHoverJob($event, job)" @mouseleave="userLeaveJob">
+      <div class="analysis-cell">
+        總共{{ toPercent(skillRateNum) }}
+        <HorizontalBar :width="toPercent(skillRateNum)"></HorizontalBar>
+      </div>
+    </div>
+    <div ref="jobsView">
+      <div class="job" v-for="(job, i) in processedJobs"
+           @mousemove="userHoverJob($event, job)"
+           @mouseleave="userLeaveJob">
         <Bookmark :job="job"></Bookmark>
-        <a class="cell" :href="job.網址" target="_blank">{{ job.工作名稱 }}</a>
+        <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class="cell">
-        <span class="inline-block"
-              v-for="tag in getTags(job)"
-              :class="{highlight: tagInKeywords(tag)}">
-          {{ tag }}
-        </span>
+          <span class="inline-block" v-for="tag in getTags(job)"
+                :class="{ highlight: !isKeywordEmpty && tagInKeywords(tag) }">
+            {{ tag }}
+          </span>
         </div>
-        <div v-if="job.skillRate && job.skillWeight">  <!-- 避免undefined顯示NaN -->
+        <div v-if="!isKeywordEmpty && job.skillRate && job.skillWeight"> <!-- 避免undefined顯示NaN -->
           <div class="cell">關鍵字比例：{{ toPercent(job.skillRate) }}</div>
           <HorizontalBar :width="toPercent(job.skillRate)"></HorizontalBar>
           <div class="cell hint--bottom" :aria-label="job.skillWeightHint">
@@ -29,18 +30,7 @@
           </div>
           <HorizontalBar :width="toPercent(job.skillWeight)"></HorizontalBar>
         </div>
-        <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if="isHovering(job)"></KeyHint>
-      </div>
-    </div>
-    <div v-else>
-      <div class="job" v-for="(job, i) in processedJobs" @mousemove="userHoverJob($event, job)"
-           @mouseleave="userLeaveJob">
-        <Bookmark :job="job"></Bookmark>
-        <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
-        <div class="cell">
-          <span class="inline-block" v-for="tag in getTags(job)">{{ tag }}</span>
-        </div>
-        <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if="isHovering(job)"></KeyHint>
+        <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if="isHovering(job)"></KeyHint>
       </div>
     </div>
   </div>
@@ -56,11 +46,12 @@ import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
+import JobAtSiteCenter from '@/js/jobAtSiteCenter.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
 
-let {isHovering, setJobOnHover} = useKeyHintOnJob()
+let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
 export default {
   name: 'KeywordCoverageResult',
@@ -226,6 +217,14 @@ export default {
   },
   mounted() {
     this.updateResult()
+  },
+  updated() {
+    let jobs = this.$refs.jobsView.querySelectorAll('.job')
+    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
+  },
+  activated() {
+    let jobs = this.$refs.jobsView.querySelectorAll('.job')
+    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
   },
 }
 </script>
