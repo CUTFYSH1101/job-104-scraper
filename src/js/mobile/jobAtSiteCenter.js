@@ -1,5 +1,6 @@
 import { reactive } from 'vue'
 import { isMobile } from '@/js/mobile/rwd.js'
+import { setCurrentJob } from '@/js/mobile/detailPreviewMobile.js'
 
 let state = reactive({
   jobs: [],
@@ -16,7 +17,6 @@ let setJobsAndPoses = (jobEls, jobDatas, hrefColName) => {
   let hrefs = jobDatas.map(job => job[hrefColName])
   state.jobs = [...hrefs]
   state.poses = [...poses]
-  console.log(state.poses)
 }
 let changeJobDetail = scrollEvent => {
   if (!isMobile()) return
@@ -24,7 +24,7 @@ let changeJobDetail = scrollEvent => {
   let href = getCurrentJob(pos)
   state.scrollPos = pos
   state.currentHref = href
-  console.log(state.indexOf + 1, href, pos)
+  setCurrentJob(href)
 }
 let getCurrentJob = top => {
   state.diff = state.poses.map(y => Math.abs(y - top))

@@ -1,6 +1,12 @@
 import * as utils from '@/js/utils.js'
-import { setCurrentPath } from '@/js/detailPreview.js'
 import { ref } from 'vue'
+import { setCurrentPath as scp1 } from '@/js/detailPreview.js'
+import { setCurrentPath as scp2 } from '@/js/mobile/detailPreviewMobile.js'
+
+let setCurrentPath = val => {
+  scp1(val)
+  scp2(val)
+}
 
 let _jobs = ref([])
 export let jobs = () => _jobs.value

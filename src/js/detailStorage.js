@@ -1,4 +1,5 @@
 import * as utils from '@/js/utils.js'
+import { dictIncludes } from '@/js/utils.js'
 
 export default class DetailStorage {
   constructor() {
@@ -42,6 +43,8 @@ export default class DetailStorage {
   currentDetailsPath() {
     let target = utils.shortPath(this.currentPath)
 
+    if (!this.detailPaths) throw new Error('尚未初始化，請先載入路徑資料')
+
     if (!target) return undefined
 
     if (target === this.oldTarget) return this.oldDetailPath
@@ -63,7 +66,8 @@ export default class DetailStorage {
   }
 
   setCurrentJob(val) {
-    this.currentJob = val['網址']
+    if (dictIncludes(val, '網址')) this.currentJob = val['網址']
+    else this.currentJob = val
   }
 
   // details->detail

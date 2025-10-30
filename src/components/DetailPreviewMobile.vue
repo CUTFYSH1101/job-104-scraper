@@ -17,11 +17,11 @@
 </template>
 
 <script>
-import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
 import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh, getCssRoot } from '@/js/utils.js'
 import { useTouchEvent } from '@/js/mobile/touchEvent.js'
 import Vec2 from '@/js/mobile/vec2.js'
 import { config as coConfig } from '@/js/mobile/changeOrder.js'
+import { currentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
 
 let orderTouch = useTouchEvent()
 let sliderTouch = useTouchEvent()
@@ -39,6 +39,9 @@ export default {
   },
   computed: {
     slicedContent() {
+      setInterval(async() => {
+        console.log('細節', await currentJobDetail())
+      }, 1000)
       if (!dictIncludes(this.detail, this.keyName)) return ''
       let content = this.detail[this.keyName]
       if (this.contentLength >= content.length) return content
