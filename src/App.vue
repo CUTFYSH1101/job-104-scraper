@@ -12,10 +12,10 @@
 
 <script>
 import Site from '@/components/Site.vue'
-import { isMobile } from '@/js/rwd.js'
+import { isMobile } from '@/js/mobile/rwd.js'
 import DetailPreviewMobile from '@/components/DetailPreviewMobile.vue'
 import DetailPreview from '@/components/DetailPreview.vue'
-import { config } from '@/js/changeOrder.js'
+import { config } from '@/js/mobile/changeOrder.js'
 
 export default {
   components: {

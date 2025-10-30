@@ -1,5 +1,5 @@
 import { reactive } from 'vue'
-import { isMobile } from '@/js/rwd.js'
+import { isMobile } from '@/js/mobile/rwd.js'
 
 let state = reactive({
   jobs: [],
@@ -11,6 +11,7 @@ let state = reactive({
 })
 // 等到props和dom都有值再去抓取
 let setJobsAndPoses = (jobEls, jobDatas, hrefColName) => {
+  if (!isMobile()) return
   let poses = els2Pos(jobEls)
   let hrefs = jobDatas.map(job => job[hrefColName])
   state.jobs = [...hrefs]

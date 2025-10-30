@@ -19,9 +19,9 @@
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight } from '@/js/detailPreview.js'
 import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh, getCssRoot } from '@/js/utils.js'
-import { useTouchEvent } from '@/js/touchEvent.js'
-import Vec2 from '@/js/vec2.js'
-import { config as coConfig } from '@/js/changeOrder.js'
+import { useTouchEvent } from '@/js/mobile/touchEvent.js'
+import Vec2 from '@/js/mobile/vec2.js'
+import { config as coConfig } from '@/js/mobile/changeOrder.js'
 
 let orderTouch = useTouchEvent()
 let sliderTouch = useTouchEvent()

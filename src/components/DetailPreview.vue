@@ -21,7 +21,7 @@ import { hoverJobDetail, config, updateBodyWidthHeight, showDetail, hideDetail }
 import { dictIncludes } from '@/js/utils.js'
 import Satisfied from '@/js/satisfied.js'
 import { setCookie, getCookie } from '@/js/utils.js'
-import { isMobile } from '@/js/rwd.js'
+import { isMobile } from '@/js/mobile/rwd.js'
 import KeyHint from '@/components/KeyHint.vue'
 
 export default {

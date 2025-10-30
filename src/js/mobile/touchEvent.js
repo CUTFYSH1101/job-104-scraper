@@ -6,7 +6,7 @@
 // 測試：單點不能觸發、長按要觸發、長按移動不能觸發、長按移動出去又回來不能觸發
 // 測試：要嘛是move->end，或是stay
 
-import Vec2 from '@/js/vec2.js'
+import Vec2 from '@/js/mobile/vec2.js'
 
 export function useTouchEvent() {
   let p1 = new Vec2(0, 0)

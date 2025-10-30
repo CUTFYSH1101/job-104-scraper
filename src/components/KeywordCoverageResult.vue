@@ -46,7 +46,7 @@ import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
-import JobAtSiteCenter from '@/js/jobAtSiteCenter.js'
+import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
@@ -215,16 +215,15 @@ export default {
       this.updateResult()
     },
   },
-  mounted() {
-    this.updateResult()
-  },
   updated() {
-    let jobs = this.$refs.jobsView.querySelectorAll('.job')
-    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
+    SetJobsAndPoses.updated(this.$refs.jobsView)
   },
   activated() {
-    let jobs = this.$refs.jobsView.querySelectorAll('.job')
-    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
+    this.updateResult()
+    SetJobsAndPoses.activated(this.$refs.jobsView)
+  },
+  deactivated() {
+    SetJobsAndPoses.deactivated()
   },
 }
 </script>

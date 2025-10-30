@@ -29,6 +29,7 @@ $unitL: 0.75rem
   position: absolute
   right: $unit
   bottom: $unit
+  max-width: calc(100% - #{$unit * 2})  // 限制顯示範圍
 
 .key
   box-shadow: 0 $unit 0 rgba(black, 0.05)
@@ -40,6 +41,7 @@ $unitL: 0.75rem
   margin: 0 $unit $unit 0
   cursor: pointer
   transition: 0.1s
+  min-width: 0  // 限制顯示範圍
 
   &:hover
     transform: scale(1.1)

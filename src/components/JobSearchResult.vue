@@ -23,7 +23,7 @@ import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
-import JobAtSiteCenter from '@/js/jobAtSiteCenter.js'
+import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 
 let {isHovering, setJobOnHover} = useKeyHintOnJob()
 
@@ -126,13 +126,14 @@ export default {
       return utils.replace(text, keyword, '<span class="highlight">$1</span>')
     },
   },
-  updated() {  // 等到props和dom都有值再去抓取
-    let jobs = this.$refs.jobsView.querySelectorAll('.job')
-    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
+  updated() {
+    SetJobsAndPoses.updated(this.$refs.jobsView)
   },
-  activated() {  // 切換頁面的時候
-    let jobs = this.$refs.jobsView.querySelectorAll('.job')
-    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
+  activated() {
+    SetJobsAndPoses.activated(this.$refs.jobsView)
+  },
+  deactivated() {
+    SetJobsAndPoses.deactivated()
   },
 }
 </script>
