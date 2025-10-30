@@ -4,7 +4,7 @@
       <Download :data="filterJobs" format="job" csv-name="job-search.csv" class="float-panel"></Download>
       <div v-show="keyword" class="hint">共{{ filterJobs.length }}筆搜尋結果</div>
     </div>
-    <div>
+    <div ref="jobsView">
       <div class="job" v-for="(job, i) in filterJobs" @mousemove="userHoverJob($event, job)" @mouseleave="userLeaveJob">
         <Bookmark :job="job"></Bookmark>
         <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
@@ -23,6 +23,7 @@ import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
+import JobAtSiteCenter from '@/js/jobAtSiteCenter.js'
 
 let {isHovering, setJobOnHover} = useKeyHintOnJob()
 
@@ -124,6 +125,14 @@ export default {
       // 只有一個正向關鍵字
       return utils.replace(text, keyword, '<span class="highlight">$1</span>')
     },
+  },
+  updated() {  // 等到props和dom都有值再去抓取
+    let jobs = this.$refs.jobsView.querySelectorAll('.job')
+    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
+  },
+  activated() {  // 切換頁面的時候
+    let jobs = this.$refs.jobsView.querySelectorAll('.job')
+    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
   },
 }
 </script>

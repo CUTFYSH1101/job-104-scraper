@@ -1,5 +1,5 @@
 <template>
-  <div class="site">
+  <div class="site" @scroll="changeJobDetail">
     <header class="page-header pl-5 pr-5 pt-3 pb-3">
       <SearchPanel @change="changeKeyword"></SearchPanel>
     </header>
@@ -44,6 +44,7 @@ import KeywordCoverageResult from '@/components/KeywordCoverageResult.vue'
 import SkillRecommendResult from '@/components/SkillRecommendResult.vue'
 import BookmarkResult from '@/components/BookmarkResult.vue'
 import { jobs } from '@/js/jobsLoader.js'
+import JobAtSiteCenter from '@/js/jobAtSiteCenter.js'
 
 export default {
   components: {
@@ -63,6 +64,9 @@ export default {
   methods: {
     changeKeyword(val) {
       this.keyword = val  // keywordJobSearch step 2
+    },
+    changeJobDetail(e) {
+      JobAtSiteCenter.changeJobDetail(e)
     },
   },
   computed: {
