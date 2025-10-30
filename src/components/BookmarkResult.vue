@@ -12,9 +12,10 @@
       >
       </button>
     </div>
-    <div>
-      <div class="job" v-for="(job, i) in filterJobs" @mousemove="setJobOnHover(job)"
-           @mouseleave="setJobOnHover({})">
+    <div ref="jobsView">
+      <div class="job" v-for="(job, i) in filterJobs"
+           @mousemove="userHoverJob($event, job)"
+           @mouseleave="userLeaveJob">
         <Bookmark :job="job"></Bookmark>
         <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class="cell">{{ job.工作標籤 }}</div>
@@ -31,12 +32,13 @@ import { getColorMap, getBookmark } from '@/js/bookmark.js'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
+import JobAtSiteCenter from '@/js/jobAtSiteCenter.js'
 
 let {isHovering, setJobOnHover} = useKeyHintOnJob()
 
 export default {
   name: 'BookmarkResult',
-  components: { Bookmark, KeyHint },
+  components: { Bookmark, KeyHint, JobAtSiteCenter },
   props: ['jobs'],
   data() {
     return {
@@ -51,8 +53,23 @@ export default {
     },
   },
   methods: {
-    setJobOnHover,
+    userHoverJob(e, job) {
+      userHoverJob(e, job)
+      setJobOnHover(job)
+    },
+    userLeaveJob() {
+      userLeaveJob()
+      setJobOnHover({})
+    },
     isHovering,
+  },
+  updated() {  // 等到props和dom都有值再去抓取
+    let jobs = this.$refs.jobsView.querySelectorAll('.job')
+    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
+  },
+  activated() {  // 切換頁面的時候
+    let jobs = this.$refs.jobsView.querySelectorAll('.job')
+    JobAtSiteCenter.setJobsAndPoses(jobs, this.jobs, '網址')
   },
 }
 </script>
