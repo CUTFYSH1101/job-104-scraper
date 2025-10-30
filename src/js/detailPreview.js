@@ -1,13 +1,11 @@
 import * as utils from '@/js/utils.js'
 import { clientHeight, clientWidth } from '@/js/utils.js'
+import DetailStorage from '@/js/detailStorage.js'
+
+let detailConfig = new DetailStorage()
+await detailConfig.init()
 
 export let config = {
-  hoverJob: {},
-  thePathsHavingDetail: [],
-  currentPath: '',
-  oldTarget: '',
-  oldDetailPath: '',
-  oldDetails: [],
   pos: [],
   onSetPos: pos => {
   },
@@ -21,7 +19,7 @@ export let config = {
 }
 
 export async function userHoverJob(e, job) {
-  setHoverJob(job)
+  detailConfig.setCurrentJob(job)
   await showDetail()
   await setPos(e.clientX, e.clientY)
 }
@@ -54,41 +52,10 @@ async function setPos(...args) {  // 無法阻擋undefined, null
   await config.onSetPos(config.pos)
 }
 
-export function currentDetailPath() {
-  let target = utils.shortPath(config.currentPath)
-  if (target && target === config.oldTarget) return config.oldDetailPath
-
-  let path = config.thePathsHavingDetail.filter(path => path.replace(/\\/g, '/').includes(target))
-  config.oldTarget = target
-  config.oldDetailPath = path
-  return path
-}
-
-export async function openDetails() {
-  if (config.oldDetailPath && config.oldDetailPath === currentDetailPath())
-    return config.oldDetails
-
-  let details = await utils.loadDetails(currentDetailPath())
-  config.oldDetails = details
-  return details
-}
-
 export async function hoverJobDetail() {
-  let target = config.hoverJob['網址']
-  let details = await openDetails()
-  if (!details || !details.length) return undefined
-  return details.filter(row => row['job-href'] === target)[0]
-}
-
-function setHoverJob(val) {
-  config.hoverJob = val
+  return await detailConfig.currentJobDetail()
 }
 
 export function setCurrentPath(val) {
-  if (utils.isFalsy(val)) console.warn('所設定的新路徑為空')
-  config.currentPath = val
+  detailConfig.setCurrentPath(val)
 }
-
-let paths = await utils.loadText('./data/paths.txt')
-paths = paths.split(/\r?\n/)
-config.thePathsHavingDetail = paths.filter(path => path.includes('processing'))
