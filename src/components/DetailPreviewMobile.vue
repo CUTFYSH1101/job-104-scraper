@@ -13,6 +13,7 @@
     </div>
     <div class="drag-preview" ref="drag-preview" v-if="dragging"></div>
     <div class="drag-outline" v-if="dragging"></div>
+    <div ref="detect-mouseup-area" class="w-dvw h-dvh fixed left-0 top-0 hidden" @mouseup="mouseup"></div>
   </div>
 </template>
 
@@ -56,6 +57,10 @@ export default {
         touchmove: orderTouch.update,
         touchend: orderTouch.stop,
         touchcancel: orderTouch.stop,
+        mousedown: e => {
+          orderTouch.mousedown(e)
+          this.$refs['detect-mouseup-area'].classList.remove('hidden')
+        },
       }
     },
     sliderHandlers() {
@@ -64,7 +69,18 @@ export default {
         touchmove: sliderTouch.update,
         touchend: sliderTouch.stop,
         touchcancel: sliderTouch.stop,
+        mousedown: e => {
+          sliderTouch.mousedown(e)
+          this.$refs['detect-mouseup-area'].classList.remove('hidden')
+        },
       }
+    },
+  },
+  methods: {
+    mouseup() {
+      orderTouch.mouseup()
+      sliderTouch.mouseup()
+      this.$refs['detect-mouseup-area'].classList.add('hidden')
     },
   },
   mounted() {
@@ -179,11 +195,13 @@ export default {
   +var.absCover
   background-color: var(--drag-orange)
   z-index: 1
+  pointer-events: none  // 這樣mouseup才會觸發
 
 .drag-outline
   +var.absCover
   border: solid 5px var(--drag-orange)
   box-sizing: border-box
+  pointer-events: none
 
 // 觸控的區域比顯示的區域大，比較不會按空
 // 離上下空白多一點才不會誤觸其他功能
@@ -198,4 +216,9 @@ export default {
     content: ''
     border-bottom: 5px solid #cfcfcf
     border-radius: 10px
+</style>
+
+<style lang="sass">
+.hidden
+  display: none
 </style>

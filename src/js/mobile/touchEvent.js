@@ -20,6 +20,7 @@ export function useTouchEvent() {
   let touches = []
   let listener = null
   let hasStopped = false
+  let mousemoveListener = null
 
   let config = {
     onLongPress: (p1, p2) => {
@@ -65,6 +66,12 @@ export function useTouchEvent() {
     oldP1 = p1.clone()
     oldP2 = p2.clone()
 
+    if (e.type.includes('mouse')) {
+      p1.set(e.clientX, e.clientY)
+      p2 = Vec2.ZERO
+      return
+    }
+
     length = e.touches.length
     if (length === 0) {
       p1 = Vec2.ZERO
@@ -86,10 +93,25 @@ export function useTouchEvent() {
     p2.set(touch.clientX, touch.clientY)
   }
 
+  function mousedown(e) {
+    start(e)
+    mousemoveListener = (moveEvent) => update(moveEvent)
+    window.addEventListener('mousemove', mousemoveListener)
+  }
+
+  function mouseup() {
+    if (mousemoveListener)
+      window.removeEventListener('mousemove', mousemoveListener)
+    mousemoveListener = null
+    stop()
+  }
+
   return {
     config,
     start,
     update,
     stop,
+    mousedown,
+    mouseup,
   }
 }
