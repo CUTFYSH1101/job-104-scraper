@@ -9,25 +9,28 @@
           <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
           <p v-html="slicedContent"></p>
         </div>
+        <!-- 在上方時距離底部的拖曳桿遠點避免重疊 -->
+        <KeyHint :keys="['1','2','3','4','5','6']" :bottom="order === -1 ? '1.5rem' : '0.5rem'"></KeyHint>
       </div>
     </div>
     <div class="drag-preview" ref="drag-preview" v-if="dragging"></div>
     <div class="drag-outline" v-if="dragging"></div>
-    <div ref="detect-mouseup-area" class="w-dvw h-dvh fixed left-0 top-0 hidden" @mouseup="mouseup"></div>
   </div>
 </template>
 
 <script>
-import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh, getCssRoot } from '@/js/utils.js'
+import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh } from '@/js/utils.js'
 import { useTouchEvent } from '@/js/mobile/touchEvent.js'
 import Vec2 from '@/js/mobile/vec2.js'
 import { config as coConfig } from '@/js/mobile/changeOrder.js'
 import { getCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
+import KeyHint from '@/components/KeyHint.vue'
 
 let orderTouch = useTouchEvent()
 let sliderTouch = useTouchEvent()
 
 export default {
+  components: { KeyHint },
   data() {
     return {
       keyName: 'content',
@@ -57,10 +60,7 @@ export default {
         touchmove: orderTouch.update,
         touchend: orderTouch.stop,
         touchcancel: orderTouch.stop,
-        mousedown: e => {
-          orderTouch.mousedown(e)
-          this.$refs['detect-mouseup-area'].classList.remove('hidden')
-        },
+        mousedown: e => orderTouch.mousedown(e),
       }
     },
     sliderHandlers() {
@@ -69,18 +69,18 @@ export default {
         touchmove: sliderTouch.update,
         touchend: sliderTouch.stop,
         touchcancel: sliderTouch.stop,
-        mousedown: e => {
-          sliderTouch.mousedown(e)
-          this.$refs['detect-mouseup-area'].classList.remove('hidden')
-        },
+        mousedown: e => sliderTouch.mousedown(e),
       }
     },
   },
   methods: {
-    mouseup() {
-      orderTouch.mouseup()
-      sliderTouch.mouseup()
-      this.$refs['detect-mouseup-area'].classList.add('hidden')
+    switchMode(e) {
+      let mode = parseInt(e.key)
+      if (mode <= 0) return
+      if (!this.detail || !Object.keys(this.detail)[mode - 1]) return
+
+      this.modeHidden = false
+      this.keyName = Object.keys(this.detail)[mode - 1]
     },
   },
   mounted() {
@@ -146,10 +146,7 @@ export default {
       this.draggingSlider = true
       pressSliderPos.set(p1.x, p1.y)
       startHeight = coConfig.height
-      Object.assign(this.$refs['resize-slider'].style, {
-        padding: `5px ${(100 - 15) / 2}dvw`,
-        backgroundColor: getCssRoot('--drag-orange'),
-      })
+      this.$refs['resize-slider'].classList.add('dragging')
     }
     sliderTouch.config.onUpdate = (p1, p2) => {
       if (!this.draggingSlider) return
@@ -166,12 +163,18 @@ export default {
     sliderTouch.config.onStop = (p1, p2) => {
       if (!this.draggingSlider) return
       this.draggingSlider = false
-      Object.assign(this.$refs['resize-slider'].style, {
-        padding: `5px ${(100 - 20) / 2}dvw`,
-        backgroundColor: 'transparent',
-      })
+      this.$refs['resize-slider'].classList.remove('dragging')
       setCookie('detailHeight', coConfig.height)
     }
+
+    window.addEventListener('mouseup', orderTouch.mouseup)
+    window.addEventListener('mouseup', sliderTouch.mouseup)
+    window.addEventListener('keyup', this.switchMode)
+  },
+  unmounted() {
+    window.removeEventListener('mouseup', orderTouch.mouseup)
+    window.removeEventListener('mouseup', sliderTouch.mouseup)
+    window.removeEventListener('keyup', this.switchMode)
   },
 }
 </script>
@@ -195,13 +198,12 @@ export default {
   +var.absCover
   background-color: var(--drag-orange)
   z-index: 1
-  pointer-events: none  // 這樣mouseup才會觸發
+  cursor: grabbing
 
 .drag-outline
   +var.absCover
   border: solid 5px var(--drag-orange)
   box-sizing: border-box
-  pointer-events: none
 
 // 觸控的區域比顯示的區域大，比較不會按空
 // 離上下空白多一點才不會誤觸其他功能
@@ -216,6 +218,11 @@ export default {
     content: ''
     border-bottom: 5px solid #cfcfcf
     border-radius: 10px
+
+  &.dragging
+    padding: 5px calc(#{(100 - 15) / 2}dvw)
+    background-color: var.$dragOrange
+    cursor: row-resize
 </style>
 
 <style lang="sass">
