@@ -48,7 +48,7 @@ export function getCookie(name) {
 }
 
 export function setCookie(name, value) {
-  document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))}; max-age=3600`
+  document.cookie = `${name}=${encodeURIComponent(JSON.stringify(value))}; max-age=86400`
 }
 
 export function getLocalStorage(name) {

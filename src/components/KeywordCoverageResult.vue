@@ -22,13 +22,16 @@
             {{ tag }}
           </span>
         </div>
-        <div v-if="!isKeywordEmpty && job.skillRate && job.skillWeight"> <!-- 避免undefined顯示NaN -->
-          <div class="cell">關鍵字比例：{{ toPercent(job.skillRate) }}</div>
-          <HorizontalBar :width="toPercent(job.skillRate)"></HorizontalBar>
-          <div class="cell hint--bottom" :aria-label="job.skillWeightHint">
-            關鍵字比重：{{ toPercent(job.skillWeight) }}
+        <!-- skillRate 或 skillWeight 任一有值時顯示，避免undefined顯示NaN -->
+        <div v-if="!isKeywordEmpty && (job.skillRate || job.skillWeight)">
+          <div v-if="job.skillRate" class="cell">
+            <div>關鍵字比例：{{ toPercent(job.skillRate) }}</div>
+            <HorizontalBar :width="toPercent(job.skillRate)"></HorizontalBar>
           </div>
-          <HorizontalBar :width="toPercent(job.skillWeight)"></HorizontalBar>
+          <div v-if="job.skillWeight" class="cell hint--bottom" :aria-label="job.skillWeightHint">
+            <div>關鍵字比重：{{ toPercent(job.skillWeight) }}</div>
+            <HorizontalBar :width="toPercent(job.skillWeight)"></HorizontalBar>
+          </div>
         </div>
         <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if="isHovering(job)"></KeyHint>
       </div>
