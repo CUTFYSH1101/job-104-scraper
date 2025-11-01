@@ -118,8 +118,8 @@ export default {
       else
         this.processedKeywords = keyword.split(/\s+/)
 
-      this.mustKeywords = this.processedKeywords.filter(key => !this.isStartsWithDash(key))
-      this.notKeywords = this.processedKeywords.filter(key => this.isStartsWithDash(key)).map(key => this.dumpFirst(key))
+      this.mustKeywords = this.processedKeywords.filter(utils.notStartsWithDash)
+      this.notKeywords = this.processedKeywords.filter(utils.isStartsWithDash).map(utils.dumpFirst)
     },
     // 這個工作的技能要求中，有多少比例符合你搜尋的關鍵字，越大表示這個工作越符合你的搜尋條件
     async calcuRateForeachJob() {
@@ -202,12 +202,6 @@ export default {
     },
     toPercent(f) {
       return utils.toPercent(f)
-    },
-    isStartsWithDash(word) {
-      return word.startsWith('-')
-    },
-    dumpFirst(word) {
-      return word.substring(1)
     },
   },
   watch: {

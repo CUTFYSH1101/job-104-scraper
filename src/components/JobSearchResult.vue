@@ -49,10 +49,10 @@ export default {
         if (keyword.includes('-')) {
           let keyword_ = keyword.toLowerCase().split(/\s+/)
           let must = keyword_
-            .filter(key => key.charAt(0) !== '-')
+            .filter(utils.notStartsWithDash)
           let not = keyword_
-            .filter(key => key.charAt(0) === '-')
-            .map(key => key.substring(1))
+            .filter(utils.isStartsWithDash)
+            .map(utils.dumpFirst)
           return this.jobs.filter(job => {
             let content = utils.getContent(job).toLowerCase()
             if (!must.every(word => content.includes(word))) return false
@@ -74,7 +74,7 @@ export default {
         return this.jobs.filter(job =>
           !utils.getContent(job)
             .toLowerCase()
-            .includes(keyword.toLowerCase()))
+            .includes(keyword.toLowerCase().dumpFirst()))
 
       // 只有一個正向關鍵字
       return this.jobs.filter(job =>
@@ -113,7 +113,7 @@ export default {
       // 以空白切割，只強調正向關鍵字
       if (keyword.includes(' ')) {
         let keyword_ = keyword.toLowerCase().split(/\s+/)
-        let must = keyword_.filter(key => key.charAt(0) !== '-')
+        let must = keyword_.filter(utils.notStartsWithDash)
         must.forEach(keyword => text = utils.replace(text, keyword, '<span class="highlight">$1</span>'))
         return text
       }

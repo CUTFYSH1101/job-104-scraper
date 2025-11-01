@@ -137,16 +137,23 @@ export function replace(text, search, replace) {
   return text.replace(regex, replace)
 }
 
+String.prototype.isStartsWithDash = function() {
+  // this.charAt(0) === '-'
+  return this.startsWith('-')
+}
+export let isStartsWithDash = word => word.isStartsWithDash()
+export let notStartsWithDash = word => !word.isStartsWithDash()
+String.prototype.dumpFirst = function() {
+  return this.substring(1)
+}
+export let dumpFirst = word => word.dumpFirst()
+
 export function joinDictValues(list, separator) {
   return Object.values(list).join(separator)
 }
 
 export function getContent(job) {
   return joinDictValues(job, ',')
-}
-
-export function getDetail(job) {
-
 }
 
 export function getLowerTags(job) {
