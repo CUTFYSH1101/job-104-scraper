@@ -19,5 +19,5 @@ export let keywordAliases = {
   'ts': ['typescript'],
   'rest': ['restful'],
   'tf': ['tensorflow'],
-  'ai': ['ai 工程師', '機器學習', 'machine learning', '深度學習', 'deep learning', 'keras', 'sklearn', 'scikit-learn', 'tensorflow', 'pytorch'],
+  'ai': ['ai 工程師', 'ai工程師', '機器學習', 'machine learning', '深度學習', 'deep learning', 'keras', 'sklearn', 'scikit-learn', 'tensorflow', 'pytorch'],
 }
