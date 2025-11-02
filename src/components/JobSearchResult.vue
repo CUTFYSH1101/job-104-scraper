@@ -130,9 +130,6 @@ export default {
   deactivated() {
     SetJobsAndPoses.deactivated()
   },
-  isJobIncludesKeyword(job, keyword) {
-    return isJobIncludesKeyword(job, keyword)
-  },
 }
 </script>
 

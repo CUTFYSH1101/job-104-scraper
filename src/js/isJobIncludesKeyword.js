@@ -19,15 +19,22 @@ function getDetail(job) {
   return detail ? utils.joinDictValues(detail) : ''
 }
 
-export function isJobIncludesKeyword(job, keyword) {
+// 若關鍵字等於別名，優先使用別名比對，避免誤中無關內容
+// 比方像搜尋'ai'，等於搜尋以下陣列其一
+// ['ai 工程師', '機器學習', 'machine learning', '深度學習', 'deep learning', 'keras', 'sklearn',
+// 'scikit-learn', 'tensorflow', 'pytorch']
+// 若不使用別名，會誤匹配到如 'taiwan'、'email'、'tailwind' 等含有 ai 的字詞
+function matchKeyword(text, keyword) {
+  if (!text || !keyword) return false
   keyword = keyword.toLowerCase()
-  let tags = utils.getLowerTags(job)
+  text = text.toLowerCase()
 
-  // 檢查別名，當關鍵字涵蓋別名key，去查詢別名value是否出現在job
-  if (config.keywordAliases[keyword]) {
-    return config.keywordAliases[keyword].some(alias => tags.includes(alias))
-  }
+  let aliases = config.keywordAliases[keyword]
+  if (aliases) return aliases.some(alias => text.includes(alias))
 
-  let detail = getDetail(job)
-  return detail ? detail.toLowerCase().includes(keyword) : false
+  return text.includes(keyword)
+}
+
+export function isJobIncludesKeyword(job, keyword) {
+  return matchKeyword(getDetail(job), keyword)
 }
