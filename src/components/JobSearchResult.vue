@@ -7,8 +7,10 @@
     <div ref="jobsView">
       <div class="job" v-for="(job, i) in filterJobs" @mousemove="userHoverJob($event, job)" @mouseleave="userLeaveJob">
         <Bookmark :job="job"></Bookmark>
-        <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
-        <div class="cell">{{ job.工作標籤 }}</div>
+        <a class="cell" :href="job.網址" target="_blank">
+          {{ i + 1 }}:<span v-html="highlightText(job.工作名稱)"></span>
+        </a>
+        <div class="cell" v-html="highlightText(job.工作標籤)"></div>
         <div class="cell" v-html="highlightText(job.關鍵字)"></div>
         <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if="isHovering(job)"></KeyHint>
       </div>
@@ -25,8 +27,9 @@ import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 import { isJobIncludesKeyword } from '@/js/isJobIncludesKeyword.js'
+import { keywordAliases } from '@/js/config.js'
 
-let {isHovering, setJobOnHover} = useKeyHintOnJob()
+let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
 export default {
   name: 'JobSearchResult',
@@ -104,6 +107,15 @@ export default {
       if (!this.keyword || !text || typeof this.keyword === 'object') return text
 
       let keyword = this.checkAndReturnKeyword()
+
+      // 把別名加入要高亮的清單
+      let keyword_ = keyword.toLowerCase().split(/\s+/)
+      let must = keyword_.filter(utils.notStartsWithDash)
+      let includes = must.intersection(keywordAliases._keys)
+      let replace = includes.map(keyword => keywordAliases[keyword]).flat().join(' ')
+      includes.forEach(key => keyword = keyword.replace(key, ''))
+      keyword += ' ' + replace
+      keyword = keyword.trim()
 
       // 以空白切割，只強調正向關鍵字
       if (keyword.includes(' ')) {

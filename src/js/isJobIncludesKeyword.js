@@ -24,7 +24,7 @@ function getDetail(job) {
 // ['ai 工程師', '機器學習', 'machine learning', '深度學習', 'deep learning', 'keras', 'sklearn',
 // 'scikit-learn', 'tensorflow', 'pytorch']
 // 若不使用別名，會誤匹配到如 'taiwan'、'email'、'tailwind' 等含有 ai 的字詞
-function matchKeyword(text, keyword) {
+export function matchKeyword(text, keyword) {
   if (!text || !keyword) return false
   keyword = keyword.toLowerCase()
   text = text.toLowerCase()

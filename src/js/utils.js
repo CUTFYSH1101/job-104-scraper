@@ -97,6 +97,34 @@ export function isDict(val) {
   return typeof val == 'object' && val !== null && !Array.isArray(val)
 }
 
+Object.defineProperty(Object.prototype, '_values', {
+  get: function() {
+    if (isDict(this)) return Object.values(this)
+    throw new TypeError('this variable must be an dictionary')
+  }
+})
+Object.defineProperty(Object.prototype, '_keys', {
+  get: function() {
+    if (isDict(this)) return Object.keys(this)
+    throw new TypeError('this variable must be an dictionary')
+  }
+})
+Object.defineProperty(Object.prototype, '_items', {
+  get: function() {
+    if (isDict(this)) {
+      let keys = this._keys
+      let values = this._values
+      return keys.map((key, index) => [key, values[index]])
+    }
+    throw new TypeError('this variable must be an dictionary')
+  }
+})
+Array.prototype.intersection = function(compare) {
+  if (!isArray(compare))
+    throw new TypeError('compare must be array')
+  return this.filter(item => compare.includes(item))
+}
+
 export function isFalsy(val) {
   if (typeof val === 'string')
     return !val.trim()

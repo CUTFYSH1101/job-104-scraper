@@ -50,6 +50,7 @@ import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
+import { matchKeyword } from '@/js/isJobIncludesKeyword.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
@@ -197,11 +198,10 @@ export default {
     tagInKeywords(tag) {
       // 檢查別名
       for (let key of this.mustKeywords)
-        if (config.keywordAliases[key] &&
-          config.keywordAliases[key].some(alias => tag.toLowerCase() === alias))
+        if (matchKeyword(tag, key))
           return true
 
-      return this.mustKeywords.includes(tag.toLowerCase())
+      return false
     },
     toPercent(f) {
       return utils.toPercent(f)
