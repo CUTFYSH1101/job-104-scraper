@@ -53,7 +53,7 @@ async function setPos(...args) {  // 無法阻擋undefined, null
 }
 
 export function hoverJobDetail() {
-  return detailConfig.currentJobDetail()
+  return detailConfig.getCurrentJobDetail()
 }
 
 export async function setCurrentPath(val) {

@@ -14,7 +14,7 @@ export async function setCurrentPath(val) {
 }
 
 export function setCurrentJobDetail() {
-  detail.value = detailConfig.currentJobDetail()
+  detail.value = detailConfig.getCurrentJobDetail()
 }
 
 export function getCurrentJobDetail() {

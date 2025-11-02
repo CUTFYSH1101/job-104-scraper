@@ -24,6 +24,7 @@ import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
+import { isJobIncludesKeyword } from '@/js/isJobIncludesKeyword.js'
 
 let {isHovering, setJobOnHover} = useKeyHintOnJob()
 
@@ -54,33 +55,27 @@ export default {
             .filter(utils.isStartsWithDash)
             .map(utils.dumpFirst)
           return this.jobs.filter(job => {
-            let content = utils.getContent(job).toLowerCase()
-            if (!must.every(word => content.includes(word))) return false
-            if (not.some(word => content.includes(word))) return false
+            if (!must.every(word => isJobIncludesKeyword(job, word))) return false
+            if (not.some(word => isJobIncludesKeyword(job, word))) return false
             return true
           })
         }
 
         // 全部都是正向關鍵字
         return this.jobs.filter(job => {
-          let content = utils.getContent(job).toLowerCase()
           let keyword_ = keyword.toLowerCase().split(/\s+/)
-          return keyword_.every(word => content.includes(word))
+          return keyword_.every(word => isJobIncludesKeyword(job, word))
         })
       }
 
       // 只有一個負面關鍵字
       if (keyword.includes('-'))
         return this.jobs.filter(job =>
-          !utils.getContent(job)
-            .toLowerCase()
-            .includes(keyword.toLowerCase().dumpFirst()))
+          !isJobIncludesKeyword(job, keyword.toLowerCase().dumpFirst()))
 
       // 只有一個正向關鍵字
       return this.jobs.filter(job =>
-        utils.getContent(job)
-          .toLowerCase()
-          .includes(keyword.toLowerCase()))
+        isJobIncludesKeyword(job, keyword.toLowerCase()))
     },
   },
   methods: {
@@ -134,6 +129,9 @@ export default {
   },
   deactivated() {
     SetJobsAndPoses.deactivated()
+  },
+  isJobIncludesKeyword(job, keyword) {
+    return isJobIncludesKeyword(job, keyword)
   },
 }
 </script>

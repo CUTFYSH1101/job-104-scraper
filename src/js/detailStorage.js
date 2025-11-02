@@ -62,7 +62,7 @@ export default class DetailStorage {
   }
 
   // details->detail
-  currentJobDetail() {
+  getCurrentJobDetail() {
     let target = this.currentJob
     let details = this.config.details
     if (!details || !details.length) return undefined
