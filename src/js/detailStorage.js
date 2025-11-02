@@ -5,11 +5,11 @@ export default class DetailStorage {
   constructor() {
     this.config = {
       currentJob: {},
+      details: {},
       detailPaths: [],
       currentPath: '',
       oldTarget: '',
       oldDetailPath: '',
-      oldDetails: [],
     }
   }
 
@@ -35,9 +35,10 @@ export default class DetailStorage {
     Object.assign(this.config, dict)
   }
 
-  setCurrentPath(val) {
+  async setCurrentPath(val) {
     if (utils.isFalsy(val)) console.warn('所設定的新路徑為空')
     this.currentPath = val
+    this.config.details = await utils.loadDetails(this.currentDetailsPath())
   }
 
   currentDetailsPath() {
@@ -55,25 +56,15 @@ export default class DetailStorage {
     return path
   }
 
-  // path->file
-  async getOrOpenDetails() {
-    if (this.oldDetailPath && this.oldDetailPath === this.currentDetailsPath())
-      return this.oldDetails
-
-    let details = await utils.loadDetails(this.currentDetailsPath())
-    this.oldDetails = details
-    return details
-  }
-
   setCurrentJob(val) {
     if (dictIncludes(val, '網址')) this.currentJob = val['網址']
     else this.currentJob = val
   }
 
   // details->detail
-  async currentJobDetail() {
+  currentJobDetail() {
     let target = this.currentJob
-    let details = await this.getOrOpenDetails()
+    let details = this.config.details
     if (!details || !details.length) return undefined
     return details.filter(row => row['job-href'] === target)[0]
   }

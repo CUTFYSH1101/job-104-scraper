@@ -66,9 +66,9 @@ export default {
     changeKeyword(val) {
       this.keyword = val  // keywordJobSearch step 2
     },
-    async changeJobDetail(e) {
+    changeJobDetail(e) {
       JobAtSiteCenter.changeJobDetail(e)
-      await setCurrentJobDetail()
+      setCurrentJobDetail()
     },
   },
   computed: {

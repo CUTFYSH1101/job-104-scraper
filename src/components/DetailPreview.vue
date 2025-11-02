@@ -60,8 +60,8 @@ export default {
       }
     },
 
-    async loadDetail() {
-      this.detail = await hoverJobDetail()
+    loadDetail() {
+      this.detail = hoverJobDetail()
       if (!this.detail) {
         this.includesDetail = false
         return
@@ -78,7 +78,7 @@ export default {
       if (this.fontSize > 1.27) this.fontSize = 1.27
     },
 
-    async switchMode(e) {  // 0:關閉,其他:不動,切換模式:索引=e.key-1
+    switchMode(e) {  // 0:關閉,其他:不動,切換模式:索引=e.key-1
       if (e.key === '0' && !this.modeHidden) {
         this.modeHidden = true
         window.addEventListener('keyup', this.switchMode)
@@ -146,7 +146,7 @@ export default {
     config.onShowDetail = async() => {
       this.hidden = false
       await this.$nextTick()  // 等待vue元素載入完成，才不會undefined
-      await this.loadDetail()
+      this.loadDetail()
       this.domElement = this.$el
     }
     window.addEventListener('keyup', this.switchMode)
@@ -162,7 +162,7 @@ export default {
 
       if (this.hidden || this.modeHidden) return
       await this.$nextTick()  // 等 Vue 同步完變數與畫面，否則 this.domElement 可能還是上一幀已被替換的 DOM
-      await this.loadDetail()  // 更換懸浮視窗的內容
+      this.loadDetail()  // 更換懸浮視窗的內容
       updateBodyWidthHeight()  // 即便畫面縮放也ok
       let x = pos[0], y = pos[1]
       let w = this.domElement.offsetWidth, h = this.domElement.offsetHeight
