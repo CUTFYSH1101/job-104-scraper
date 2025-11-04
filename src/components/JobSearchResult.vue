@@ -168,5 +168,6 @@ export default {
 
 .job-search-container .highlight
   color: var.$btnBlue
+  background-color: var.$dragOrange
   font-weight: 600
 </style>
