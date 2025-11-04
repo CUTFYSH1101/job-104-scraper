@@ -27,7 +27,7 @@ import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 import { isJobIncludesKeyword } from '@/js/isJobIncludesKeyword.js'
-import { keywordAliases } from '@/js/config.js'
+import { highlightText, cleanKeyword } from '@/js/highlight.js'
 
 let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
@@ -45,7 +45,7 @@ export default {
       if (!this.keyword) return this.jobs
       if (typeof this.keyword === 'object') return this.jobs
 
-      let keyword = this.checkAndReturnKeyword()
+      let keyword = cleanKeyword(this.keyword)
 
       // 以空白切割
       if (keyword.includes(' ')) {
@@ -92,45 +92,8 @@ export default {
     },
     isHovering,
 
-    checkAndReturnKeyword() {
-      let keyword = this.keyword.trim()  // 去除前後空格
-      // 假設忘記在其中一個'-'前加上' '，補' '避免後續split(' ')失敗
-      if (keyword.includes('-'))
-        for (let i = 1; i < keyword.length; i++)
-          if (keyword.charAt(i) === '-' && keyword.charAt(i - 1) !== ' ') {
-            keyword = keyword.substring(0, i) + ' ' + keyword.substring(i)
-            i++
-          }
-      return keyword
-    },
     highlightText(text) {
-      if (!this.keyword || !text || typeof this.keyword === 'object') return text
-
-      let keyword = this.checkAndReturnKeyword()
-
-      // 把別名加入要高亮的清單
-      let keyword_ = keyword.toLowerCase().split(/\s+/)
-      let must = keyword_.filter(utils.notStartsWithDash)
-      let includes = must.intersection(keywordAliases._keys)
-      let replace = includes.map(keyword => keywordAliases[keyword]).flat().join(' ')
-      includes.forEach(key => keyword = keyword.replace(key, ''))
-      keyword += ' ' + replace
-      keyword = keyword.trim()
-
-      // 以空白切割，只強調正向關鍵字
-      if (keyword.includes(' ')) {
-        let keyword_ = keyword.toLowerCase().split(/\s+/)
-        let must = keyword_.filter(utils.notStartsWithDash)
-        must.forEach(keyword => text = utils.replace(text, keyword, '<span class="highlight">$1</span>'))
-        return text
-      }
-
-      // 負面關鍵字表示不用強調
-      if (keyword.includes('-'))
-        return text
-
-      // 只有一個正向關鍵字
-      return utils.replace(text, keyword, '<span class="highlight">$1</span>')
+      return highlightText(text, this.keyword)
     },
   },
   updated() {
