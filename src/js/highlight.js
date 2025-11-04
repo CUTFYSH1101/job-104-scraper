@@ -2,7 +2,7 @@ import * as utils from '@/js/utils.js'
 import { keywordAliases } from '@/js/config.js'
 
 export function cleanKeyword(keyword) {
-  if (!keyword || typeof keyword === 'object') return ''
+  if (utils.isFalsy(keyword)) return ''
 
   keyword = keyword.toLowerCase().trim()  // 去除前後空格
   // 假設忘記在其中一個'-'前加上' '，補' '避免後續split(' ')失敗
@@ -21,7 +21,7 @@ export function cleanKeyword(keyword) {
  * @returns {{} | {all: string[], must: string[], not: string[]}}
  */
 function parseKeyword(keyword) {
-  if (!keyword || typeof keyword === 'object') return {}
+  if (utils.isFalsy(keyword)) return {}
   let cleaned = cleanKeyword(keyword)
   if (!cleaned) return {}
 
@@ -38,7 +38,7 @@ function parseKeyword(keyword) {
  * @return string
  */
 function expandAliases(keyword) {
-  if (!keyword || typeof keyword === 'object') return ''
+  if (utils.isFalsy(keyword)) return ''
 
   let cleaned = cleanKeyword(keyword)
   let keyword_ = cleaned.toLowerCase().split(/\s+/)
@@ -52,7 +52,7 @@ function expandAliases(keyword) {
 }
 
 export function highlightText(text, keyword) {
-  if (!keyword || !text || typeof keyword === 'object') return text
+  if (utils.isFalsy(text) || utils.isFalsy(keyword)) return text
 
   keyword = expandAliases(keyword)
 

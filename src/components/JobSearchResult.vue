@@ -42,7 +42,7 @@ export default {
   computed: {
     filterJobs() {
       if (!this.jobs) return []
-      if (!this.keyword) return this.jobs
+      if (utils.isFalsy(this.keyword)) return this.jobs
       if (typeof this.keyword === 'object') return this.jobs
 
       let keyword = cleanKeyword(this.keyword)
