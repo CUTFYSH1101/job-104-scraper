@@ -4,10 +4,10 @@
     <div class="flex flex-col h-100" :class="{'flex-col-reverse': order === -1}">
       <!-- 拖曳桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
       <div class="resize-slider" v-on="sliderHandlers" ref="resize-slider"></div>
-      <div class="job-preview" v-on="orderHandlers">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
+      <div class="job-preview" v-on="orderHandlers" @wheel.prevent="zoom">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
         <div v-if="detail">
           <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
-          <p v-html="slicedContent"></p>
+          <p v-html="slicedContent" :style="contentStyle"></p>
         </div>
         <!-- 在上方時距離底部的拖曳桿遠點避免重疊 -->
         <KeyHint :keys="['1','2','3','4','5','6']" :bottom="order === -1 ? '1.5rem' : '0.5rem'"></KeyHint>
@@ -25,9 +25,11 @@ import Vec2 from '@/js/mobile/vec2.js'
 import { config as coConfig } from '@/js/mobile/changeOrder.js'
 import { getCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
 import KeyHint from '@/components/KeyHint.vue'
+import AlertDialog from '@/js/AlertDialog.js'
 
 let orderTouch = useTouchEvent()
 let sliderTouch = useTouchEvent()
+let resizeTouch = useTouchEvent()
 
 export default {
   components: { KeyHint },
@@ -36,6 +38,7 @@ export default {
       keyName: 'content',
       originLength: 200,
       contentLength: 0,
+      fontSize: 1,
 
       dragging: false,
       draggingSlider: false,
@@ -57,9 +60,18 @@ export default {
     },
     orderHandlers() {
       return {
-        touchstart: orderTouch.start,
-        touchmove: orderTouch.update,
-        touchend: orderTouch.stop,
+        touchstart: e => {
+          orderTouch.start(e)
+          resizeTouch.start(e)
+        },
+        touchmove: e => {
+          orderTouch.update(e)
+          resizeTouch.update(e)
+        },
+        touchend: () => {
+          orderTouch.stop()
+          resizeTouch.stop()
+        },
         touchcancel: orderTouch.stop,
         mousedown: e => orderTouch.mousedown(e),
       }
@@ -73,6 +85,15 @@ export default {
         mousedown: e => sliderTouch.mousedown(e),
       }
     },
+    contentStyle() {
+      // 文字為1/2倍時，可容納4倍文字，文字為1/3倍時，可容納9倍文字
+      this.contentLength = Math.floor(this.originLength / (this.fontSize ** 2))
+      return {
+        fontSize: this.fontSize + 'rem',
+        lineHeight: this.fontSize * 1.2 + 'rem',
+        letterSpacing: this.fontSize + 'px',
+      }
+    },
   },
   methods: {
     switchMode(e) {
@@ -82,6 +103,15 @@ export default {
 
       this.modeHidden = false
       this.keyName = Object.keys(this.detail)[mode - 1]
+    },
+    zoom(e) {
+      if (!dictIncludes(this.detail, 'content')) return
+
+      let y = e.deltaY  // 正表示範圍變大，負表示字變大
+      let unit = f => f / 111  // 最小單位
+      this.fontSize -= unit(y) * 0.1
+      if (this.fontSize < 0.54) this.fontSize = 0.54
+      if (this.fontSize > 1.27) this.fontSize = 1.27
     },
   },
   mounted() {
@@ -173,6 +203,30 @@ export default {
     window.addEventListener('mouseup', orderTouch.mouseup)
     window.addEventListener('mouseup', sliderTouch.mouseup)
     window.addEventListener('keyup', this.switchMode)
+
+    let distance = 0
+    let resizing = false
+    resizeTouch.config.onLongPress = (p1, p2) => {
+      AlertDialog.showAlertDialog('長按觸發')
+      if (resizeTouch.config.length < 2) return
+      resizing = true
+      distance = Vec2.distance(p1, p2)
+      AlertDialog.showAlertDialog(`滿兩指，當前距離:${distance}, p1=${p1.toString()}, p2=${p2.toString()}`)
+    }
+    resizeTouch.config.onUpdate = (p1, p2) => {
+      if (!resizing) return
+      if (Vec2.distance(p1, p2) > distance) {
+        AlertDialog.showAlertDialog(`放大，當前距離:${Vec2.distance(p1, p2)}, p1=${p1.toString()}, p2=${p2.toString()}`)
+      }
+      if (Vec2.distance(p1, p2) < distance) {
+        AlertDialog.showAlertDialog(`縮小，當前距離:${Vec2.distance(p1, p2)}, p1=${p1.toString()}, p2=${p2.toString()}`)
+      }
+    }
+    resizeTouch.config.onStop = (p1, p2) => {
+      if (!resizing) return
+      resizing = false
+      AlertDialog.showAlertDialog(`放開`)
+    }
   },
   unmounted() {
     window.removeEventListener('mouseup', orderTouch.mouseup)
