@@ -7,6 +7,7 @@
       :style="{order: order, flexBasis: height}">
     </DetailPreviewMobile>
     <DetailPreview v-else></DetailPreview>
+    <AlertDialog></AlertDialog>
   </div>
 </template>
 
@@ -16,12 +17,14 @@ import { isMobile } from '@/js/mobile/rwd.js'
 import DetailPreviewMobile from '@/components/DetailPreviewMobile.vue'
 import DetailPreview from '@/components/DetailPreview.vue'
 import { config } from '@/js/mobile/changeOrder.js'
+import AlertDialog from '@/components/AlertDialog.vue'
 
 export default {
   components: {
     Site,
     DetailPreview,
     DetailPreviewMobile,
+    AlertDialog,
   },
   computed: {
     isMobile,

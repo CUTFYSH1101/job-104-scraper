@@ -13,7 +13,6 @@ export function useTouchEvent() {
   let p2 = new Vec2(0, 0)
   let oldP1 = new Vec2(0, 0)
   let oldP2 = new Vec2(0, 0)
-  let length = 0
   let touch = null
   let moveThresholdPx = 15  // px像素
   let timeoutMs = 1000  // ms毫秒
@@ -29,6 +28,7 @@ export function useTouchEvent() {
     },
     onStop: (p1, p2) => {
     },
+    length: 0,
   }
 
   function start(e) {
@@ -72,15 +72,15 @@ export function useTouchEvent() {
       return
     }
 
-    length = e.touches.length
-    if (length === 0) {
+    config.length = e.touches.length
+    if (config.length === 0) {
       p1 = Vec2.ZERO
       p2 = Vec2.ZERO
       return
     }
 
     touches = e.touches
-    if (length === 1) {
+    if (config.length === 1) {
       touch = touches[0]
       p1.set(touch.clientX, touch.clientY)
       p2 = Vec2.ZERO
