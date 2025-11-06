@@ -7,7 +7,7 @@
       <div class="job-preview" v-on="orderHandlers" @wheel.prevent="zoom">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
         <div v-if="detail">
           <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
-          <p v-html="slicedContent" :style="contentStyle"></p>
+          <p v-html="highlightText(slicedContent)" :style="contentStyle"></p>
         </div>
         <!-- 在上方時距離底部的拖曳桿遠點避免重疊 -->
         <KeyHint :keys="['1','2','3','4','5','6']" :bottom="order === -1 ? '1.5rem' : '0.5rem'"></KeyHint>
@@ -19,12 +19,14 @@
 </template>
 
 <script>
-import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh } from '@/js/utils.js'
+import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh, isFalsy } from '@/js/utils.js'
 import { useTouchEvent } from '@/js/mobile/touchEvent.js'
 import Vec2 from '@/js/mobile/vec2.js'
 import { config as coConfig } from '@/js/mobile/changeOrder.js'
 import { getCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
 import KeyHint from '@/components/KeyHint.vue'
+import { highlightText } from '@/js/highlight.js'
+import { getKeyword } from '@/js/keyword.js'
 
 let orderTouch = useTouchEvent()
 let sliderTouch = useTouchEvent()
@@ -111,6 +113,10 @@ export default {
       this.fontSize -= unit(y) * 0.1
       if (this.fontSize < 0.54) this.fontSize = 0.54
       if (this.fontSize > 1.27) this.fontSize = 1.27
+    },
+    highlightText(text) {
+      if (isFalsy(getKeyword())) return text
+      return highlightText(text, getKeyword())
     },
   },
   mounted() {
@@ -297,6 +303,12 @@ export default {
 </style>
 
 <style lang="sass">
+@use "@/styles/highlight"
+
+p.highlight, p .highlight
+  +highlight.defaultStyle
+  font-weight: initial
+
 .hidden
   display: none
 </style>
