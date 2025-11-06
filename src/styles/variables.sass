@@ -17,11 +17,31 @@ $dragOrange: rgba(orange, 0.4)
   width: $w
   height: $h
 
+=hiddenButChildrenVisible()
+  position: fixed
+  left: 0
+  top: 0
+  width: 0
+  height: 0
+  pointer-events: none
+
 =fixCenter()
   position: fixed
   transform: translate(-50%, -50%)
   left: 50dvw
   top: 50dvh
+
+=fixTop()
+  position: fixed
+  transform: translateX(-50%)
+  left: 50dvw
+  top: 0
+
+=fixBottom()
+  position: fixed
+  transform: translateX(-50%)
+  left: 50dvw
+  bottom: 0
 
 =absCenter()
   position: absolute

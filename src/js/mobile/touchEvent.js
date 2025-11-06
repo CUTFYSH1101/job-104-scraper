@@ -14,8 +14,6 @@ export function useTouchEvent() {
   let oldP1 = new Vec2(0, 0)
   let oldP2 = new Vec2(0, 0)
   let touch = null
-  let moveThresholdPx = 15  // px像素
-  let timeoutMs = 1000  // ms毫秒
   let touches = []
   let listener = null
   let hasStopped = false
@@ -29,6 +27,8 @@ export function useTouchEvent() {
     onStop: (p1, p2) => {
     },
     length: 0,
+    moveThresholdPx: 15,  // px像素
+    timeoutMs: 1000,      // ms毫秒
   }
 
   function start(e) {
@@ -40,7 +40,7 @@ export function useTouchEvent() {
     listener = setTimeout(() => {
       updatePos(e)  // 時間到時更新座標，偵測是否還在原地
       if (!isPanning()) config.onLongPress?.(p1, p2)
-    }, timeoutMs)
+    }, config.timeoutMs)
   }
 
   function update(e) {
@@ -59,7 +59,7 @@ export function useTouchEvent() {
   }
 
   function isPanning() {
-    return Vec2.distance(oldP1, p1) >= moveThresholdPx
+    return Vec2.distance(oldP1, p1) >= config.moveThresholdPx
   }
 
   function updatePos(e) {

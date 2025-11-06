@@ -25,7 +25,6 @@ import Vec2 from '@/js/mobile/vec2.js'
 import { config as coConfig } from '@/js/mobile/changeOrder.js'
 import { getCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
 import KeyHint from '@/components/KeyHint.vue'
-import AlertDialog from '@/js/AlertDialog.js'
 
 let orderTouch = useTouchEvent()
 let sliderTouch = useTouchEvent()
@@ -124,6 +123,7 @@ export default {
 
     let pressPos = new Vec2(0, 0)
     orderTouch.config.onLongPress = (p1, p2) => {
+      if (resizing) return  // 如果正在拖曳字體大小
       this.dragging = true
       pressPos.set(p1.x, p1.y)
     }
@@ -204,28 +204,32 @@ export default {
     window.addEventListener('mouseup', sliderTouch.mouseup)
     window.addEventListener('keyup', this.switchMode)
 
-    let distance = 0
+    let d0 = 0
     let resizing = false
+    resizeTouch.config.timeoutMs = 0
     resizeTouch.config.onLongPress = (p1, p2) => {
-      AlertDialog.showAlertDialog('長按觸發')
       if (resizeTouch.config.length < 2) return
       resizing = true
-      distance = Vec2.distance(p1, p2)
-      AlertDialog.showAlertDialog(`滿兩指，當前距離:${distance}, p1=${p1.toString()}, p2=${p2.toString()}`)
+      d0 = Vec2.distance(p1, p2)
     }
     resizeTouch.config.onUpdate = (p1, p2) => {
       if (!resizing) return
-      if (Vec2.distance(p1, p2) > distance) {
-        AlertDialog.showAlertDialog(`放大，當前距離:${Vec2.distance(p1, p2)}, p1=${p1.toString()}, p2=${p2.toString()}`)
+      let d = Vec2.distance(p1, p2)
+      let move = 0
+      if (Math.abs(d - d0) > 0.01) move = d - d0
+      this.fontSize += move * 0.0001
+      if (this.fontSize < 0.54) {
+        d0 = d  // 重設，這樣才能馬上縮小
+        this.fontSize = 0.54
       }
-      if (Vec2.distance(p1, p2) < distance) {
-        AlertDialog.showAlertDialog(`縮小，當前距離:${Vec2.distance(p1, p2)}, p1=${p1.toString()}, p2=${p2.toString()}`)
+      if (this.fontSize > 1.27) {
+        d0 = d  // 才能馬上放大
+        this.fontSize = 1.27
       }
     }
     resizeTouch.config.onStop = (p1, p2) => {
       if (!resizing) return
       resizing = false
-      AlertDialog.showAlertDialog(`放開`)
     }
   },
   unmounted() {

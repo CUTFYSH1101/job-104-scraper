@@ -20,15 +20,10 @@ let hidden = computed(() => AlertDialog.getHidden())
 @use '@/styles/variables' as var
 
 .event-root
-  position: fixed
-  left: 0
-  top: 0
-  width: 0
-  height: 0
-  pointer-events: none
+  +var.hiddenButChildrenVisible
 
 .alert-dialog
-  +var.fixCenter
+  +var.fixTop
   top: 5dvh
   width: fit-content
   max-width: 90dvw
