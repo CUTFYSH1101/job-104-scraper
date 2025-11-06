@@ -10,7 +10,7 @@
 
 <script setup>
 import { computed } from 'vue'
-import AlertDialog from '@/js/AlertDialog.js'
+import AlertDialog from '@/js/alertDialog.js'
 
 let message = computed(() => AlertDialog.getMessage())
 let hidden = computed(() => AlertDialog.getHidden())

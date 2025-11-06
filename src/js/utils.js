@@ -111,11 +111,13 @@ export function isFalsy(val) {
     return !val.trim()
   if (isArray(val))
     return val.length === 0
+  if (typeof val === 'object' && val instanceof Event)
+    return true
   if (isDict(val))
     return Object.keys(val).length === 0
   if (typeof val === 'number')
     return isNaN(val)
-  return val === null || val === undefined || (typeof val === 'object' && 'value' in val)
+  return val === null || val === undefined
 }
 
 // endregion

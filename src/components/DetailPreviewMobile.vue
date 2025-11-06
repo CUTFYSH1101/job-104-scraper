@@ -4,10 +4,10 @@
     <div class="flex flex-col h-100" :class="{'flex-col-reverse': order === -1}">
       <!-- 拖曳桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
       <div class="resize-slider" v-on="sliderHandlers" ref="resize-slider"></div>
-      <div class="job-preview" v-on="orderHandlers" @wheel.prevent="zoom">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
+      <div class="job-preview" v-on="orderHandlers" @wheel.prevent="zoom" ref="jobPreview">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
         <div v-if="detail">
           <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
-          <p v-html="highlightText(slicedContent)" :style="contentStyle"></p>
+          <p v-html="highlightText(slicedContent)" :style="contentStyle" ref="content"></p>
         </div>
         <!-- 在上方時距離底部的拖曳桿遠點避免重疊 -->
         <KeyHint :keys="['1','2','3','4','5','6']" :bottom="order === -1 ? '1.5rem' : '0.5rem'"></KeyHint>
@@ -37,9 +37,10 @@ export default {
   data() {
     return {
       keyName: 'content',
-      originLength: 200,
+      originLength: 500,
       contentLength: 0,
       fontSize: 1,
+      step: 50,
 
       dragging: false,
       draggingSlider: false,
@@ -87,8 +88,6 @@ export default {
       }
     },
     contentStyle() {
-      // 文字為1/2倍時，可容納4倍文字，文字為1/3倍時，可容納9倍文字
-      this.contentLength = Math.floor(this.originLength / (this.fontSize ** 2))
       return {
         fontSize: this.fontSize + 'rem',
         lineHeight: this.fontSize * 1.2 + 'rem',
@@ -113,10 +112,23 @@ export default {
       this.fontSize -= unit(y) * 0.1
       if (this.fontSize < 0.54) this.fontSize = 0.54
       if (this.fontSize > 1.27) this.fontSize = 1.27
+      this.calcuContentTextLength()
     },
     highlightText(text) {
       if (isFalsy(getKeyword())) return text
       return highlightText(text, getKeyword())
+    },
+    async calcuContentTextLength() {
+      this.contentLength = this.originLength
+      let outerH = this.$refs.jobPreview.offsetHeight
+      let innerH = this.$refs.content.offsetHeight
+      for (let i = 0; i < this.originLength; i += this.step) {
+        await this.$nextTick()
+        outerH = this.$refs.jobPreview.offsetHeight
+        innerH = this.$refs.content.offsetHeight
+        if (innerH * 1.2 <= outerH) break
+        this.contentLength -= this.step
+      }
     },
   },
   mounted() {
@@ -187,7 +199,7 @@ export default {
       startHeight = coConfig.height
       this.$refs['resize-slider'].classList.add('dragging')
     }
-    sliderTouch.config.onUpdate = (p1, p2) => {
+    sliderTouch.config.onUpdate = async (p1, p2) => {
       if (!this.draggingSlider) return
       let displaceY = p1.y - pressSliderPos.y
       let minDvh = px2dvh(20)  // 從上到下：m5 p5 bt5 p5，共20px
@@ -198,6 +210,7 @@ export default {
       if (dvh < minDvh) dvh = minDvh
       if (dvh > 100) dvh = 100
       coConfig.height = dvh + 'dvh'
+      await this.calcuContentTextLength()
     }
     sliderTouch.config.onStop = (p1, p2) => {
       if (!this.draggingSlider) return
@@ -218,12 +231,12 @@ export default {
       resizing = true
       d0 = Vec2.distance(p1, p2)
     }
-    resizeTouch.config.onUpdate = (p1, p2) => {
+    resizeTouch.config.onUpdate = async (p1, p2) => {
       if (!resizing) return
       let d = Vec2.distance(p1, p2)
       let move = 0
       if (Math.abs(d - d0) > 0.01) move = d - d0
-      this.fontSize += move * 0.0001
+      this.fontSize += move * 0.0005
       if (this.fontSize < 0.54) {
         d0 = d  // 重設，這樣才能馬上縮小
         this.fontSize = 0.54
@@ -232,6 +245,7 @@ export default {
         d0 = d  // 才能馬上放大
         this.fontSize = 1.27
       }
+      await this.calcuContentTextLength()
     }
     resizeTouch.config.onStop = (p1, p2) => {
       if (!resizing) return
