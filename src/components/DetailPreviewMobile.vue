@@ -34,7 +34,8 @@ export default {
   data() {
     return {
       keyName: 'content',
-      contentLength: 50,
+      originLength: 200,
+      contentLength: 0,
 
       dragging: false,
       draggingSlider: false,
@@ -84,6 +85,8 @@ export default {
     },
   },
   mounted() {
+    this.contentLength = this.originLength
+
     if (getCookie('startsAtBottom') !== undefined) {
       coConfig.startsAtBottom = getCookie('startsAtBottom')
       coConfig.order = coConfig.startsAtBottom ? 'initial' : -1
@@ -182,6 +185,14 @@ export default {
 <style scoped lang="sass">
 @use "@/styles/variables.sass" as var
 @use "@/styles/tailwind" as tw
+@use "@/styles/jobDetail.sass"
+
+// 引用a樣式
++jobDetail.aStyle
+.job-preview a
+  display: block
+  width: fit-content
+  +tw.mb(1)
 
 .container
   width: 100%
@@ -193,6 +204,8 @@ export default {
   flex: 1  // 填充拖曳桿剩餘的高度
   padding: var.$px10
   background-color: white
+  +jobDetail.content104Style
+  white-space: pre-wrap
 
 .drag-preview
   +var.absCover

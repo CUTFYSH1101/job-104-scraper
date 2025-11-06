@@ -36,7 +36,7 @@ export default class DetailStorage {
   }
 
   async setCurrentPath(val) {
-    if (utils.isFalsy(val)) console.warn('所設定的新路徑為空')
+    if (utils.isFalsy(val)) console.warn('The new path you set is empty.')
     this.currentPath = val
     this.config.details = await utils.loadDetails(this.currentDetailsPath())
   }
@@ -44,7 +44,7 @@ export default class DetailStorage {
   currentDetailsPath() {
     let target = utils.shortPath(this.currentPath)
 
-    if (!this.detailPaths) throw new Error('尚未初始化，請先載入路徑資料')
+    if (!this.detailPaths) throw new Error('Not initialized yet, please load the path information first.')
 
     if (!target) return undefined
 

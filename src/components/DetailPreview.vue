@@ -9,7 +9,7 @@
       <div v-if="includesDetail">  <!-- 內容用一個div裝著 -->
         <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
         <p v-if="keyName === 'content'" class="salary" :style="salaryStyle">{{ detail['salary'] }}</p>
-        <p v-html="slicedContent" :style="contentStyle"></p>
+        <p v-html="highlightText(slicedContent)" :style="contentStyle"></p>
       </div>
       <div class="empty" @mousemove="hideOnHoverBlackSpace($event)"></div>
       <KeyHint :keys="['1','2','3','4','5','6','0']"></KeyHint>
@@ -18,11 +18,12 @@
 </template>
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight, showDetail, hideDetail } from '@/js/detailPreview.js'
-import { dictIncludes } from '@/js/utils.js'
+import { dictIncludes, setCookie, getCookie, isFalsy } from '@/js/utils.js'
 import Satisfied from '@/js/satisfied.js'
-import { setCookie, getCookie } from '@/js/utils.js'
 import { isMobile } from '@/js/mobile/rwd.js'
 import KeyHint from '@/components/KeyHint.vue'
+import { highlightText } from '@/js/highlight.js'
+import { getKeyword } from '@/js/keyword.js'
 
 export default {
   components: {
@@ -32,8 +33,8 @@ export default {
     return {
       detail: {},
       fontSize: 1,
-      originLength: 500,
-      contentLength: this.originLength,
+      originLength: 300,
+      contentLength: 0,
       includesDetail: false,
       domElement: null,
       contentDomElement: null,
@@ -92,6 +93,10 @@ export default {
       this.modeHidden = false
       this.keyName = Object.keys(this.detail)[mode - 1]
     },
+    highlightText(text) {
+      if (isFalsy(getKeyword())) return text
+      return highlightText(text, getKeyword())
+    },
   },
   computed: {
     slicedContent() {
@@ -108,7 +113,6 @@ export default {
         fontSize: this.fontSize + 'rem',
         lineHeight: this.fontSize * 1.2 + 'rem',
         letterSpacing: this.fontSize + 'px',
-        whiteSpace: 'pre-wrap',
       }
     },
     salaryStyle() {
@@ -142,6 +146,7 @@ export default {
     },
   },
   created() {
+    this.contentLength = this.originLength
     config.onHideDetail = () => this.hidden = true
     config.onShowDetail = async() => {
       this.hidden = false
@@ -194,9 +199,10 @@ export default {
 
 <style scoped lang="sass">
 @use "@/styles/variables.sass" as var
+@use "@/styles/jobDetail.sass"
 
 // 引用a樣式
-@use "@/styles/jobs.sass"
++jobDetail.aStyle
 
 =fillRemainingSpace()
   display: flex
@@ -217,11 +223,8 @@ export default {
   overflow: hidden
   padding: var.$px10
   +fillRemainingSpace
-
-  // 仿104
-  border-radius: 4px
-  box-shadow: 0 2px 6px rgba(black, .1)
-  font-family: Arial, MsJhengHeiBold, 微軟正黑體, Microsoft JhengHei, Roboto, PingFangTC, sans-serif
+  +jobDetail.content104Style
+  white-space: pre-wrap
 
 // fade-enter 表示 fade in, fade-leave 表示 fade out
 .fade-enter-active, .fade-leave-active
@@ -232,4 +235,12 @@ export default {
 
 .fade-enter-to, .fade-leave-from
   opacity: 1
+</style>
+
+<style lang="sass">
+@use "@/styles/highlight"
+
+p.highlight, p .highlight
+  +highlight.defaultStyle
+  font-weight: initial
 </style>

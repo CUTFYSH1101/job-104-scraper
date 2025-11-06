@@ -27,7 +27,7 @@ import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 import { isJobIncludesKeyword } from '@/js/isJobIncludesKeyword.js'
-import { highlightText, cleanKeyword } from '@/js/highlight.js'
+import { highlightText, cleanKeyword, parseKeyword } from '@/js/highlight.js'
 
 let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
@@ -43,42 +43,14 @@ export default {
     filterJobs() {
       if (!this.jobs) return []
       if (utils.isFalsy(this.keyword)) return this.jobs
-      if (typeof this.keyword === 'object') return this.jobs
 
       let keyword = cleanKeyword(this.keyword)
-
-      // 以空白切割
-      if (keyword.includes(' ')) {
-        // 正向與負面混雜
-        if (keyword.includes('-')) {
-          let keyword_ = keyword.toLowerCase().split(/\s+/)
-          let must = keyword_
-            .filter(utils.notStartsWithDash)
-          let not = keyword_
-            .filter(utils.isStartsWithDash)
-            .map(utils.dumpFirst)
-          return this.jobs.filter(job => {
-            if (!must.every(word => isJobIncludesKeyword(job, word))) return false
-            if (not.some(word => isJobIncludesKeyword(job, word))) return false
-            return true
-          })
-        }
-
-        // 全部都是正向關鍵字
-        return this.jobs.filter(job => {
-          let keyword_ = keyword.toLowerCase().split(/\s+/)
-          return keyword_.every(word => isJobIncludesKeyword(job, word))
-        })
-      }
-
-      // 只有一個負面關鍵字
-      if (keyword.includes('-'))
-        return this.jobs.filter(job =>
-          !isJobIncludesKeyword(job, keyword.toLowerCase().dumpFirst()))
-
-      // 只有一個正向關鍵字
-      return this.jobs.filter(job =>
-        isJobIncludesKeyword(job, keyword.toLowerCase()))
+      let keywords = parseKeyword(keyword)
+      return this.jobs.filter(job => {
+        if (!keywords.must.every(word => isJobIncludesKeyword(job, word))) return false
+        if (keywords.not.some(word => isJobIncludesKeyword(job, word))) return false
+        return true
+      })
     },
   },
   methods: {
@@ -127,10 +99,8 @@ export default {
 </style>
 
 <style lang="sass">
-@use "@/styles/variables.sass" as var
+@use "@/styles/highlight"
 
 .job-search-container .highlight
-  color: var.$btnBlue
-  background-color: var.$dragOrange
-  font-weight: 600
+  +highlight.defaultStyle
 </style>

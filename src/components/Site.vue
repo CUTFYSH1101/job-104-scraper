@@ -46,6 +46,7 @@ import BookmarkResult from '@/components/BookmarkResult.vue'
 import { jobs } from '@/js/jobsLoader.js'
 import JobAtSiteCenter from '@/js/mobile/jobAtSiteCenter.js'
 import { setCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
+import { setKeyword } from '@/js/keyword.js'
 
 export default {
   components: {
@@ -65,6 +66,7 @@ export default {
   methods: {
     changeKeyword(val) {
       this.keyword = val  // keywordJobSearch step 2
+      setKeyword(val)
     },
     changeJobDetail(e) {
       JobAtSiteCenter.changeJobDetail(e)

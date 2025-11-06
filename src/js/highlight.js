@@ -20,7 +20,7 @@ export function cleanKeyword(keyword) {
  * @param {string} keyword
  * @returns {{} | {all: string[], must: string[], not: string[]}}
  */
-function parseKeyword(keyword) {
+export function parseKeyword(keyword) {
   if (utils.isFalsy(keyword)) return {}
   let cleaned = cleanKeyword(keyword)
   if (!cleaned) return {}
@@ -71,3 +71,5 @@ export function highlightText(text, keyword) {
   // 只有一個正向關鍵字
   return utils.replace(text, keyword, '<span class="highlight">$1</span>')
 }
+
+export default {cleanKeyword,parseKeyword,expandAliases,highlightText}

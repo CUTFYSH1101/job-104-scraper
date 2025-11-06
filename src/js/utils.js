@@ -1,3 +1,4 @@
+// region DOM 樣式相關
 // 視窗寬度
 export function windowWidth() {
   return window.innerWidth
@@ -30,6 +31,9 @@ export function getCssRoot(varName) {
   return getComputedStyle(document.documentElement).getPropertyValue(varName).trim()
 }
 
+// endregion
+
+// region Cookie & Storage
 export function getCookie(name) {
   let parts = []
   if (document.cookie.startsWith(`${name}=`))
@@ -63,6 +67,9 @@ export function removeLocalStorage(name) {
   localStorage.removeItem(name)
 }
 
+// endregion
+
+// region 陣列、字典、型別工具
 export function includes(str, compare) {
   return typeof str == 'string' && str.indexOf(compare) > -1
 }
@@ -97,34 +104,7 @@ export function isDict(val) {
   return typeof val == 'object' && val !== null && !Array.isArray(val)
 }
 
-Object.defineProperty(Object.prototype, '_values', {
-  get: function() {
-    if (isDict(this)) return Object.values(this)
-    throw new TypeError('this variable must be an dictionary')
-  }
-})
-Object.defineProperty(Object.prototype, '_keys', {
-  get: function() {
-    if (isDict(this)) return Object.keys(this)
-    throw new TypeError('this variable must be an dictionary')
-  }
-})
-Object.defineProperty(Object.prototype, '_items', {
-  get: function() {
-    if (isDict(this)) {
-      let keys = this._keys
-      let values = this._values
-      return keys.map((key, index) => [key, values[index]])
-    }
-    throw new TypeError('this variable must be an dictionary')
-  }
-})
-Array.prototype.intersection = function(compare) {
-  if (!isArray(compare))
-    throw new TypeError('compare must be array')
-  return this.filter(item => compare.includes(item))
-}
-
+// typeof val === 'object' 是為了處理 Vue 的 ref() 或 reactive()
 export function isFalsy(val) {
   if (typeof val === 'string')
     return !val.trim()
@@ -134,9 +114,59 @@ export function isFalsy(val) {
     return Object.keys(val).length === 0
   if (typeof val === 'number')
     return isNaN(val)
-  return val === null || val === undefined
+  return val === null || val === undefined || (typeof val === 'object' && 'value' in val)
 }
 
+// endregion
+
+// region 原型擴充
+Object.defineProperty(Object.prototype, '_values', {
+  get: function() {
+    if (isDict(this)) return Object.values(this)
+    throw new TypeError('This variable must be a dictionary.')
+  }
+})
+Object.defineProperty(Object.prototype, '_keys', {
+  get: function() {
+    if (isDict(this)) return Object.keys(this)
+    throw new TypeError('This variable must be a dictionary.')
+  }
+})
+Object.defineProperty(Object.prototype, '_items', {
+  get: function() {
+    if (isDict(this)) {
+      let keys = this._keys
+      let values = this._values
+      return keys.map((key, index) => [key, values[index]])
+    }
+    throw new TypeError('This variable must be a dictionary.')
+  }
+})
+Array.prototype.intersection = function(compare) {
+  if (!isArray(compare))
+    throw new TypeError('The comparison must be an array.')
+  return this.filter(item => compare.includes(item))
+}
+/**
+ * @example
+ * let arr = [1, 2, 3, 4]
+ * arr.remove(2)
+ * console.log(arr)       // [1, 3, 4]
+ *
+ * @example
+ * let arr = [1, 2, 3, 4]
+ * removed = arr.remove(2)
+ * console.log(arr)       // [1, 3, 4]
+ * console.log(removed)   // 2
+ */
+Array.prototype.remove = function(removed) {
+  let index = this.indexOf(removed)
+  if (index <= -1) throw new Error('This array does not contain the value to be deleted.')
+  return this.splice(index, 1)
+}
+Array.prototype.copy = function() {
+  return this.slice()
+}
 String.prototype.format = function(args) {
   let result = this
   if (arguments.length > 0) {
@@ -149,6 +179,9 @@ String.prototype.format = function(args) {
   return result
 }
 
+// endregion
+
+// region 語法糖、前綴、轉成百分比，slice、join、startswith進階處理
 export function prefixEach(arr, separator) {
   return isFalsy(arr) ? '' : separator + arr.join(separator)
 }
@@ -176,6 +209,9 @@ String.prototype.dumpFirst = function() {
 }
 export let dumpFirst = word => word.dumpFirst()
 
+// endregion
+
+// region 檔案載入與欄位
 export function joinDictValues(list, separator) {
   return Object.values(list).join(separator)
 }
@@ -271,3 +307,5 @@ export function shortPath(path) {
   let regex = new RegExp(`${sep}${folder}${sep}${date}${sep}`)  // '/xxx/yyyy-mm-dd'
   return path.match(regex)[0]
 }
+
+// endregion

@@ -51,6 +51,8 @@ import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 import { matchKeyword } from '@/js/isJobIncludesKeyword.js'
+import { parseKeyword } from '@/js/highlight.js'
+import { keywordAliases } from '@/js/config.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
@@ -109,21 +111,10 @@ export default {
       return this.keyword && typeof this.keyword !== 'object'
     },
     processKeywords() {
-      let keyword = this.keyword.toLowerCase().trim()  // 去除前後空格
-      // 假設忘記在其中一個'-'前加上' '，補' '避免後續split(' ')失敗
-      if (keyword.includes('-'))
-        for (let i = 1; i < keyword.length; i++)
-          if (keyword.charAt(i) === '-' && keyword.charAt(i - 1) !== ' ') {
-            keyword = keyword.substring(0, i) + ' ' + keyword.substring(i)
-            i++
-          }
-      if (!keyword.includes(' '))
-        this.processedKeywords = [keyword]
-      else
-        this.processedKeywords = keyword.split(/\s+/)
-
-      this.mustKeywords = this.processedKeywords.filter(utils.notStartsWithDash)
-      this.notKeywords = this.processedKeywords.filter(utils.isStartsWithDash).map(utils.dumpFirst)
+      let keywords = parseKeyword(this.keyword)
+      this.processedKeywords = keywords.all
+      this.mustKeywords = keywords.must
+      this.notKeywords = keywords.not
     },
     // 這個工作的技能要求中，有多少比例符合你搜尋的關鍵字，越大表示這個工作越符合你的搜尋條件
     async calcuRateForeachJob() {
@@ -140,13 +131,13 @@ export default {
     async calcuWeightForeachJob() {
       await batcher.forEach(this.processedJobs, job => {
         let total = getTags(job).length
-        let must = this.mustKeywords.filter(key => this.jobIncludesKeyword(job, key))
-        let not = this.notKeywords.filter(key => this.jobIncludesKeyword(job, key))  // 每有一個就扣分
+        let must = this.expandAliases(this.mustKeywords).filter(key => this.jobIncludesKeyword(job, key))
+        let not = this.expandAliases(this.notKeywords).filter(key => this.jobIncludesKeyword(job, key))  // 每有一個就扣分
         let score = must.length - not.length
         if (score < 0) score = 0
         if (score > total) score = total
         job.skillWeight = score / total
-        job.skillWeightHint = `${prefixEach(must, '+')}${prefixEach(not, '-')}=${score} => ${score}/${total}=${job.skillWeight}`
+        job.skillWeightHint = `${prefixEach(must, '+')}${prefixEach(not, '-')}共${score}項符合（${must.length}-${not.length}），${score}/${total} = ${job.skillWeight}`
       })
       console.log('weight')
     },
@@ -205,6 +196,16 @@ export default {
     },
     toPercent(f) {
       return utils.toPercent(f)
+    },
+    expandAliases(keywords) {
+      if (utils.isFalsy(keywords)) return []
+
+      keywords = keywords.copy()
+      let includes = keywords.intersection(keywordAliases._keys)
+      let replace = includes.map(keyword => keywordAliases[keyword]).flat()
+      includes.forEach(key => keywords.remove(key))
+      keywords = [...keywords, ...replace]
+      return keywords
     },
   },
   watch: {
