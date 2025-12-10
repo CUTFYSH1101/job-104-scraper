@@ -11,10 +11,9 @@ let state = reactive({
   currentHref: {},
 })
 // 等到props和dom都有值再去抓取
-let setJobsAndPoses = (jobEls, jobDatas, hrefColName) => {
+let setJobsAndPoses = (jobEls, hrefs) => {
   if (!isMobile()) return
   let poses = els2Pos(jobEls)
-  let hrefs = jobDatas.map(job => job[hrefColName])
   state.jobs = [...hrefs]
   state.poses = [...poses]
 }

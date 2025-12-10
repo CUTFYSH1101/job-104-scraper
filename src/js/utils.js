@@ -193,6 +193,41 @@ String.prototype.format = function(args) {
 Array.prototype.toDict = function(keyName, valueName) {
   return Object.fromEntries(this.map(item => [item[keyName], item[valueName]]))
 }
+// querySelectorAll
+NodeList.prototype.map = function(callback) {
+  return [...this].map(callback)
+}
+NodeList.prototype.filter = function(callback) {
+  return [...this].filter(callback)
+}
+NodeList.prototype.find = function(callback) {
+  return [...this].find(callback)
+}
+NodeList.prototype.some = function(callback) {
+  return [...this].some(callback)
+}
+NodeList.prototype.every = function(callback) {
+  return [...this].every(callback)
+}
+// getElementsXXX
+HTMLCollection.prototype.map = function(callback) {
+  return [...this].map(callback)
+}
+HTMLCollection.prototype.forEach = function(callback) {
+  return [...this].forEach(callback)
+}
+HTMLCollection.prototype.filter = function(callback) {
+  return [...this].filter(callback)
+}
+HTMLCollection.prototype.find = function(callback) {
+  return [...this].find(callback)
+}
+HTMLCollection.prototype.some = function(callback) {
+  return [...this].some(callback)
+}
+HTMLCollection.prototype.every = function(callback) {
+  return [...this].every(callback)
+}
 
 // endregion
 
