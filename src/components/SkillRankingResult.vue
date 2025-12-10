@@ -30,7 +30,9 @@ const svgRef = ref(null)
 const resize = () => {
   let width = container.value.clientWidth
   let rate = 0.4
+  // 最小寬度為400px，最大寬度為100% container寬度
   if (width > 400) width = width * rate > 400 ? width * rate : 400
+  if (width > container.value.clientWidth) width = container.value.clientWidth
   graphDonut.updateSize({ w: width, h: width })
 }
 const filterJobs = (keyword, jobs) => {
