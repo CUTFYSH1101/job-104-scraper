@@ -1,5 +1,5 @@
 <template>
-  <select class="select" v-model="currentPath">
+  <select class="select" v-model="currentPath" @change.stop>
     <option disabled selected>開啟新的檔案</option>
     <option v-for="path in thePathsHavingKeyword" :value="path">{{ shortPath(path) }}</option>
   </select>
