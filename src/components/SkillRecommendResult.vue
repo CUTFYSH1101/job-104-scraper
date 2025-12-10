@@ -8,11 +8,14 @@
 <script>
 import SkillRankingResult from '@/components/SkillRankingResult.vue'
 import SkillRelationResult from '@/components/SkillRelationResult.vue'
+import { setIsGraphPage } from '@/js/graphPage.js'
 
 export default {
   name: 'SkillRecommendResult',
   props: ['jobs', 'keyword'],
   components: { SkillRankingResult, SkillRelationResult },
+  activated: () => setIsGraphPage(true),
+  deactivated: () => setIsGraphPage(false),
 }
 </script>
 
