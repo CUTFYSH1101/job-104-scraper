@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>d3 v.s. papaparse</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"
+            integrity="sha512-vc58qvvBdrDR4etbxMdlTt4GBQk1qjvyORR2nrsPsFPyrs+/u5c3+1Ct6upOgdZoIl7eq6k3a1UPDSNAQi/32A=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"
+            integrity="sha512-dfX5uYVXzyU8+KHqj8bjo7UkOdg18PaOtpa48djpNbZHwExddghZ+ZmzWT06R5v6NSk3ZUfsH6FNEDepLx9hPQ=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+<script type="module">
+    import * as utils from './utils.js'
+
+    let async_ = async () =>
+        new Promise((resolve, reject) =>
+            Papa.parse('./9.6公里內 所有工程師.csv', {
+                download: true,         // 載入檔案而非字串
+                header: true,           // 轉成[{},{}]格式
+                complete(result) {
+                    resolve(result.data)
+                }
+            })
+        )
+    let csv = await async_()
+    console.log(csv)
+    console.log(utils.getTotalUniqueTags(csv))
+</script>
+<script type="module">
+    import * as utils from './utils.js'
+
+    let csv = await d3.csv('./9.6公里內 所有工程師.csv')
+    console.log(csv)
+    console.log(utils.getTotalUniqueTags(csv))
+</script>
+</body>
+</html>

@@ -127,24 +127,26 @@ Object.defineProperty(Object.prototype, '_values', {
   get: function() {
     if (isDict(this)) return Object.values(this)
     throw new TypeError('This variable must be a dictionary.')
-  }
+  },
 })
 Object.defineProperty(Object.prototype, '_keys', {
   get: function() {
     if (isDict(this)) return Object.keys(this)
     throw new TypeError('This variable must be a dictionary.')
-  }
+  },
 })
+// for item in obj._items console.log(item.key, item.value)
 Object.defineProperty(Object.prototype, '_items', {
   get: function() {
-    if (isDict(this)) {
-      let keys = this._keys
-      let values = this._values
-      return keys.map((key, index) => [key, values[index]])
-    }
+    if (isDict(this)) return Object.entries(this)
+      .map(([key, value]) => ({ key: key, value: value }))
     throw new TypeError('This variable must be a dictionary.')
-  }
+  },
 })
+/**
+ * @param {Array} compare
+ * @returns {Array}
+ */
 Array.prototype.intersection = function(compare) {
   if (!isArray(compare))
     throw new TypeError('The comparison must be an array.')
@@ -167,6 +169,13 @@ Array.prototype.remove = function(removed) {
   if (index <= -1) throw new Error('This array does not contain the value to be deleted.')
   return this.splice(index, 1)
 }
+Array.prototype.removeArray = function(removed) {
+  return this.filter(item => {
+    if (!Array.isArray(item)) return true
+    if (item.length !== removed.length) return true
+    return !item.every((val, i) => val === removed[i])
+  })
+}
 Array.prototype.copy = function() {
   return this.slice()
 }
@@ -180,6 +189,9 @@ String.prototype.format = function(args) {
     }
   }
   return result
+}
+Array.prototype.toDict = function(keyName, valueName) {
+  return Object.fromEntries(this.map(item => [item[keyName], item[valueName]]))
 }
 
 // endregion
@@ -212,10 +224,17 @@ String.prototype.dumpFirst = function() {
 }
 export let dumpFirst = word => word.dumpFirst()
 
+export let slice = (arrayOrStr, length) => {
+  if (isFalsy(arrayOrStr)) return ''
+  if (length >= arrayOrStr.length) return arrayOrStr
+  if (Array.isArray(arrayOrStr)) return arrayOrStr.slice(0, length)
+  return arrayOrStr.slice(0, length) + '...'
+}
+
 // endregion
 
 // region 檔案載入與欄位
-export function joinDictValues(list, separator) {
+export function joinDictValues(list, separator = ' ') {
   return Object.values(list).join(separator)
 }
 
@@ -225,20 +244,30 @@ export function getContent(job) {
 
 export function getLowerTags(job) {
   if (job['關鍵字'] === undefined) return []
-  return job['關鍵字'].toLowerCase().split(',')
+  return job['關鍵字'].toLowerCase().split(',').filter(keyword => keyword.trim())
 }
 
 export function getTags(job) {
-  if (job['關鍵字'] === undefined) return []
-  return job['關鍵字'].split(',')
+  if (typeof job['關鍵字'] !== 'string') return []
+  return job['關鍵字'].split(',').filter(keyword => keyword.trim())
 }
 
 export function getTotalTags(jobs) {
-  return jobs.map(job => this.getTags(job)).flat()
+  return jobs
+    .map(job => getLowerTags(job))
+    .flat()
 }
 
 export function getTotalUniqueTags(jobs) {
   return [...new Set(getTotalTags(jobs))]
+}
+
+export function getEachTagCount(jobs) {
+  let total = getTotalTags(jobs)
+  let uniqueTags = getTotalUniqueTags(jobs)
+  let result = {}
+  uniqueTags.forEach(tag1 => result[tag1] = count(total, tag2 => tag1 === tag2))
+  return result
 }
 
 export async function loadText(filepath) {
@@ -246,32 +275,22 @@ export async function loadText(filepath) {
   return await res.text()
 }
 
+import Papa from 'papaparse'
+
 export async function loadJobs(filepath, onSuccess = filepath => {
 }) {
-  let text = await loadText(filepath)
+  let async_ = async () => new Promise((resolve, reject) => Papa.parse(filepath, {
+    download: true, // 載入檔案而非字串
+    header: true, // 轉成[{},{}]格式
+    complete(result) {
+      resolve(result.data)
+    }, error(e) {
+      reject(e)
+    },
+  }))
   try {
-    let jobs = []
-    let lines = text.split(/\r?\n/)  // 每行
-    let col_names = lines[0].split(',')  // 第一行是欄位名稱 ['網址', '工作名稱', '工作標籤', '關鍵字']
-    for (let i = 1; i < lines.length; i++) {  // 跳過第一行
-      let job = {}
-      if (lines[i].includes('"')) {  // 關鍵字有用""包起來 lines[i] = 網址,工作名稱,工作標籤,"關鍵字"
-        let col_keyword = lines[i].split('"')
-        let cols = col_keyword[0].split(',')
-        col_keyword = col_keyword.at(-2)  // 倒數第二個
-        for (let j = 0; j < col_names.length; j++)
-          job[col_names[j]] = cols[j]
-        job[col_names.at(-1)] = col_keyword
-      } else {  // 關鍵字沒有用""包起來 lines[i] = 網址,工作名稱,工作標籤,關鍵字
-        let cols = lines[i].split(',')
-        for (let j = 0; j < col_names.length; j++)
-          job[col_names[j]] = cols[j]
-      }
-      jobs.push(job)
-    }
-
-    // dropna
-    jobs = jobs.filter(job => joinDictValues(job, '').trim().length > 0 && job['網址'].trim().length > 0)
+    let jobs = await async_()
+    jobs = jobs.filter(job => joinDictValues(job, '').trim() && job['網址']?.trim())  // dropna
     onSuccess?.(filepath)
     return jobs
   } catch (e) {
@@ -279,8 +298,6 @@ export async function loadJobs(filepath, onSuccess = filepath => {
     return undefined
   }
 }
-
-import Papa from 'papaparse'
 
 export async function loadDetails(filepath) {
   if (!filepath || filepath.length === 0) return undefined
@@ -309,6 +326,17 @@ export function shortPath(path) {
   let date = '\\d{4}-\\d{2}-\\d{2}'
   let regex = new RegExp(`${sep}${folder}${sep}${date}${sep}`)  // '/xxx/yyyy-mm-dd'
   return path.match(regex)[0]
+}
+
+// endregion
+
+// region vue <script setup>
+export function parseValue(val) {
+  return JSON.parse(JSON.stringify(val.value))
+}
+
+export function parse(val) {
+  return JSON.parse(JSON.stringify(val))
 }
 
 // endregion

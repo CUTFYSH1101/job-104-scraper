@@ -1,3 +1,71 @@
+### 在`d3.join`等有`{}`括住的地方呼叫`this`最好搭配箭頭函數（一般都是希望指向外側的`class`本體）
+
+```javascript
+{  // <--注意這個
+  g.append('rect')
+    .attr('fill', 'white')
+    .attr('width', d => d.width)
+    .attr('height', this.nodeHeight)
+    .lower()
+    .call(
+      d3.drag()
+        .on('start', this.dragStart)
+        .on('drag', this.dragging)
+        .on('end', this.dragEnd),
+    )
+    .on('mouseenter', this.interaction.mouseenterNode)
+    .on('mouseleave', this.interaction.mouseleaveNode)
+    .attr('cursor', 'pointer')
+}  // <--注意這個
+```
+
+要搭配箭頭函數
+
+```javascript
+this.dragging = (event, data) => {
+  this.simulation.dragging(event, data)  // `this`指向外側的`class`本體
+}
+```
+
+而不是函式
+
+```javascript
+function dragging(event, data) {
+  this.simulation.dragging(event, data)  // `this`指向`function`，此時`this.simulation`為`undefined`
+}
+```
+
+---
+
+### 力學模擬傳入新的nodes或links，節點會飄到不知道哪裡
+
+DEBUG: 更新`nodes`或`links`不會位置跑掉（錯誤原因：會繼承上一次設定的`vx, vy, x, y`導致偏移）
+解決方法有兩種，我選後一種，因為邏輯是每次更新任何屬性，就重新繪製畫面
+
+```javascript
+// 經過力學模擬後，`nodes`不會改變，但是`links`會改變，必須還原`links`的`source`和`target`
+// 原本links[0] = { 'source': 'A', 'target': 'B' }
+// 經過力學模擬，links[0] = { 'source': { id, index, vx, vy, x, y }, 'target': { id, index, vx, vy, x, y } }
+let [n2, l2] = CalcuBetweenRelation.calcu(null, utils.parse(props.jobs))  // okay
+// let [n2, l2] = [Object.assign([], nodes), Object.assign([], links)]  // error
+let loadingNodesCount = await CalcuLoading.loading(null, utils.parse(props.jobs), n2)
+graph.args = {
+  nodes: loadingNodesCount,
+  links: l2,
+}
+```
+
+```javascript
+// 資料更新後，統一把 source/target 轉回字串，再調用`d3.forceSimulation`重新綁定和生成位置
+if (this.links?.length > 0 && this.links[0].source.id)
+  this.links.forEach(link => {
+    link.source = link.source.id
+    link.target = link.target.id
+  })
+```
+
+---
+
 ### git deploy failed
 
 ```commandline
@@ -7,6 +75,8 @@ Failed to get remote.origin.url (task must either be run in a git repository wit
 錯誤原因：npm套件衝突
 
 解決方式：刪除 `package-lock.json` 和 `node_modules`，再輸入 `npm install` 重新安裝所有套件即可
+
+---
 
 ### 找不到App.vue檔案
 
@@ -61,44 +131,3 @@ js/vue-project'
 git remote add origin https://github.com/CUTFYSH1101/job-104-scraper.git
 git pull
 用Fork這款軟體，強制推送master到遠端資料庫origin，所有選項都打勾 詳情看notion教學
----
-
-# vue-project
-
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (
-and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-    - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd)
-    - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-    - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-    - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
-```
-
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```

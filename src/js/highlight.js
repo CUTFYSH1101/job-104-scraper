@@ -1,3 +1,7 @@
+// keyword 型別為 string，而非 string[]
+// 輸出結果為 string：cleanKeyword、expandAllAliases、expandMustAliases、highlightText
+// 輸出結果為 string[]：splitBySpace、parseKeyword
+
 import * as utils from '@/js/utils.js'
 import { keywordAliases } from '@/js/config.js'
 
@@ -15,6 +19,10 @@ export function cleanKeyword(keyword) {
   return keyword
 }
 
+export function splitBySpace(keyword) {
+  return keyword.includes(' ') ? keyword.split(/\s+/) : [keyword]
+}
+
 /**
  *
  * @param {string} keyword
@@ -25,7 +33,7 @@ export function parseKeyword(keyword) {
   let cleaned = cleanKeyword(keyword)
   if (!cleaned) return {}
 
-  let all = cleaned.includes(' ') ? cleaned.split(/\s+/) : [cleaned]
+  let all = splitBySpace(cleaned)
   return {
     all: all,
     must: all.filter(utils.notStartsWithDash),
@@ -37,16 +45,16 @@ export function parseKeyword(keyword) {
  * @param {string} keyword
  * @return string
  */
-function expandAliases(keyword) {
+function expandMustAliases(keyword) {
   if (utils.isFalsy(keyword)) return ''
 
   let cleaned = cleanKeyword(keyword)
-  let keyword_ = cleaned.toLowerCase().split(/\s+/)
-  let must = keyword_.filter(utils.notStartsWithDash)
+  let keywords = splitBySpace(cleaned.toLowerCase())
+  let must = keywords.filter(utils.notStartsWithDash)
   let includes = must.intersection(keywordAliases._keys)
   let replace = includes.map(keyword => keywordAliases[keyword]).flat().join(' ')
   includes.forEach(key => cleaned = cleaned.replace(key, ''))
-  cleaned += ' ' + replace
+  if (cleaned) cleaned += ' ' + replace
   cleaned = cleaned.trim()
   return cleaned
 }
@@ -54,22 +62,22 @@ function expandAliases(keyword) {
 export function highlightText(text, keyword) {
   if (utils.isFalsy(text) || utils.isFalsy(keyword)) return text
 
-  keyword = expandAliases(keyword)
+  keyword = expandMustAliases(keyword)
 
   // 以空白切割，只強調正向關鍵字
   if (keyword.includes(' ')) {
-    let keyword_ = keyword.toLowerCase().split(/\s+/)
-    let must = keyword_.filter(utils.notStartsWithDash)
+    let keywords = splitBySpace(keyword.toLowerCase())
+    let must = keywords.filter(utils.notStartsWithDash)
     must.forEach(keyword => text = utils.replace(text, keyword, '<span class="highlight">$1</span>'))
     return text
   }
 
-  // 負面關鍵字表示不用強調
-  if (keyword.includes('-'))
+  // 只有一個負面關鍵字表示不用強調
+  if (keyword.isStartsWithDash())
     return text
 
   // 只有一個正向關鍵字
   return utils.replace(text, keyword, '<span class="highlight">$1</span>')
 }
 
-export default {cleanKeyword,parseKeyword,expandAliases,highlightText}
+export default { cleanKeyword, parseKeyword, expandMustAliases, highlightText }

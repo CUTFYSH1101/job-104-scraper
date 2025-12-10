@@ -31,7 +31,7 @@ let getCurrentJob = top => {
   state.indexOf = state.diff.indexOf(Math.min(...state.diff))
   return state.jobs[state.indexOf]
 }
-let scrollPos = el => el.scrollTop + (el.clientHeight * 0.5)
+let scrollPos = el => el.scrollTop + (el.clientHeight * 0.65)
 let jobPos = el => el.offsetTop + (el.offsetHeight * 0.5)
 let els2Pos = els => [...els].map(jobPos)
 export default { state, setJobsAndPoses, changeJobDetail }

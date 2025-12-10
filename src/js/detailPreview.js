@@ -3,7 +3,7 @@ import { clientHeight, clientWidth } from '@/js/utils.js'
 import DetailStorage from '@/js/detailStorage.js'
 
 let detailConfig = new DetailStorage()
-detailConfig.init()
+await detailConfig.init()
 
 export let config = {
   pos: [],

@@ -95,7 +95,7 @@ export function useTouchEvent() {
 
   function mousedown(e) {
     start(e)
-    mousemoveListener = (moveEvent) => update(moveEvent)
+    mousemoveListener = moveEvent => update(moveEvent)
     window.addEventListener('mousemove', mousemoveListener)
   }
 

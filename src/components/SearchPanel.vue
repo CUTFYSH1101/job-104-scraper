@@ -130,8 +130,10 @@ export default {
   .tool-panel
     float: left
     margin-left: initial
-  .history-btn
-    border: none
-    color: black
-    background-color: var.$gray
+  .history-panel
+    display: none
+  //.history-btn
+  //  border: none
+  //  color: black
+  //  background-color: var.$gray
 </style>

@@ -1,7 +1,8 @@
 <template>
   <div class="site" @scroll="changeJobDetail">
-    <header class="page-header pl-5 pr-5 pt-3 pb-3">
+    <header class="page-header pl-5 pr-5 pt-3 sticky top-0 bg-white z-40">
       <SearchPanel @change="changeKeyword"></SearchPanel>
+      <hr width="100%">
     </header>
     <main class="page-content mt-3 p-3">
       <div class="tabs">
@@ -26,7 +27,7 @@
           <i class="fas fa-star h-4 w-4"></i> 書籤清單
         </button>
       </div>
-      <hr>
+      <div class="baseline"></div>
       <div class="block">
         <keep-alive>
           <component :is="activeTab + 'Result'" :keyword="keyword" :jobs="jobs"></component>
@@ -99,7 +100,7 @@ export default {
     border-bottom: solid 2px var.$blue
     color: var.$blue
 
-hr
-  border: solid 2px var.$gray
+.baseline
+  border-bottom: solid 4px var.$gray
   opacity: 100%
 </style>
