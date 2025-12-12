@@ -53,8 +53,9 @@ function expandMustAliases(keyword) {
   let must = keywords.filter(utils.notStartsWithDash)
   let includes = must.intersection(keywordAliases._keys)
   let replace = includes.map(keyword => keywordAliases[keyword]).flat().join(' ')
+  let originCleaned = cleaned.trim()
   includes.forEach(key => cleaned = cleaned.replace(key, ''))
-  if (cleaned) cleaned += ' ' + replace
+  if (originCleaned) cleaned += ' ' + replace
   cleaned = cleaned.trim()
   return cleaned
 }
