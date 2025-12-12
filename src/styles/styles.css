@@ -1,0 +1,11 @@
+@import "tailwindcss"; /* Tailwind Css */
+
+@layer base {
+    hr {
+        @apply border-gray-200;
+    }
+
+    button {
+        @apply cursor-pointer;
+    }
+}

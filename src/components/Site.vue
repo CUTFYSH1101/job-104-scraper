@@ -27,7 +27,7 @@
           <i class="fas fa-star h-4 w-4"></i> 書籤清單
         </button>
       </div>
-      <div class="baseline"></div>
+      <hr class="border-b-4 border-gray-100">
       <div class="block">
         <keep-alive>
           <component :is="activeTab + 'Result'" :keyword="keyword" :jobs="jobs"></component>
@@ -99,8 +99,4 @@ export default {
   &.active
     border-bottom: solid 2px var.$blue
     color: var.$blue
-
-.baseline
-  border-bottom: solid 4px var.$gray
-  opacity: 100%
 </style>
