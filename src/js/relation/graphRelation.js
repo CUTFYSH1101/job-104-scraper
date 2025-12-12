@@ -97,7 +97,6 @@ export default class GraphRelation {
       .data(this.nodes, d => d.id)
       .join(
         enter => {
-          console.log('enter', enter.size())
           const g = enter.append('g')
           g.append('text')
             .attr('text-anchor', 'middle')
@@ -126,7 +125,6 @@ export default class GraphRelation {
           return g
         },
         update => {
-          console.log('update', update.size())
           const g = update
           g.select('text')
             .transition(transition)
