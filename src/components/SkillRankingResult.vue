@@ -46,35 +46,48 @@ const filterJobs = (jobs, keyword) => {
   })
 }
 CalcuOneRelation.setHowToFilterJobs(filterJobs)
-
+function defaultDataWithoutKeyword() {
+  let data = utils.getEachTagCount(utils.parse(props.jobs))
+  data = data._items.map(item => ({ name: item.key, count: item.value }))
+  data.sort((a, b) => b.count - a.count)
+  return data.slice(0, 15)
+}
+function dataWithKeyword() {
+  let ones = CalcuOneRelation.calcu(utils.parse(props.jobs), utils.parse(props.keyword))
+  return ones.filter(one => one.relative !== '不顯著')
+}
+function updateJobsOrKeyword() {
+  if (!utils.isFalsy(props.keyword)) {
+    graphDonut.args = {
+      value: d => d.x2,
+      text: d => `${d.data.name} χ²=${parseInt(d.data.x2)}`,
+    }
+    graphDonut.updateData(dataWithKeyword())
+  } else {
+    graphDonut.args = {
+      value: d => d.count,
+      text: d => `${d.data.name}:${d.data.count}`,
+    }
+    graphDonut.updateData(defaultDataWithoutKeyword())
+  }
+}
 // endregion
 
 // region computed
 const filteredJobs = computed(() => filterJobs(props.jobs, props.keyword))
 // endregion
 
+
 // region 生命週期
 watch(
-  () => props.keyword,
-  (newVal, oldVal) => {
-    let ones = CalcuOneRelation.calcu(utils.parse(props.jobs), utils.parse(props.keyword))
-    ones = ones.filter(one => one.relative !== '不顯著')
-    graphDonut.args = {
-      value: d => d.x2,
-      text: d => `${d.data.name} χ²=${parseInt(d.data.x2)}`,
-    }
-    graphDonut.updateData(ones)
-  },
+    () => [props.jobs, props.keyword],
+    updateJobsOrKeyword,
 )
 onMounted(() => {
-  let data = utils.getEachTagCount(utils.parse(props.jobs))
-  data = data._items.map(item => ({ name: item.key, count: item.value }))
-  data.sort((a, b) => b.count - a.count)
-  data = data.slice(0, 15)
   graphDonut = new GraphDonut({
     svgSelector: svgRef.value,
     svgSize: { w: 400, h: 400 },
-    data: data,
+    data: defaultDataWithoutKeyword(),
     value: d => d.count,
     text: d => `${d.data.name}:${d.data.count}`,
   })
