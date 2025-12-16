@@ -69,6 +69,7 @@ export function highlightText(text, keyword) {
   if (keyword.includes(' ')) {
     let keywords = splitBySpace(keyword.toLowerCase())
     let must = keywords.filter(utils.notStartsWithDash)
+    must.sort((a, b) => b.length - a.length)  // 先替換`javascript`再替換`java`
     must.forEach(keyword => text = utils.replace(text, keyword, '<span class="highlight">$1</span>'))
     return text
   }
