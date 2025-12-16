@@ -28,6 +28,9 @@
 ./data\9.6公里內 所有工程師\2025-11-10\analysis_results\keywords.csv
 ./data\9.6公里內 所有工程師\2025-11-10\claude\9.6公里內 所有工程師.csv
 ./data\9.6公里內 所有工程師\2025-11-10\processing\9.6公里內 所有工程師.csv
+./data\9.6公里內 所有工程師\2025-12-16\analysis_results\keywords.csv
+./data\9.6公里內 所有工程師\2025-12-16\claude\9.6公里內 所有工程師.csv
+./data\9.6公里內 所有工程師\2025-12-16\processing\9.6公里內 所有工程師.csv
 ./data\全台中\2025-04-05\analysis_results\keywords.csv
 ./data\全台中\2025-04-05\claude\merged.csv
 ./data\全台中\2025-04-05\processing\merged.csv
