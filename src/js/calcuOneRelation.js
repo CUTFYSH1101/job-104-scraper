@@ -53,6 +53,8 @@ const calcu = (jobs, keyword) => {
   let uniqueKeywords = utils.getTotalUniqueTags(jobs)
   if (uniqueKeywords.includes('')) uniqueKeywords.remove('')
 
+  // 遞迴每個關鍵字，計算正面與負面的次數，回傳[{name,count},{name,count},...]
+  // 跳過自己的關鍵字
   const calcuIncludesCount = (jobs, keywords) => {
     let result = []
     uniqueKeywords.forEach(key => {
@@ -66,26 +68,28 @@ const calcu = (jobs, keyword) => {
     return result
   }
 
-  // 如果是自己的關鍵字就要跳過，但輸入值可能是縮寫需要先展開成正式名稱，接著再分割成陣列，最後遞迴unique和該陣列對比
+  // 處理使用者輸入的關鍵字：加入空格、切割、捨棄`-`符號
   keyword = cleanKeyword(keyword)
   let keywords = splitBySpace(keyword)
     .map(key => key.isStartsWithDash() ? key.dumpFirst() : key)
 
-  let ones_ = calcuIncludesCount(filterJobs(jobs, keyword), keywords)
+  // 計算搜尋結果，所有關鍵字正面與負面的次數
+  let ones = calcuIncludesCount(filterJobs(jobs, keyword), keywords)
 
+  // 計算搜尋結果的補集，所有關鍵字正面與負面的次數
   // 如果正面結果與負面結果剛好呈現相反才蒐集，反之則是不確定是否相關
   // 比方搜尋javascript中，bootstrap出現很多次，
   // 且搜尋-javascript中，bootstrap出現很少次，
   // 才能表明javascript和bootstrap存在某種關聯
-  // console.log('負向查詢', reverseKeyword())
+  // console.log('負向查詢', reverseKeyword(keyword))  // 回傳[['str1','-str2'],['-str1','str2'],['-str1','-str2']]
   let reverseKeyword2DList = reverseKeyword(keyword)
   let reverses = []
   reverseKeyword2DList.forEach(keywords => {
     let keywordStr = keywords.join(' ').trim()
     let filteredJobs = filterJobs(jobs, keywordStr)
-    let result = calcuIncludesCount(filteredJobs, keywords.map(key => key.isStartsWithDash() ? key.dumpFirst() : key))
-    reverses.push(result)
-    // console.log(keywordStr, result)
+    let reverse = calcuIncludesCount(filteredJobs, keywords.map(key => key.isStartsWithDash() ? key.dumpFirst() : key))
+    reverses.push(reverse)
+    // console.log(keywordStr, reverse)
   })
   let reverseSum = reverses.flat().reduce((acc, item) => {
     // item 是單個物件 {name: "xxx", count: 123}
@@ -99,7 +103,7 @@ const calcu = (jobs, keyword) => {
 
   let chi_notH0_keywords = []
   // [{name,count},{name,count},...] 轉成 dict[name]=count
-  let dictOnes = ones_.toDict('name', 'count')
+  let dictOnes = ones.toDict('name', 'count')
   let dictReversed = reverseSum.toDict('name', 'count')
   uniqueKeywords.forEach(keyword => {
     let a11 = dictOnes[keyword]
@@ -132,9 +136,9 @@ const calcu = (jobs, keyword) => {
     // )
   })
 
-  // let _8020Principle = parseInt(0.1 * ones_.length)
-  // ones_ = ones_.slice(0, _8020Principle).concat(ones_.slice(-_8020Principle))
-  // return ones_
+  // let _8020Principle = parseInt(0.1 * ones.length)
+  // ones = ones.slice(0, _8020Principle).concat(ones.slice(-_8020Principle))
+  // return ones
 
   chi_notH0_keywords = chi_notH0_keywords.sort((a, b) => b.x2 - a.x2)  // 降序
   return chi_notH0_keywords
