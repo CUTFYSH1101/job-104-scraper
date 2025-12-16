@@ -1,7 +1,7 @@
 import * as utils from '@/js/utils.js'
 import { getDetail } from '@/js/isJobIncludesKeyword.js'
 
-export const loading = async (keyword, jobs, nodes) => {
+export const loading = async (jobs, nodes) => {
   // 點 抓取符合該Tag的所有工作
   // 線段 抓取符合兩個關鍵字的工作
 

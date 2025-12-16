@@ -30,7 +30,7 @@
       <hr class="border-b-4 border-gray-100">
       <div class="block">
         <keep-alive>
-          <component :is="activeTab + 'Result'" :keyword="keyword" :jobs="jobs"></component>
+          <component :is="activeTab + 'Result'" :jobs="jobs" :keyword="keyword"></component>
         </keep-alive>
       </div>
     </main>

@@ -3,7 +3,7 @@ import * as utils from '@/js/utils.js'
 import { cleanKeyword, splitBySpace } from '@/js/highlight.js'
 import { isJobTagsEqualsKeyword, matchKeyword } from '@/js/isJobIncludesKeyword.js'
 
-let filterJobs = (keyword, jobs) => {}
+let filterJobs = (jobs, keyword) => {}
 let setHowToFilterJobs = func => filterJobs = func
 const reverseKeyword = keyword => {
   keyword = cleanKeyword(keyword)
@@ -49,7 +49,7 @@ const chi_squared = (a11, a12, a21, a22) => {
 //      反之為負相關，不必考慮 a11===a21 的情況，因為已經確定彼此有相關
 // 3-5. h1 = !h0，h0和h1為互斥
 // </pre>
-const calcu = (keyword, jobs) => {
+const calcu = (jobs, keyword) => {
   let uniqueKeywords = utils.getTotalUniqueTags(jobs)
   if (uniqueKeywords.includes('')) uniqueKeywords.remove('')
 
@@ -71,7 +71,7 @@ const calcu = (keyword, jobs) => {
   let keywords = splitBySpace(keyword)
     .map(key => key.isStartsWithDash() ? key.dumpFirst() : key)
 
-  let ones_ = calcuIncludesCount(filterJobs(keyword, jobs), keywords)
+  let ones_ = calcuIncludesCount(filterJobs(jobs, keyword), keywords)
 
   // 如果正面結果與負面結果剛好呈現相反才蒐集，反之則是不確定是否相關
   // 比方搜尋javascript中，bootstrap出現很多次，
@@ -82,7 +82,7 @@ const calcu = (keyword, jobs) => {
   let reverses = []
   reverseKeyword2DList.forEach(keywords => {
     let keywordStr = keywords.join(' ').trim()
-    let filteredJobs = filterJobs(keywordStr, jobs)
+    let filteredJobs = filterJobs(jobs, keywordStr)
     let result = calcuIncludesCount(filteredJobs, keywords.map(key => key.isStartsWithDash() ? key.dumpFirst() : key))
     reverses.push(result)
     // console.log(keywordStr, result)
@@ -139,8 +139,8 @@ const calcu = (keyword, jobs) => {
   chi_notH0_keywords = chi_notH0_keywords.sort((a, b) => b.x2 - a.x2)  // 降序
   return chi_notH0_keywords
 }
-const test = (keyword, jobs) => {
-  let ones = calcu(keyword, jobs)
+const test = (jobs, keyword) => {
+  let ones = calcu(jobs, keyword)
   console.log(keyword, ones)
 }
 

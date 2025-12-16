@@ -66,7 +66,7 @@ export default {
     HorizontalBar,
     KeyHint,
   },
-  props: ['keyword', 'jobs'],
+  props: ['jobs', 'keyword'],
   data() {
     return {
       processedJobs: [],

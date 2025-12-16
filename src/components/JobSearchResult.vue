@@ -38,7 +38,7 @@ export default {
     Bookmark,
     KeyHint,
   },
-  props: ['keyword', 'jobs'],
+  props: ['jobs', 'keyword'],
   computed: {
     filterJobs() {
       if (!this.jobs) return []

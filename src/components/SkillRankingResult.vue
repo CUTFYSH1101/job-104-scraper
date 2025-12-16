@@ -21,7 +21,7 @@ import GraphDonut from '@/js/graphDonut.js'
 let graphDonut = null
 
 // region data
-const props = defineProps(['keyword', 'jobs'])
+const props = defineProps(['jobs', 'keyword'])
 const container = ref(null)
 const svgRef = ref(null)
 // endregion
@@ -33,7 +33,7 @@ const resize = () => {
   if (width > 400) width = width * rate > 400 ? width * rate : 400
   graphDonut.updateSize({ w: width, h: width })
 }
-const filterJobs = (keyword, jobs) => {
+const filterJobs = (jobs, keyword) => {
   if (!jobs) return []
   if (utils.isFalsy(keyword)) return jobs
 
@@ -50,14 +50,14 @@ CalcuOneRelation.setHowToFilterJobs(filterJobs)
 // endregion
 
 // region computed
-const filteredJobs = computed(() => filterJobs(props.keyword, props.jobs))
+const filteredJobs = computed(() => filterJobs(props.jobs, props.keyword))
 // endregion
 
 // region 生命週期
 watch(
   () => props.keyword,
   (newVal, oldVal) => {
-    let ones = CalcuOneRelation.calcu(utils.parse(props.keyword), utils.parse(props.jobs))
+    let ones = CalcuOneRelation.calcu(utils.parse(props.jobs), utils.parse(props.keyword))
     ones = ones.filter(one => one.relative !== '不顯著')
     graphDonut.args = {
       value: d => d.x2,

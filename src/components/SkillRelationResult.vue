@@ -36,7 +36,7 @@ let graph = null
 let clickInteraction = null
 let init = false
 
-const props = defineProps(['keyword', 'jobs'])
+const props = defineProps(['jobs', 'keyword'])
 
 // region data
 let svgRef = ref(null)
@@ -87,7 +87,7 @@ let concatKeyword = computed(() => {
 async function loadingAfterSettingDetailCsvPath(nodes, delay = 100) {
   return await new Promise(resolve => {
     let interval = setInterval(async () => {
-      let result = await CalcuLoading.loading(null, utils.parse(props.jobs), nodes)
+      let result = await CalcuLoading.loading(utils.parse(props.jobs), nodes)
       if (!result[0].count) return
       clearInterval(interval)
       resolve(result)
@@ -100,7 +100,7 @@ async function loadingAfterSettingDetailCsvPath(nodes, delay = 100) {
 watch(
     () => props.jobs,
     async newVal => {
-      let [nodes, links] = CalcuBetweenRelation.calcu(null, utils.parse(props.jobs))
+      let [nodes, links] = CalcuBetweenRelation.calcu(utils.parse(props.jobs))
       let loadingNodesCount = await loadingAfterSettingDetailCsvPath(nodes)
       graph.args = {
         links: links,
@@ -115,7 +115,7 @@ onActivated(async () => {
   window.addEventListener('resize', resize)
   if (init) return
   init = true
-  let [nodes, links] = CalcuBetweenRelation.calcu(null, utils.parse(props.jobs))
+  let [nodes, links] = CalcuBetweenRelation.calcu(utils.parse(props.jobs))
   graph = new GraphRelation({
     svgSelector: svgRef.value,
     canvas: canvasRef.value,

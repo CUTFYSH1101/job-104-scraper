@@ -46,12 +46,12 @@ DEBUG: 更新`nodes`或`links`不會位置跑掉（錯誤原因：會繼承上�
 // 經過力學模擬後，`nodes`不會改變，但是`links`會改變，必須還原`links`的`source`和`target`
 // 原本links[0] = { 'source': 'A', 'target': 'B' }
 // 經過力學模擬，links[0] = { 'source': { id, index, vx, vy, x, y }, 'target': { id, index, vx, vy, x, y } }
-let [n2, l2] = CalcuBetweenRelation.calcu(null, utils.parse(props.jobs))  // okay
+let [n2, l2] = CalcuBetweenRelation.calcu(utils.parse(props.jobs))  // okay
 // let [n2, l2] = [Object.assign([], nodes), Object.assign([], links)]  // error
-let loadingNodesCount = await CalcuLoading.loading(null, utils.parse(props.jobs), n2)
+let loadingNodesCount = await CalcuLoading.loading(utils.parse(props.jobs), n2)
 graph.args = {
-  nodes: loadingNodesCount,
-  links: l2,
+    nodes: loadingNodesCount,
+    links: l2,
 }
 ```
 

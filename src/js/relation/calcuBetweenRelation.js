@@ -8,7 +8,7 @@ const pairs = arr => {
   return result
 }
 
-const calcu = (keyword, jobs) => {
+const calcu = (jobs) => {
   let eachJobTags = jobs.map(job => utils.getLowerTags(job))
   let totalTags = utils.getTotalUniqueTags(jobs)
 
