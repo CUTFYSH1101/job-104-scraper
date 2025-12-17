@@ -1,3 +1,35 @@
+### `Set` `Map` `.map` 與 `Object`字典物件
+
+- 在js中`Object`可能代表字典、`Array`、`Event`，在此我們只說「字典」物件，字典用途的 Object：key 會被轉成字串，不適合用物件當 key
+  ```javascript
+    let obj = {}
+    obj['name'] = value
+  
+    if (obj['name']) {}
+  ```
+
+- `.map`和`Map`完全不一樣，只是剛好名稱一樣
+    - 這是`.map`：`let arr2 = arr1.map(el => el.count)`表示轉成一個[count,count,...]陣列後指派給`arr1`
+    - 這是`Map`
+      ```javascript
+        let map = new Map()
+        arr1.forEach(el => map.set(el.name, el))  // 注意格式是 `.set(key,value)`
+      
+        let map = new Map(arr1.map(el => [el.name, el]))  // 注意格式是 `new Map(.map([key,value]))`
+      
+        return map.get(el.name)
+      ```
+
+- `Set`
+  ```javascript
+    let set = new Set([1,2,3])
+  
+    if (set.has(1)) {}
+  ```
+
+- 不管是哪個通常都比`Array`的 `arr.find` 和 `arr.filter` 來得快
+  因為`find`和`filter`表示重頭找，時間是 O(n)，其餘都是 O(1)
+
 ### jobs還未切換過來所造成的錯誤
 
 解法1：等待直到載入
