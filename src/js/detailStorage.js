@@ -38,7 +38,9 @@ export default class DetailStorage {
   async setCurrentPath(val) {
     if (utils.isFalsy(val)) console.warn('The new path you set is empty.')
     this.currentPath = val
-    this.config.details = await utils.loadDetails(this.currentDetailsPath())
+    let details_ = await utils.loadDetails(this.currentDetailsPath())
+    this.config.details = new Map()
+    details_.forEach(row => this.config.details.set(row['job-href'], row))
   }
 
   currentDetailsPath() {
@@ -65,7 +67,7 @@ export default class DetailStorage {
   getCurrentJobDetail() {
     let target = this.currentJob
     let details = this.config.details
-    if (!details || !details.length) return undefined
-    return details.filter(row => row['job-href'] === target)[0]
+    if (!details || !details.size) return undefined
+    return details.get(target)
   }
 }
