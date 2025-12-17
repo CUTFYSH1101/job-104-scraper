@@ -148,7 +148,7 @@ export default {
   created() {
     this.contentLength = this.originLength
     config.onHideDetail = () => this.hidden = true
-    config.onShowDetail = async() => {
+    config.onShowDetail = async () => {
       this.hidden = false
       await this.$nextTick()  // 等待vue元素載入完成，才不會undefined
       this.loadDetail()
@@ -161,7 +161,7 @@ export default {
       this.keyName = getCookie('keyName')
 
     let assignPos = (x, y) =>
-      [this.x, this.y] = [x, y]
+        [this.x, this.y] = [x, y]
     config.onSetPos = async pos => {
       if (this.isMobile) return
 

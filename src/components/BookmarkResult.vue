@@ -1,15 +1,13 @@
 <template>
   <div>
     <div>
-      <button
-        v-for="color in getColorMap"
-        :style="{backgroundColor: color}"
-        class="w-5 aspect-square rounded-full
-         m-1 mb-4 duration-300
-         hover:scale-125 active:scale-100"
-        :class="{'scale-125': activeColor === color}"
-        @click="activeColor = color"
-      >
+      <button v-for="color in getColorMap"
+              :style="{backgroundColor: color}"
+              class="w-5 aspect-square rounded-full
+               m-1 mb-4 duration-300
+               hover:scale-125 active:scale-100"
+              :class="{'scale-125': activeColor === color}"
+              @click="activeColor = color">
       </button>
     </div>
     <div ref="jobsView">
@@ -35,7 +33,7 @@ import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import JobAtSiteCenter from '@/js/mobile/jobAtSiteCenter.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 
-let {isHovering, setJobOnHover} = useKeyHintOnJob()
+let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
 export default {
   name: 'BookmarkResult',

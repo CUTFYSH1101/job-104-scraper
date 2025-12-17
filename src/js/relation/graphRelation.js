@@ -3,7 +3,7 @@ import MyD3 from '@/js/myD3.js'
 import ForceSimulation from '@/js/relation/forceSimulation.js'
 import CanvasRenderer from '@/js/relation/canvasRenderer.js'
 import Interaction from '@/js/relation/interaction.js'
-import InteractionForHoverLine from "@/js/relation/interactionForHoverLine.js";
+import InteractionForHoverLine from '@/js/relation/interactionForHoverLine.js'
 import GraphLoadingNodeOpacity from '@/js/relation/multithreading/graphLoadingNodeOpacity.js'
 
 export default class GraphRelation {

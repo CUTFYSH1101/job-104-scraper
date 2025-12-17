@@ -46,16 +46,19 @@ const filterJobs = (jobs, keyword) => {
   })
 }
 CalcuOneRelation.setHowToFilterJobs(filterJobs)
+
 function defaultDataWithoutKeyword() {
   let data = utils.getEachTagCount(utils.parse(props.jobs))
   data = data._items.map(item => ({ name: item.key, count: item.value }))
   data.sort((a, b) => b.count - a.count)
   return data.slice(0, 15)
 }
+
 function dataWithKeyword() {
   let ones = CalcuOneRelation.calcu(utils.parse(props.jobs), utils.parse(props.keyword))
   return ones.filter(one => one.relative !== '不顯著')
 }
+
 function updateJobsOrKeyword() {
   if (!utils.isFalsy(props.keyword)) {
     graphDonut.args = {
@@ -71,6 +74,7 @@ function updateJobsOrKeyword() {
     graphDonut.updateData(defaultDataWithoutKeyword())
   }
 }
+
 // endregion
 
 // region computed

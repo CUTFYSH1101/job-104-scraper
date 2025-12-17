@@ -7,8 +7,8 @@ let listener = null
 function setJobsAndPoses(jobsView) {
   let jobViews = jobsView.querySelectorAll('.job')
   let jobHrefs = jobViews
-      ? jobViews.map(el => el.querySelector('a').getAttribute('href'))
-      : jobDatas().map(job => job['網址'])
+    ? jobViews.map(el => el.querySelector('a').getAttribute('href'))
+    : jobDatas().map(job => job['網址'])
   if (!jobViews) console.warn('Jobs not found')
   JobAtSiteCenter.setJobsAndPoses(jobViews, jobHrefs)
 }
