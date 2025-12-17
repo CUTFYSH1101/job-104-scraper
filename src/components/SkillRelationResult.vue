@@ -84,15 +84,8 @@ let concatKeyword = computed(() => {
 
 // 直到`isJobIncludesKeyword.setCurrentPath`觸發，`calcuLoading.jobsData.getDetail`才不為`undefined`
 // @param {Number}delay
-async function loadingAfterSettingDetailCsvPath(nodes, delay = 100) {
-  return await new Promise(resolve => {
-    let interval = setInterval(async () => {
-      let result = await CalcuLoading.loading(utils.parse(props.jobs), nodes)
-      if (!result[0].count) return
-      clearInterval(interval)
-      resolve(result)
-    }, delay)
-  })
+async function loadingAfterSettingDetailCsvPath(nodes) {
+  return await CalcuLoading.loading(utils.parse(props.jobs), nodes)
 }
 
 // region 生命週期

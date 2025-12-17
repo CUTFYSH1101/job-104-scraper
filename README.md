@@ -1,3 +1,48 @@
+### jobs還未切換過來所造成的錯誤
+
+解法1：等待直到載入
+
+```javascript
+// 直到`isJobIncludesKeyword.setCurrentPath`觸發，`calcuLoading.jobsData.getDetail`才不為`undefined`
+async function loadingAfterSettingDetailCsvPath(nodes, delay = 100) {
+    return await new Promise(resolve => {
+        let interval = setInterval(async () => {
+            let result = await CalcuLoading.loading(utils.parse(props.jobs), nodes)
+            if (!result[0].count) return
+            clearInterval(interval)
+            resolve(result)
+        }, delay)
+    })
+}
+```
+
+解法2：在每個async方法，用await等待它載入
+缺點是畫面會等待它而卡頓
+
+```javascript
+export async function loadJobs(filepath, onSuccess = filepath => {
+}) {
+    let async_ = async () => new Promise((resolve, reject) => Papa.parse(filepath, {
+        download: true, // 載入檔案而非字串
+        header: true, // 轉成[{},{}]格式
+        complete(result) {
+            resolve(result.data)
+        }, error(e) {
+            reject(e)
+        },
+    }))
+    try {
+        let jobs = await async_()
+        jobs = jobs.filter(job => joinDictValues(job, '').trim() && job['網址']?.trim())  // dropna
+        await onSuccess?.(filepath)  // 這一行
+        return jobs
+    } catch (e) {
+        console.error(e)
+        return undefined
+    }
+}
+```
+
 ### 在`d3.join`等有`{}`括住的地方呼叫`this`最好搭配箭頭函數（一般都是希望指向外側的`class`本體）
 
 ```javascript
