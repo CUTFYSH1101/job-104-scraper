@@ -7,7 +7,7 @@
                placeholder='例：python django -高級'>
         <button class='search-btn' @click='addHistory()'><i class='fa fa-plus'></i></button>
       </div>
-      <ChangeOpenFile></ChangeOpenFile>
+      <ChangeOpenFile/>
     </div>
     <div class='history-panel'>  <!-- 搜尋紀錄 -->
       <div class='m-2 opacity-80 inline-block'>搜尋紀錄</div>

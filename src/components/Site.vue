@@ -1,7 +1,7 @@
 <template>
   <div class='site' @scroll='changeJobDetail'>
     <header class='page-header pl-5 pr-5 pt-3 sticky top-0 bg-white z-40'>
-      <SearchPanel @change='changeKeyword'></SearchPanel>
+      <SearchPanel @change='changeKeyword'/>
       <hr width='100%'>
     </header>
     <main class='page-content mt-3 p-3'>

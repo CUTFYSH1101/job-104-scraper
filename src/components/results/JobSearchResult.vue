@@ -1,18 +1,18 @@
 <template>
   <div class='job-search-container'>
     <div class='main-tool'>
-      <Download :data='filterJobs' format='job' csv-name='job-search.csv' class='float-panel'></Download>
+      <Download :data='filterJobs' format='job' csv-name='job-search.csv' class='float-panel'/>
       <div v-show='keyword' class='hint'>共{{ filterJobs.length }}筆搜尋結果</div>
     </div>
     <div ref='jobsView'>
       <div class='job' v-for='(job, i) in filterJobs' @mousemove='userHoverJob($event, job)' @mouseleave='userLeaveJob'>
-        <Bookmark :job='job'></Bookmark>
+        <Bookmark :job='job'/>
         <a class='cell' :href='job.網址' target='_blank'>
           {{ i + 1 }}:<span v-html='highlightText(job.工作名稱)'></span>
         </a>
         <div class='cell' v-html='highlightText(job.工作標籤)'></div>
         <div class='cell' v-html='highlightText(job.關鍵字)'></div>
-        <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if='isHovering(job)'></KeyHint>
+        <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if='isHovering(job)'/>
       </div>
     </div>
   </div>

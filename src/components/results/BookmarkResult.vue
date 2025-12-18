@@ -14,11 +14,11 @@
       <div class='job' v-for='(job, i) in filterJobs'
            @mousemove='userHoverJob($event, job)'
            @mouseleave='userLeaveJob'>
-        <Bookmark :job='job'></Bookmark>
+        <Bookmark :job='job'/>
         <a class='cell' :href='job.網址' target='_blank'>{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class='cell'>{{ job.工作標籤 }}</div>
         <div class='cell'>{{ job.關鍵字 }}</div>
-        <KeyHint :keys="['Q','W','E','R','T','Y','U']" v-if='isHovering(job)'></KeyHint>
+        <KeyHint :keys="['Q','W','E','R','T','Y','U']" v-if='isHovering(job)'/>
       </div>
     </div>
   </div>

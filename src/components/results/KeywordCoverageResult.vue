@@ -3,18 +3,18 @@
     <div v-if='!isKeywordEmpty' class='analysis line-block mb-5'>
       <div v-for='[key, value] in Object.entries(skillRateDict)' class='analysis-cell'>
         {{ key }}佔{{ toPercent(value) }}
-        <HorizontalBar :width='toPercent(value)'></HorizontalBar>
+        <HorizontalBar :width='toPercent(value)'/>
       </div>
       <div class='analysis-cell'>
         總共{{ toPercent(skillRateNum) }}
-        <HorizontalBar :width='toPercent(skillRateNum)'></HorizontalBar>
+        <HorizontalBar :width='toPercent(skillRateNum)'/>
       </div>
     </div>
     <div ref='jobsView'>
       <div class='job' v-for='(job, i) in processedJobs'
            @mousemove='userHoverJob($event, job)'
            @mouseleave='userLeaveJob'>
-        <Bookmark :job='job'></Bookmark>
+        <Bookmark :job='job'/>
         <a class='cell' :href='job.網址' target='_blank'>{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class='cell'>
           <span class='inline-block' v-for='tag in getTags(job)'
@@ -26,14 +26,14 @@
         <div v-if='!isKeywordEmpty && (job.skillRate || job.skillWeight)'>
           <div v-if='job.skillRate' class='cell'>
             <div>關鍵字比例：{{ toPercent(job.skillRate) }}</div>
-            <HorizontalBar :width='toPercent(job.skillRate)'></HorizontalBar>
+            <HorizontalBar :width='toPercent(job.skillRate)'/>
           </div>
           <div v-if='job.skillWeight' class='cell hint--bottom' :aria-label='job.skillWeightHint'>
             <div>關鍵字比重：{{ toPercent(job.skillWeight) }}</div>
-            <HorizontalBar :width='toPercent(job.skillWeight)'></HorizontalBar>
+            <HorizontalBar :width='toPercent(job.skillWeight)'/>
           </div>
         </div>
-        <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if='isHovering(job)'></KeyHint>
+        <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if='isHovering(job)'/>
       </div>
     </div>
   </div>
@@ -41,7 +41,6 @@
 
 <script>
 import * as utils from '@/js/utils.js'
-import * as config from '@/js/config.js'
 import Batcher from '@/js/batcher.js'
 import { getTags, prefixEach } from '@/js/utils.js'
 import HorizontalBar from '@/components/utils/HorizontalBar.vue'
@@ -50,9 +49,8 @@ import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
-import { matchKeyword } from '@/js/isJobIncludesKeyword.js'
+import { isJobIncludesKeyword, matchKeyword } from '@/js/isJobIncludesKeyword.js'
 import { parseKeyword } from '@/js/highlight.js'
-import { keywordAliases } from '@/js/config.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
@@ -120,8 +118,8 @@ export default {
     async calcuRateForeachJob() {
       await batcher.forEach(this.processedJobs, job => {
         let total = this.processedKeywords.length
-        let must = this.mustKeywords.filter(key => this.jobIncludesKeyword(job, key))
-        let not = this.notKeywords.filter(key => !this.jobIncludesKeyword(job, key))  // 全都不包含算符合一次
+        let must = this.mustKeywords.filter(key => isJobIncludesKeyword(job, key))
+        let not = this.notKeywords.filter(key => !isJobIncludesKeyword(job, key))  // 全都不包含算符合一次
         let count = must.length + not.length
         job.skillRate = count / total
       })
@@ -131,8 +129,8 @@ export default {
     async calcuWeightForeachJob() {
       await batcher.forEach(this.processedJobs, job => {
         let total = getTags(job).length
-        let must = this.expandAliases(this.mustKeywords).filter(key => this.jobIncludesKeyword(job, key))
-        let not = this.expandAliases(this.notKeywords).filter(key => this.jobIncludesKeyword(job, key))  // 每有一個就扣分
+        let must = this.mustKeywords.filter(key => isJobIncludesKeyword(job, key))
+        let not = this.notKeywords.filter(key => isJobIncludesKeyword(job, key))  // 每有一個就扣分
         let score = must.length - not.length
         if (score < 0) score = 0
         if (score > total) score = total
@@ -157,34 +155,24 @@ export default {
       let total = this.processedJobs.length
       this.skillRateDict = {}
       this.mustKeywords.forEach(key => {
-        let count = utils.count(this.processedJobs, job => this.jobIncludesKeyword(job, key))
+        let count = utils.count(this.processedJobs, job => isJobIncludesKeyword(job, key))
         this.skillRateDict[key] = count / total
       })
       this.notKeywords.forEach(key => {
-        let count = utils.count(this.processedJobs, job => !this.jobIncludesKeyword(job, key))
+        let count = utils.count(this.processedJobs, job => !isJobIncludesKeyword(job, key))
         this.skillRateDict['-' + key] = count / total
       })
 
       // 當一個工作每個關鍵字都符合，越多工作符合，表示該關鍵字可以代表很大的市場
       let count = 0
       await batcher.forEach(this.processedJobs, job => {
-        if (!this.mustKeywords.every(key => this.jobIncludesKeyword(job, key)))
+        if (!this.mustKeywords.every(key => isJobIncludesKeyword(job, key)))
           return
-        if (this.notKeywords.some(key => this.jobIncludesKeyword(job, key)))
+        if (this.notKeywords.some(key => isJobIncludesKeyword(job, key)))
           return
         count++
       })
       this.skillRateNum = count / total
-    },
-    jobIncludesKeyword(job, key) {
-      let tags = utils.getLowerTags(job)
-
-      // 檢查別名，當關鍵字涵蓋別名key，去查詢別名value是否出現在job
-      if (config.keywordAliases[key]) {
-        return config.keywordAliases[key].some(alias => tags.includes(alias))
-      }
-
-      return tags.includes(key)
     },
     tagInKeywords(tag) {
       // 檢查別名
@@ -196,16 +184,6 @@ export default {
     },
     toPercent(f) {
       return utils.toPercent(f)
-    },
-    expandAliases(keywords) {
-      if (utils.isFalsy(keywords)) return []
-
-      keywords = keywords.copy()
-      let includes = keywords.intersection(keywordAliases._keys)
-      let replace = includes.map(keyword => keywordAliases[keyword]).flat()
-      includes.forEach(key => keywords.remove(key))
-      keywords = [...keywords, ...replace]
-      return keywords
     },
   },
   watch: {
@@ -225,6 +203,7 @@ export default {
   },
 }
 </script>
+
 <style scoped lang='sass' src='@/styles/jobs.sass'></style>
 
 <style lang='sass'>

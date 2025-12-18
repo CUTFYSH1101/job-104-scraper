@@ -1,12 +1,11 @@
 <template>
   <div class='split-screen'>
-    <Site class='site'></Site>
+    <Site class='site'/>
     <DetailPreviewMobile
       v-if='isMobile && !getIsGraphPage'
       class='detail'
-      :style='{order: order, flexBasis: height}'>
-    </DetailPreviewMobile>
-    <DetailPreview v-else></DetailPreview>
+      :style='{order: order, flexBasis: height}'/>
+    <DetailPreview v-else/>
   </div>
 </template>
 

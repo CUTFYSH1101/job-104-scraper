@@ -12,10 +12,11 @@
         <p v-html='highlightText(slicedContent)' :style='contentStyle'></p>
       </div>
       <div class='empty' @mousemove='hideOnHoverBlackSpace($event)'></div>
-      <KeyHint :keys="['1','2','3','4','5','6','0']"></KeyHint>
+      <KeyHint :keys="['1','2','3','4','5','6','0']"/>
     </div>
   </transition>
 </template>
+
 <script>
 import { hoverJobDetail, config, updateBodyWidthHeight, showDetail, hideDetail } from '@/js/detailPreview.js'
 import { dictIncludes, setCookie, getCookie, isFalsy } from '@/js/utils.js'

@@ -10,7 +10,7 @@
           <p v-html='highlightText(slicedContent)' :style='contentStyle' ref='content'></p>
         </div>
         <!-- 在上方時距離底部的拖曳桿遠點避免重疊 -->
-        <KeyHint :keys="['1','2','3','4','5','6']" :bottom="order === -1 ? '1.5rem' : '0.5rem'"></KeyHint>
+        <KeyHint :keys="['1','2','3','4','5','6']" :bottom="order === -1 ? '1.5rem' : '0.5rem'"/>
       </div>
     </div>
     <div class='drag-preview' ref='drag-preview' v-if='dragging'></div>
