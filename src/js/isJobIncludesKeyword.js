@@ -30,18 +30,24 @@ export function getDetail(job) {
 export function cleanKeyword(keyword) {
   if (utils.isFalsy(keyword)) return ''
 
-  keyword = keyword.toLowerCase().trim()  // 去除前後空格
-  // 假設忘記在其中一個'-'前加上' '，補' '避免後續split(' ')失敗
-  // '/'前也補上空格
+  // 去除前後空格
+  keyword = keyword.toLowerCase().trim()
+
+  // 判斷是否在斜槓內
+  let inSlash = keyword.startsWith('/')
+
   if (keyword.includes('-'))
     for (let i = 1; i < keyword.length; i++) {
-      if (keyword.charAt(i) === '-' && keyword.charAt(i - 1) !== ' ') {
-        keyword = keyword.substring(0, i) + ' ' + keyword.substring(i)
-        i++
+      // 只切換狀態
+      if (keyword.charAt(i) === '/') {
+        inSlash = !inSlash
+        continue
       }
-      if (keyword.charAt(i) === '/' && keyword.charAt(i - 1) !== ' ') {
+
+      // 只有在不在 // 內、且是-、且前面沒空格時，可能是忘記加空格，補空格，避免後續split(' ')失敗
+      if (keyword.charAt(i) === '-' && keyword.charAt(i - 1) !== ' ' && !inSlash) {
         keyword = keyword.substring(0, i) + ' ' + keyword.substring(i)
-        i++
+        i++  // 跳過剛剛補進去的那個空格
       }
     }
   return keyword
