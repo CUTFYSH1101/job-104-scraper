@@ -29,8 +29,7 @@ import CalcuLoading from '@/js/relation/multithreading/calcuLoading.js'
 import InteractionForClick from '@/js/relation/interactionForClick.js'
 import * as utils from '@/js/utils.js'
 import { parse, parseValue } from '@/js/utils.js'
-import { cleanKeyword, parseKeyword } from '@/js/highlight.js'
-import { isJobIncludesKeyword } from '@/js/isJobIncludesKeyword.js'
+import filterJobs from '@/js/filterJobs.js'
 
 let graph = null
 let clickInteraction = null
@@ -61,20 +60,8 @@ let slice = utils.slice
 // endregion
 
 // region computed
-const filteredJobs = computed(() => {
-  if (!props.jobs) return []
-  // 用`且`邏輯連接關鍵字，要都符合才會顯示
-  let keyword = concatKeyword.value
-  if (utils.isFalsy(keyword)) return props.jobs
-
-  keyword = cleanKeyword(keyword)
-  let keywords = parseKeyword(keyword)
-  return props.jobs.filter(job => {
-    if (!keywords.must.every(word => isJobIncludesKeyword(job, word))) return false
-    if (keywords.not.some(word => isJobIncludesKeyword(job, word))) return false
-    return true
-  })
-})
+// 用`且`邏輯連接關鍵字，要都符合才會顯示
+const filteredJobs = computed(() => filterJobs(props.jobs, concatKeyword.value))
 let concatKeyword = computed(() => {
   if (typeof parse(props.keyword) === 'object') return parseValue(clickedNodeOrLine)
   return `${parse(props.keyword)} ${parseValue(clickedNodeOrLine)}`

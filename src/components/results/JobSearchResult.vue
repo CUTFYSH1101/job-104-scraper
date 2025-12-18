@@ -20,14 +20,13 @@
 
 <script>
 import Download from '@/components/Download.vue'
-import * as utils from '@/js/utils.js'
 import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
-import { isJobIncludesKeyword } from '@/js/isJobIncludesKeyword.js'
-import { highlightText, cleanKeyword, parseKeyword } from '@/js/highlight.js'
+import { highlightText } from '@/js/highlight.js'
+import filterJobs from '@/js/filterJobs.js'
 
 let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
@@ -41,16 +40,7 @@ export default {
   props: ['jobs', 'keyword'],
   computed: {
     filterJobs() {
-      if (!this.jobs) return []
-      if (utils.isFalsy(this.keyword)) return this.jobs
-
-      let keyword = cleanKeyword(this.keyword)
-      let keywords = parseKeyword(keyword)
-      return this.jobs.filter(job => {
-        if (!keywords.must.every(word => isJobIncludesKeyword(job, word))) return false
-        if (keywords.not.some(word => isJobIncludesKeyword(job, word))) return false
-        return true
-      })
+      return filterJobs(this.jobs, this.keyword)
     },
   },
   methods: {

@@ -13,10 +13,9 @@ export default {
 <script setup>
 import { ref, onMounted, onActivated, onDeactivated, computed, watch } from 'vue'
 import * as utils from '@/js/utils.js'
-import { cleanKeyword, parseKeyword } from '@/js/highlight.js'
-import { isJobIncludesKeyword } from '@/js/isJobIncludesKeyword.js'
 import CalcuOneRelation from '@/js/calcuOneRelation.js'
 import GraphDonut from '@/js/graphDonut.js'
+import filterJobs from '@/js/filterJobs.js'
 
 let graphDonut = null
 
@@ -32,18 +31,6 @@ const resize = () => {
   let rate = 0.4
   if (width > 400) width = width * rate > 400 ? width * rate : 400
   graphDonut.updateSize({ w: width, h: width })
-}
-const filterJobs = (jobs, keyword) => {
-  if (!jobs) return []
-  if (utils.isFalsy(keyword)) return jobs
-
-  keyword = cleanKeyword(keyword)
-  let keywords = parseKeyword(keyword)
-  return jobs.filter(job => {
-    if (!keywords.must.every(word => isJobIncludesKeyword(job, word))) return false
-    if (keywords.not.some(word => isJobIncludesKeyword(job, word))) return false
-    return true
-  })
 }
 CalcuOneRelation.setHowToFilterJobs(filterJobs)
 
