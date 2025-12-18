@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import * as utils from '../js/utils'
+import * as utils from '@/js/utils.js'
 
 export default {
   props: ['data', 'format', 'csvName'],
@@ -50,5 +50,5 @@ export default {
 }
 </script>
 
-<style scoped lang="sass" src="../styles/btn.sass">
+<style scoped lang="sass" src='@/styles/btn.sass'>
 </style>

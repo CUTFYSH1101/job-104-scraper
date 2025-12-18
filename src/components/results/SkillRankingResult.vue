@@ -107,7 +107,7 @@ onDeactivated(() => {
 </script>
 
 <style scoped lang="sass">
-@use "@/styles/variables.sass" as var
+@use '@/styles/variables.sass' as var
 .container-ranking
   width: 100%
   height: 100%

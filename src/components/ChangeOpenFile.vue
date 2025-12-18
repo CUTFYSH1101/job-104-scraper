@@ -41,9 +41,9 @@ export default {
 </script>
 
 <style scoped lang="sass">
-@use "@/styles/variables.sass" as var
-@use "@/styles/rwd.sass"
-@use "@/styles/tailwind.sass" as tw
+@use '@/styles/variables.sass' as var
+@use '@/styles/rwd.sass'
+@use '@/styles/tailwind.sass' as tw
 
 .select
   margin: var.$px20

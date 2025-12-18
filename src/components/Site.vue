@@ -40,10 +40,10 @@
 
 <script>
 import SearchPanel from '@/components/SearchPanel.vue'
-import JobSearchResult from '@/components/JobSearchResult.vue'
-import KeywordCoverageResult from '@/components/KeywordCoverageResult.vue'
-import SkillRecommendResult from '@/components/SkillRecommendResult.vue'
-import BookmarkResult from '@/components/BookmarkResult.vue'
+import JobSearchResult from '@/components/results/JobSearchResult.vue'
+import KeywordCoverageResult from '@/components/results/KeywordCoverageResult.vue'
+import SkillRecommendResult from '@/components/results/SkillRecommendResult.vue'
+import BookmarkResult from '@/components/results/BookmarkResult.vue'
 import { jobs } from '@/js/jobsLoader.js'
 import JobAtSiteCenter from '@/js/mobile/jobAtSiteCenter.js'
 import { setCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
@@ -80,10 +80,10 @@ export default {
 }
 </script>
 
-<style src="@/styles/common.sass" lang="sass"></style>
+<style src='@/styles/common.sass' lang="sass"></style>
 
 <style scoped lang="sass">
-@use "@/styles/variables" as var
+@use '@/styles/variables.sass' as var
 // 讓頁腳footer固定在底部，無論main高度如何
 .site
   display: grid

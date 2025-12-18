@@ -80,10 +80,10 @@ export default {
 }
 </script>
 
-<style scoped lang="sass" src="@/styles/jobs.sass"></style>
+<style scoped lang="sass" src='@/styles/jobs.sass'></style>
 
 <style scoped lang="sass">
-@use "@/styles/rwd"
+@use '@/styles/rwd.sass'
 
 .float-panel
   float: right
@@ -99,7 +99,7 @@ export default {
 </style>
 
 <style lang="sass">
-@use "@/styles/highlight"
+@use '@/styles/highlight.sass'
 
 .job-search-container .highlight
   +highlight.defaultStyle

@@ -1,3 +1,23 @@
+### 2025/12/18 整理專案結構
+
+#### 將sass和js引用檔中的"取代成'
+
+- 搜尋目標
+  ```regexp
+  (@use|from|src=)(\s*)"([^"]+)"
+  ```
+- 取代成
+  ```regexp
+  $1$2'$3'
+  ```
+
+### 整理`src/components`資料夾
+
+移動到detail、results和utils
+由於`KeyHint.vue`被引用次數多因此不放入utils
+由於`SearchPanel.vue`只有一個檔案且results行為依賴於它，因此不創建search資料夾以放置它
+由於`Site.vue`行為更像`App.vue`因此也不放入results
+
 ### 關聯圖互動整理
 
 ####

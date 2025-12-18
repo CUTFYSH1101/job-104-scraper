@@ -132,7 +132,7 @@ onDeactivated(() => window.removeEventListener('resize', resize))
 </script>
 
 <style scoped lang="sass">
-@use "@/styles/variables.sass" as var
+@use '@/styles/variables.sass' as var
 
 =fillWindow()
   width: 100%

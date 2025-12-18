@@ -44,7 +44,7 @@ import * as utils from '@/js/utils.js'
 import * as config from '@/js/config.js'
 import Batcher from '@/js/batcher.js'
 import { getTags, prefixEach } from '@/js/utils.js'
-import HorizontalBar from '@/components/HorizontalBar.vue'
+import HorizontalBar from '@/components/utils/HorizontalBar.vue'
 import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
@@ -225,10 +225,10 @@ export default {
   },
 }
 </script>
-<style scoped lang="sass" src="@/styles/jobs.sass"></style>
+<style scoped lang="sass" src='@/styles/jobs.sass'></style>
 
 <style lang="sass">
-@use "@/styles/variables.sass" as var
+@use '@/styles/variables.sass' as var
 
 .keyword-coverage .inline-block
   display: inline-block

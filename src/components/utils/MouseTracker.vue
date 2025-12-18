@@ -31,7 +31,7 @@ export default {
 </script>
 
 <style scoped lang="sass">
-@use "@/styles/variables" as var
+@use '@/styles/variables.sass' as var
 .cursor, .cursor *
   position: fixed
   pointer-events: none

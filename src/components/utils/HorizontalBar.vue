@@ -11,7 +11,7 @@ export default {
 </script>
 
 <style lang="sass">
-@use "@/styles/variables.sass" as var
+@use '@/styles/variables.sass' as var
 
 .bar
   background-color: var.$btnWhite

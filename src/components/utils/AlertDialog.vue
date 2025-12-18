@@ -17,7 +17,7 @@ let hidden = computed(() => AlertDialog.getHidden())
 </script>
 
 <style scoped lang="sass">
-@use '@/styles/variables' as var
+@use '@/styles/variables.sass' as var
 
 .event-root
   +var.hiddenButChildrenVisible

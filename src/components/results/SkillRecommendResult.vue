@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import SkillRankingResult from '@/components/SkillRankingResult.vue'
-import SkillRelationResult from '@/components/SkillRelationResult.vue'
+import SkillRankingResult from '@/components/results/SkillRankingResult.vue'
+import SkillRelationResult from '@/components/results/SkillRelationResult.vue'
 import { setIsGraphPage } from '@/js/graphPage.js'
 
 export default {
@@ -20,7 +20,7 @@ export default {
 </script>
 
 <style scoped lang="sass">
-@use "@/styles/variables.sass" as var
+@use '@/styles/variables.sass' as var
 
 =fillWindow()
   width: 100%

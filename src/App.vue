@@ -14,8 +14,8 @@
 import Site from '@/components/Site.vue'
 import { isMobile } from '@/js/mobile/rwd.js'
 import { getIsGraphPage } from '@/js/graphPage.js'
-import DetailPreviewMobile from '@/components/DetailPreviewMobile.vue'
-import DetailPreview from '@/components/DetailPreview.vue'
+import DetailPreviewMobile from '@/components/detail/DetailPreviewMobile.vue'
+import DetailPreview from '@/components/detail/DetailPreview.vue'
 import { config } from '@/js/mobile/changeOrder.js'
 
 export default {

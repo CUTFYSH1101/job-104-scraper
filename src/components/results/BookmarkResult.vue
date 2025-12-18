@@ -74,4 +74,4 @@ export default {
 }
 </script>
 
-<style scoped lang="sass" src="@/styles/jobs.sass"></style>
+<style scoped lang="sass" src='@/styles/jobs.sass'></style>

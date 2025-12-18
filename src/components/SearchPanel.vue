@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { setCookie, getCookie, insert } from '@/js/utils'
+import { setCookie, getCookie, insert } from '@/js/utils.js'
 import ChangeOpenFile from '@/components/ChangeOpenFile.vue'
 
 export default {
@@ -60,9 +60,9 @@ export default {
 </script>
 
 <style scoped lang="sass">
-@use "@/styles/variables.sass" as var
-@use "@/styles/rwd.sass"
-@use "@/styles/tailwind.sass" as tw
+@use '@/styles/variables.sass' as var
+@use '@/styles/rwd.sass'
+@use '@/styles/tailwind.sass' as tw
 
 .tool-panel
   float: right

@@ -261,9 +261,9 @@ export default {
 </script>
 
 <style scoped lang="sass">
-@use "@/styles/variables.sass" as var
-@use "@/styles/tailwind" as tw
-@use "@/styles/jobDetail.sass"
+@use '@/styles/variables.sass' as var
+@use '@/styles/tailwind.sass' as tw
+@use '@/styles/jobDetail.sass'
 
 // 引用a樣式
 +jobDetail.aStyle
@@ -317,7 +317,7 @@ export default {
 </style>
 
 <style lang="sass">
-@use "@/styles/highlight"
+@use '@/styles/highlight.sass'
 
 p.highlight, p .highlight
   +highlight.defaultStyle
