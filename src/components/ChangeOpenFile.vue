@@ -1,7 +1,7 @@
 <template>
-  <select class="select" v-model="currentPath" @change.stop>
+  <select class='select' v-model='currentPath' @change.stop>
     <option disabled selected>開啟新的檔案</option>
-    <option v-for="path in thePathsHavingKeyword" :value="path">{{ shortPath(path) }}</option>
+    <option v-for='path in thePathsHavingKeyword' :value='path'>{{ shortPath(path) }}</option>
   </select>
 </template>
 
@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 @use '@/styles/rwd.sass'
 @use '@/styles/tailwind.sass' as tw

@@ -1,13 +1,13 @@
 <template>
-  <div ref="container" class="container-relation">
+  <div ref='container' class='container-relation'>
     <div>
-      <svg ref="svgRef"></svg>
-      <canvas ref="canvasRef"></canvas>
+      <svg ref='svgRef'></svg>
+      <canvas ref='canvasRef'></canvas>
     </div>
-    <div class="jobs">
+    <div class='jobs'>
       <h3>{{ concatKeyword }}</h3>
-      <div class="job" v-for="(job, i) in slice(filteredJobs, 10)">
-        <a class="cell" :href="job.網址" target="_blank">
+      <div class='job' v-for='(job, i) in slice(filteredJobs, 10)'>
+        <a class='cell' :href='job.網址' target='_blank'>
           {{ i + 1 }}:{{ slice(job.工作名稱, 15) }}
         </a>
       </div>
@@ -131,7 +131,7 @@ onDeactivated(() => window.removeEventListener('resize', resize))
 // endregion
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 
 =fillWindow()

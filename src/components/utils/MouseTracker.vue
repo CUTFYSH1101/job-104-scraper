@@ -1,7 +1,7 @@
 <template>
-  <div class="cursor" :style="{left: x + 'px', top: y + 'px' }">
-    <span class="point"></span>
-    <span class="text">({{ x }}, {{ y }})</span>
+  <div class='cursor' :style="{left: x + 'px', top: y + 'px' }">
+    <span class='point'></span>
+    <span class='text'>({{ x }}, {{ y }})</span>
   </div>
 </template>
 
@@ -30,7 +30,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 .cursor, .cursor *
   position: fixed

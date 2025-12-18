@@ -1,6 +1,6 @@
 <template>
-  <div class="bar">
-    <div class="value" :style="{width: width}"></div>
+  <div class='bar'>
+    <div class='value' :style='{width: width}'></div>
   </div>
 </template>
 
@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style lang="sass">
+<style lang='sass'>
 @use '@/styles/variables.sass' as var
 
 .bar

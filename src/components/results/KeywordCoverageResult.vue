@@ -1,39 +1,39 @@
 <template>
-  <div class="keyword-coverage">
-    <div v-if="!isKeywordEmpty" class="analysis line-block mb-5">
-      <div v-for="[key, value] in Object.entries(skillRateDict)" class="analysis-cell">
+  <div class='keyword-coverage'>
+    <div v-if='!isKeywordEmpty' class='analysis line-block mb-5'>
+      <div v-for='[key, value] in Object.entries(skillRateDict)' class='analysis-cell'>
         {{ key }}佔{{ toPercent(value) }}
-        <HorizontalBar :width="toPercent(value)"></HorizontalBar>
+        <HorizontalBar :width='toPercent(value)'></HorizontalBar>
       </div>
-      <div class="analysis-cell">
+      <div class='analysis-cell'>
         總共{{ toPercent(skillRateNum) }}
-        <HorizontalBar :width="toPercent(skillRateNum)"></HorizontalBar>
+        <HorizontalBar :width='toPercent(skillRateNum)'></HorizontalBar>
       </div>
     </div>
-    <div ref="jobsView">
-      <div class="job" v-for="(job, i) in processedJobs"
-           @mousemove="userHoverJob($event, job)"
-           @mouseleave="userLeaveJob">
-        <Bookmark :job="job"></Bookmark>
-        <a class="cell" :href="job.網址" target="_blank">{{ i + 1 }}:{{ job.工作名稱 }}</a>
-        <div class="cell">
-          <span class="inline-block" v-for="tag in getTags(job)"
-                :class="{ highlight: !isKeywordEmpty && tagInKeywords(tag) }">
+    <div ref='jobsView'>
+      <div class='job' v-for='(job, i) in processedJobs'
+           @mousemove='userHoverJob($event, job)'
+           @mouseleave='userLeaveJob'>
+        <Bookmark :job='job'></Bookmark>
+        <a class='cell' :href='job.網址' target='_blank'>{{ i + 1 }}:{{ job.工作名稱 }}</a>
+        <div class='cell'>
+          <span class='inline-block' v-for='tag in getTags(job)'
+                :class='{ highlight: !isKeywordEmpty && tagInKeywords(tag) }'>
             {{ tag }}
           </span>
         </div>
         <!-- skillRate 或 skillWeight 任一有值時顯示，避免undefined顯示NaN -->
-        <div v-if="!isKeywordEmpty && (job.skillRate || job.skillWeight)">
-          <div v-if="job.skillRate" class="cell">
+        <div v-if='!isKeywordEmpty && (job.skillRate || job.skillWeight)'>
+          <div v-if='job.skillRate' class='cell'>
             <div>關鍵字比例：{{ toPercent(job.skillRate) }}</div>
-            <HorizontalBar :width="toPercent(job.skillRate)"></HorizontalBar>
+            <HorizontalBar :width='toPercent(job.skillRate)'></HorizontalBar>
           </div>
-          <div v-if="job.skillWeight" class="cell hint--bottom" :aria-label="job.skillWeightHint">
+          <div v-if='job.skillWeight' class='cell hint--bottom' :aria-label='job.skillWeightHint'>
             <div>關鍵字比重：{{ toPercent(job.skillWeight) }}</div>
-            <HorizontalBar :width="toPercent(job.skillWeight)"></HorizontalBar>
+            <HorizontalBar :width='toPercent(job.skillWeight)'></HorizontalBar>
           </div>
         </div>
-        <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if="isHovering(job)"></KeyHint>
+        <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if='isHovering(job)'></KeyHint>
       </div>
     </div>
   </div>
@@ -225,9 +225,9 @@ export default {
   },
 }
 </script>
-<style scoped lang="sass" src='@/styles/jobs.sass'></style>
+<style scoped lang='sass' src='@/styles/jobs.sass'></style>
 
-<style lang="sass">
+<style lang='sass'>
 @use '@/styles/variables.sass' as var
 
 .keyword-coverage .inline-block

@@ -1,6 +1,6 @@
 <template>
-  <div ref="container" class="container-ranking">
-    <svg ref="svgRef"></svg>
+  <div ref='container' class='container-ranking'>
+    <svg ref='svgRef'></svg>
   </div>
 </template>
 
@@ -106,7 +106,7 @@ onDeactivated(() => {
 // endregion
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 .container-ranking
   width: 100%

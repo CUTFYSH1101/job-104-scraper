@@ -1,6 +1,6 @@
 <template>
-  <button @click="toCsv()">
-    <i class="fa fa-download" aria-hidden="true"></i>
+  <button @click='toCsv()'>
+    <i class='fa fa-download' aria-hidden='true'></i>
     EXPORT
   </button>
 </template>
@@ -50,5 +50,5 @@ export default {
 }
 </script>
 
-<style scoped lang="sass" src='@/styles/btn.sass'>
+<style scoped lang='sass' src='@/styles/btn.sass'>
 </style>

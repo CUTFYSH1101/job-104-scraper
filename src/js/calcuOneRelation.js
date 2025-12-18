@@ -92,7 +92,7 @@ const calcu = (jobs, keyword) => {
     // console.log(keywordStr, reverse)
   })
   let reverseSum = reverses.flat().reduce((acc, item) => {
-    // item 是單個物件 {name: "xxx", count: 123}
+    // item 是單個物件 {name: 'xxx', count: 123}
     if (acc[item.name]) acc[item.name] += item.count
     else acc[item.name] = item.count
     return acc

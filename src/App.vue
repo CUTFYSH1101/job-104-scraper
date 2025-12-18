@@ -1,10 +1,10 @@
 <template>
-  <div class="split-screen">
-    <Site class="site"></Site>
+  <div class='split-screen'>
+    <Site class='site'></Site>
     <DetailPreviewMobile
-      v-if="isMobile && !getIsGraphPage"
-      class="detail"
-      :style="{order: order, flexBasis: height}">
+      v-if='isMobile && !getIsGraphPage'
+      class='detail'
+      :style='{order: order, flexBasis: height}'>
     </DetailPreviewMobile>
     <DetailPreview v-else></DetailPreview>
   </div>
@@ -37,7 +37,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 .split-screen
   display: flex
   flex-direction: column

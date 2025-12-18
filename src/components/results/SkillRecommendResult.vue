@@ -1,7 +1,7 @@
 <template>
-  <div class="container-recommend">
-    <SkillRankingResult :jobs="jobs" :keyword="keyword"/>
-    <SkillRelationResult :jobs="jobs" :keyword="keyword"/>
+  <div class='container-recommend'>
+    <SkillRankingResult :jobs='jobs' :keyword='keyword'/>
+    <SkillRelationResult :jobs='jobs' :keyword='keyword'/>
   </div>
 </template>
 
@@ -19,7 +19,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 
 =fillWindow()

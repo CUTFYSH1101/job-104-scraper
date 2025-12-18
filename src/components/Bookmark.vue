@@ -1,6 +1,6 @@
 <template>
-  <div class="event-listener" @mousemove="userHoverJob" @mouseover="userLeaveJob">
-    <div class="bookmark" v-if="getBookmark()" :style="{backgroundColor: getBookmark()}"></div>
+  <div class='event-listener' @mousemove='userHoverJob' @mouseover='userLeaveJob'>
+    <div class='bookmark' v-if='getBookmark()' :style='{backgroundColor: getBookmark()}'></div>
   </div>
 </template>
 
@@ -23,7 +23,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 .event-listener
   position: absolute
   inset: 0

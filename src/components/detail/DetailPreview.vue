@@ -1,17 +1,17 @@
 <template>
-  <transition name="fade" mode="out-in">  <!-- 套用動畫 -->
-    <div class="job-preview"
-         :style="posStyle"
-         @wheel.prevent="zoom"
-         v-if="!hidden && !modeHidden && !isMobile"
-         @mousemove="showDetail"
-         @mouseleave="hideDetail">  <!-- 移動和縮放 -->
-      <div v-if="includesDetail">  <!-- 內容用一個div裝著 -->
-        <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
-        <p v-if="keyName === 'content'" class="salary" :style="salaryStyle">{{ detail['salary'] }}</p>
-        <p v-html="highlightText(slicedContent)" :style="contentStyle"></p>
+  <transition name='fade' mode='out-in'>  <!-- 套用動畫 -->
+    <div class='job-preview'
+         :style='posStyle'
+         @wheel.prevent='zoom'
+         v-if='!hidden && !modeHidden && !isMobile'
+         @mousemove='showDetail'
+         @mouseleave='hideDetail'>  <!-- 移動和縮放 -->
+      <div v-if='includesDetail'>  <!-- 內容用一個div裝著 -->
+        <a :href="detail['job-href']" target='_blank'>{{ detail['job'] }}</a>
+        <p v-if="keyName === 'content'" class='salary' :style='salaryStyle'>{{ detail['salary'] }}</p>
+        <p v-html='highlightText(slicedContent)' :style='contentStyle'></p>
       </div>
-      <div class="empty" @mousemove="hideOnHoverBlackSpace($event)"></div>
+      <div class='empty' @mousemove='hideOnHoverBlackSpace($event)'></div>
       <KeyHint :keys="['1','2','3','4','5','6','0']"></KeyHint>
     </div>
   </transition>
@@ -197,7 +197,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 @use '@/styles/jobDetail.sass'
 
@@ -237,7 +237,7 @@ export default {
   opacity: 1
 </style>
 
-<style lang="sass">
+<style lang='sass'>
 @use '@/styles/highlight.sass'
 
 p.highlight, p .highlight

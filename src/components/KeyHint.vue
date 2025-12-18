@@ -1,9 +1,9 @@
 <template>
-  <div class="keys" :style="styles">
-    <button class="key"
-            v-for="keyName in keys"
-            v-on="onClick(keyName)"
-            :class="{focused: focusedKey === keyName}">
+  <div class='keys' :style='styles'>
+    <button class='key'
+            v-for='keyName in keys'
+            v-on='onClick(keyName)'
+            :class='{focused: focusedKey === keyName}'>
       {{ keyName }}
     </button>
   </div>
@@ -44,7 +44,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 $unit: 0.25rem
 $unitL: 0.75rem
 

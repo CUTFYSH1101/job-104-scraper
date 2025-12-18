@@ -1,40 +1,40 @@
 <template>
-  <div class="site" @scroll="changeJobDetail">
-    <header class="page-header pl-5 pr-5 pt-3 sticky top-0 bg-white z-40">
-      <SearchPanel @change="changeKeyword"></SearchPanel>
-      <hr width="100%">
+  <div class='site' @scroll='changeJobDetail'>
+    <header class='page-header pl-5 pr-5 pt-3 sticky top-0 bg-white z-40'>
+      <SearchPanel @change='changeKeyword'></SearchPanel>
+      <hr width='100%'>
     </header>
-    <main class="page-content mt-3 p-3">
-      <div class="tabs">
-        <button class="tab"
+    <main class='page-content mt-3 p-3'>
+      <div class='tabs'>
+        <button class='tab'
                 :class="{active: activeTab==='jobSearch'}"
                 @click="activeTab='jobSearch'">
-          <i class="fas fa-search h-4 w-4"></i> 職缺搜尋結果
+          <i class='fas fa-search h-4 w-4'></i> 職缺搜尋結果
         </button>
-        <button class="tab"
+        <button class='tab'
                 :class="{active: activeTab==='keywordCoverage'}"
                 @click="activeTab='keywordCoverage'">
-          <i class="fas fa-bar-chart h-4 w-4"></i> 關鍵字覆蓋率分析
+          <i class='fas fa-bar-chart h-4 w-4'></i> 關鍵字覆蓋率分析
         </button>
-        <button class="tab"
+        <button class='tab'
                 :class="{active: activeTab==='skillRecommend'}"
                 @click="activeTab='skillRecommend'">
-          <i class="fas fa-pie-chart h-4 w-4"></i> 相關技能(1+1/1+2/1+3)
+          <i class='fas fa-pie-chart h-4 w-4'></i> 相關技能(1+1/1+2/1+3)
         </button>
-        <button class="tab"
+        <button class='tab'
                 :class="{active: activeTab==='bookmark'}"
                 @click="activeTab='bookmark'">
-          <i class="fas fa-star h-4 w-4"></i> 書籤清單
+          <i class='fas fa-star h-4 w-4'></i> 書籤清單
         </button>
       </div>
-      <hr class="border-b-4 border-gray-100">
-      <div class="block">
+      <hr class='border-b-4 border-gray-100'>
+      <div class='block'>
         <keep-alive>
-          <component :is="activeTab + 'Result'" :jobs="jobs" :keyword="keyword"></component>
+          <component :is="activeTab + 'Result'" :jobs='jobs' :keyword='keyword'></component>
         </keep-alive>
       </div>
     </main>
-    <footer class="page-footer bg-stone-300 text-stone-700">© Elico.org - 版權所有</footer>
+    <footer class='page-footer bg-stone-300 text-stone-700'>© Elico.org - 版權所有</footer>
   </div>
 </template>
 
@@ -80,9 +80,9 @@ export default {
 }
 </script>
 
-<style src='@/styles/common.sass' lang="sass"></style>
+<style src='@/styles/common.sass' lang='sass'></style>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 // 讓頁腳footer固定在底部，無論main高度如何
 .site

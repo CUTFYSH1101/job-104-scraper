@@ -1,20 +1,20 @@
 <!-- container決定拖曳框的大小和整體的高度 -->
 <template>
-  <div class="container">  <!-- 用flexbox和order決定拖曳桿和內容顯示前後 -->
-    <div class="flex flex-col h-100" :class="{'flex-col-reverse': order === -1}">
+  <div class='container'>  <!-- 用flexbox和order決定拖曳桿和內容顯示前後 -->
+    <div class='flex flex-col h-100' :class="{'flex-col-reverse': order === -1}">
       <!-- 拖曳桿，手指拖曳上下決定要顯示多高的內容(預設位置:上) -->
-      <div class="resize-slider" v-on="sliderHandlers" ref="resize-slider"></div>
-      <div class="job-preview" v-on="orderHandlers" @wheel.prevent="zoom" ref="jobPreview">  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
-        <div v-if="detail">
-          <a :href="detail['job-href']" target="_blank">{{ detail['job'] }}</a>
-          <p v-html="highlightText(slicedContent)" :style="contentStyle" ref="content"></p>
+      <div class='resize-slider' v-on='sliderHandlers' ref='resize-slider'></div>
+      <div class='job-preview' v-on='orderHandlers' @wheel.prevent='zoom' ref='jobPreview'>  <!-- 不管有無工作內容都會顯示的白色背景(預設位置:下) -->
+        <div v-if='detail'>
+          <a :href="detail['job-href']" target='_blank'>{{ detail['job'] }}</a>
+          <p v-html='highlightText(slicedContent)' :style='contentStyle' ref='content'></p>
         </div>
         <!-- 在上方時距離底部的拖曳桿遠點避免重疊 -->
         <KeyHint :keys="['1','2','3','4','5','6']" :bottom="order === -1 ? '1.5rem' : '0.5rem'"></KeyHint>
       </div>
     </div>
-    <div class="drag-preview" ref="drag-preview" v-if="dragging"></div>
-    <div class="drag-outline" v-if="dragging"></div>
+    <div class='drag-preview' ref='drag-preview' v-if='dragging'></div>
+    <div class='drag-outline' v-if='dragging'></div>
   </div>
 </template>
 
@@ -260,7 +260,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 @use '@/styles/tailwind.sass' as tw
 @use '@/styles/jobDetail.sass'
@@ -316,7 +316,7 @@ export default {
     cursor: row-resize
 </style>
 
-<style lang="sass">
+<style lang='sass'>
 @use '@/styles/highlight.sass'
 
 p.highlight, p .highlight

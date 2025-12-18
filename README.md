@@ -1,5 +1,28 @@
 ### 2025/12/18 整理專案結構
 
+#### 取代"為'
+
+- 搜尋目標
+  - 要包含`=`/空白開頭，空白/換行/>/`/>`結尾
+  - 由於`"`是單字邊界，無法搭配`/b`使用
+  - `(?=)`內無法被辨識成`$3`
+  ```regexp
+  (=|\s)"([^'"<>]+)"(?=\s|>|,|/|$)
+  ```
+- 取代成
+  ```regexp
+  $1'$2'
+  ```
+- 檢查是否都取代好了
+  ```regexp
+  ".*"
+  ```
+
+- 檢查都沒有故障
+  ```bash
+  npm run dev
+  ```
+
 #### 將sass和js引用檔中的"取代成'
 
 - 搜尋目標
@@ -66,7 +89,8 @@ onEnterNode: id => {
 
 ### `Set` `Map` `.map` 與 `Object`字典物件
 
-- 在js中`Object`可能代表字典、`Array`、`Event`，在此我們只說「字典」物件，字典用途的 Object：key 會被轉成字串，不適合用物件當 key
+- 在js中`Object`可能代表字典、`Array`、`Event`，在此我們只說「字典」物件，字典用途的 Object：key 會被轉成字串，不適合用物件當
+  key
   ```javascript
     let obj = {}
     obj['name'] = value
@@ -75,16 +99,16 @@ onEnterNode: id => {
   ```
 
 - `.map`和`Map`完全不一樣，只是剛好名稱一樣
-    - 這是`.map`：`let arr2 = arr1.map(el => el.count)`表示轉成一個[count,count,...]陣列後指派給`arr1`
-    - 這是`Map`
-      ```javascript
-        let map = new Map()
-        arr1.forEach(el => map.set(el.name, el))  // 注意格式是 `.set(key,value)`
+  - 這是`.map`：`let arr2 = arr1.map(el => el.count)`表示轉成一個[count,count,...]陣列後指派給`arr1`
+  - 這是`Map`
+    ```javascript
+      let map = new Map()
+      arr1.forEach(el => map.set(el.name, el))  // 注意格式是 `.set(key,value)`
 
-        let map = new Map(arr1.map(el => [el.name, el]))  // 注意格式是 `new Map(.map([key,value]))`
+      let map = new Map(arr1.map(el => [el.name, el]))  // 注意格式是 `new Map(.map([key,value]))`
 
-        return map.get(el.name)
-      ```
+      return map.get(el.name)
+    ```
 
 - `Set`
   ```javascript

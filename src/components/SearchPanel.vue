@@ -1,19 +1,19 @@
 <template>
-  <div class="font-bold top-panel">
-    <div class="tool-panel">  <!-- 工具區 -->
-      <div class="input-wrapper">  <!-- 搜尋框 -->
-        <i class="fa fa-search input-icon opacity-60"></i>
-        <input class="search-input" type="text" v-model="keyword" v-on:keydown.enter="addHistory()"
-               placeholder="例：python django -高級">
-        <button class="search-btn" @click="addHistory()"><i class="fa fa-plus"></i></button>
+  <div class='font-bold top-panel'>
+    <div class='tool-panel'>  <!-- 工具區 -->
+      <div class='input-wrapper'>  <!-- 搜尋框 -->
+        <i class='fa fa-search input-icon opacity-60'></i>
+        <input class='search-input' type='text' v-model='keyword' v-on:keydown.enter='addHistory()'
+               placeholder='例：python django -高級'>
+        <button class='search-btn' @click='addHistory()'><i class='fa fa-plus'></i></button>
       </div>
       <ChangeOpenFile></ChangeOpenFile>
     </div>
-    <div class="history-panel">  <!-- 搜尋紀錄 -->
-      <div class="m-2 opacity-80 inline-block">搜尋紀錄</div>
-      <button class="m-1 history-btn opacity-60 cursor-pointer inline-block"
-              v-for="history in historyKeywords"
-              @click="keyword = history">
+    <div class='history-panel'>  <!-- 搜尋紀錄 -->
+      <div class='m-2 opacity-80 inline-block'>搜尋紀錄</div>
+      <button class='m-1 history-btn opacity-60 cursor-pointer inline-block'
+              v-for='history in historyKeywords'
+              @click='keyword = history'>
         {{ history }}
       </button>
     </div>
@@ -59,7 +59,7 @@ export default {
 }
 </script>
 
-<style scoped lang="sass">
+<style scoped lang='sass'>
 @use '@/styles/variables.sass' as var
 @use '@/styles/rwd.sass'
 @use '@/styles/tailwind.sass' as tw
@@ -69,7 +69,7 @@ export default {
   +tw.ml(5)
   +tw.mb(5)
 
-// <editor-fold desc="搜尋框">
+// <editor-fold desc='搜尋框'>
 .input-wrapper
   position: relative
 
@@ -109,7 +109,7 @@ export default {
     border: solid 1px var.$dark
 // </editor-fold>
 
-// <editor-fold desc="歷史紀錄">
+// <editor-fold desc='歷史紀錄'>
 .history-btn
   border: solid 1px var.$gray
   background-color: white
