@@ -1,6 +1,6 @@
 ### 2025/12/18 整理專案結構
 
-### 每個<template><script><style>之間要空格
+#### 每個<template><script><style>之間要空格
 
 ```regexp
 </(template|script|style)>\n<(template|script|style)
