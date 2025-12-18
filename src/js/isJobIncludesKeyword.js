@@ -1,7 +1,11 @@
+// 輸出結果為 string：cleanKeyword
+// 輸出結果為 string[]：splitBySpace、parseKeyword
+
 import DetailStorage from '@/js/detailStorage.js'
 import * as utils from '@/js/utils.js'
 import * as config from '@/js/config.js'
 
+// region 獲取職缺細節
 let detailConfig = new DetailStorage()
 await detailConfig.init()
 
@@ -19,6 +23,48 @@ export function getDetail(job) {
   return detail ? utils.joinDictValues(detail) : ''
 }
 
+// endregion
+
+// region 關鍵字清理與解析（No IO）
+export function cleanKeyword(keyword) {
+  if (utils.isFalsy(keyword)) return ''
+
+  keyword = keyword.toLowerCase().trim()  // 去除前後空格
+  // 假設忘記在其中一個'-'前加上' '，補' '避免後續split(' ')失敗
+  if (keyword.includes('-'))
+    for (let i = 1; i < keyword.length; i++)
+      if (keyword.charAt(i) === '-' && keyword.charAt(i - 1) !== ' ') {
+        keyword = keyword.substring(0, i) + ' ' + keyword.substring(i)
+        i++
+      }
+  return keyword
+}
+
+export function splitBySpace(keyword) {
+  return keyword.includes(' ') ? keyword.split(/\s+/) : [keyword]
+}
+
+/**
+ *
+ * @param {string} keyword
+ * @returns {{} | {all: string[], must: string[], not: string[]}}
+ */
+export function parseKeyword(keyword) {
+  if (utils.isFalsy(keyword)) return {}
+  let cleaned = cleanKeyword(keyword)
+  if (!cleaned) return {}
+
+  let all = splitBySpace(cleaned)
+  return {
+    all: all,
+    must: all.filter(utils.notStartsWithDash),
+    not: all.filter(utils.isStartsWithDash).map(utils.dumpFirst)
+  }
+}
+
+// endregion
+
+// region 職缺/文字關鍵字比對
 // 逐一比對單一關鍵字與職缺標籤
 // 目的：避免像搜尋「java」時不小心比對到「javascript」，或搜尋「ml」時誤比對到「html」
 // 因為 job['關鍵字'] 與 keywordsPickUp 的來源一致、擷取方式相同，因此可以使用「完全相等」比較
@@ -55,3 +101,5 @@ export function matchKeyword(text, keyword) {
 export function isJobIncludesKeyword(job, keyword) {
   return matchKeyword(getDetail(job), keyword)
 }
+
+// endregion

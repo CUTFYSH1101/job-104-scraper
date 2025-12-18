@@ -49,8 +49,7 @@ import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
-import { isJobIncludesKeyword, matchKeyword } from '@/js/isJobIncludesKeyword.js'
-import { parseKeyword } from '@/js/highlight.js'
+import { parseKeyword, isJobIncludesKeyword, matchKeyword } from '@/js/isJobIncludesKeyword.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
