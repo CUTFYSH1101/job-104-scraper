@@ -29,13 +29,33 @@ export function highlightText(text, keyword) {
 
   keyword = expandMustAliases(keyword)
 
-  // 以空白切割，只強調正向關鍵字
+  // 包含正則與空格
+  if (keyword.includes('/') && keyword.includes(' ')) {
+    let regexes = keyword.match(/\/[^/]+\//g)
+    let patterns = []
+    regexes.forEach(regex => patterns.push(regex.slice(1, -1)))  // 去除頭尾/
+
+    keyword = keyword.replace(/\/[^/]+\//g, '')
+    let keywords = splitBySpace(keyword.toLowerCase())
+    let must = keywords.filter(utils.notStartsWithDash)
+    must.forEach(keyword => patterns.push(keyword))
+
+    patterns.sort((a, b) => b.length - a.length)  // 先替換`javascript`再替換`java`
+    return utils.replace(text, patterns.join('|'), '<span class="highlight">$1</span>')
+  }
+
+  // 單一正則
+  if (keyword.includes('/') && keyword.length > 3) {
+    let pattern = keyword.slice(1, -1)  // 去除頭尾/
+    return utils.replace(text, pattern, '<span class="highlight">$1</span>')
+  }
+
+  // 以空格切割，只強調正向關鍵字
   if (keyword.includes(' ')) {
     let keywords = splitBySpace(keyword.toLowerCase())
     let must = keywords.filter(utils.notStartsWithDash)
     must.sort((a, b) => b.length - a.length)  // 先替換`javascript`再替換`java`
-    must.forEach(keyword => text = utils.replace(text, keyword, '<span class="highlight">$1</span>'))
-    return text
+    return utils.replace(text, must.join('|'), '<span class="highlight">$1</span>')
   }
 
   // 只有一個負面關鍵字表示不用強調

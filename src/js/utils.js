@@ -244,7 +244,7 @@ export function toPercent(f) {
 
 // 不分大小寫
 export function replace(text, search, replace) {
-  let regex = new RegExp(`(${search})`, 'gi')  // /search/gi 不分大小寫
+  let regex = new RegExp(`(${search})`, 'gmi')  // /search/gmi 不分大小寫 m包含^$
   return text.replace(regex, replace)
 }
 

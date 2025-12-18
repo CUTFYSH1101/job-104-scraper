@@ -31,16 +31,23 @@ export function cleanKeyword(keyword) {
 
   keyword = keyword.toLowerCase().trim()  // 去除前後空格
   // 假設忘記在其中一個'-'前加上' '，補' '避免後續split(' ')失敗
+  // '/'前也補上空格
   if (keyword.includes('-'))
-    for (let i = 1; i < keyword.length; i++)
+    for (let i = 1; i < keyword.length; i++) {
       if (keyword.charAt(i) === '-' && keyword.charAt(i - 1) !== ' ') {
         keyword = keyword.substring(0, i) + ' ' + keyword.substring(i)
         i++
       }
+      if (keyword.charAt(i) === '/' && keyword.charAt(i - 1) !== ' ') {
+        keyword = keyword.substring(0, i) + ' ' + keyword.substring(i)
+        i++
+      }
+    }
   return keyword
 }
 
 export function splitBySpace(keyword) {
+  keyword = keyword.trim()
   return keyword.includes(' ') ? keyword.split(/\s+/) : [keyword]
 }
 
@@ -89,6 +96,17 @@ export function isJobTagsEqualsKeyword(job, keyword) {
 // 若不使用別名，會誤匹配到如 'taiwan'、'email'、'tailwind' 等含有 ai 的字詞
 export function matchKeyword(text, keyword) {
   if (!text || !keyword) return false
+
+  // 處理 regex 格式：/pattern/flags，flags（正則修飾符）恆為`gmi`，使用者不可輸入及修改正則修飾符
+  let match = keyword.match(/^\/[^/]+\/$/)
+  if (match)
+    try {
+      let pattern = match[0].slice(1, -1)
+      return new RegExp(pattern, 'gmi').test(text)
+    } catch (e) {
+      console.warn(`正規表達式解析失敗： ${keyword} ，退回用一般搜尋`)
+    }
+
   keyword = keyword.toLowerCase()
   text = text.toLowerCase()
 
