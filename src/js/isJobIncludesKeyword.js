@@ -4,6 +4,7 @@
 import DetailStorage from '@/js/detailStorage.js'
 import * as utils from '@/js/utils.js'
 import * as config from '@/js/config.js'
+import myRegex from '@/js/myRegex.js'
 
 // region 獲取職缺細節
 let detailConfig = new DetailStorage()
@@ -98,7 +99,7 @@ export function matchKeyword(text, keyword) {
   if (!text || !keyword) return false
 
   // 處理 regex 格式：/pattern/flags，flags（正則修飾符）恆為`gmi`，使用者不可輸入及修改正則修飾符
-  let match = keyword.match(/^\/[^/]+\/$/)
+  let match = keyword.match(myRegex)
   if (match)
     try {
       let pattern = match[0].slice(1, -1)

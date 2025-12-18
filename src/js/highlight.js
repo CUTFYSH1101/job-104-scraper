@@ -4,6 +4,7 @@
 import * as utils from '@/js/utils.js'
 import { keywordAliases } from '@/js/config.js'
 import { cleanKeyword, splitBySpace } from '@/js/isJobIncludesKeyword.js'
+import myRegex from '@/js/myRegex.js'
 
 /**
  * @param {string} keyword
@@ -31,11 +32,11 @@ export function highlightText(text, keyword) {
 
   // 包含正則與空格
   if (keyword.includes('/') && keyword.includes(' ')) {
-    let regexes = keyword.match(/\/[^/]+\//g)
+    let regexes = keyword.match(myRegex)
     let patterns = []
     regexes.forEach(regex => patterns.push(regex.slice(1, -1)))  // 去除頭尾/
 
-    keyword = keyword.replace(/\/[^/]+\//g, '')
+    keyword = keyword.replace(myRegex, '')
     let keywords = splitBySpace(keyword.toLowerCase())
     let must = keywords.filter(utils.notStartsWithDash)
     must.forEach(keyword => patterns.push(keyword))
