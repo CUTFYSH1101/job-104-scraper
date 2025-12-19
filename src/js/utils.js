@@ -102,7 +102,7 @@ export function isArray(val) {
 }
 
 export function isDict(val) {
-  return typeof val == 'object' && val !== null && !Array.isArray(val)
+  return typeof val == 'object' && val !== null && !Array.isArray(val) && !(val instanceof Set) && !(val instanceof Map)
 }
 
 // typeof val === 'object' 是為了處理 Vue 的 ref() 或 reactive()
@@ -126,12 +126,14 @@ export function isFalsy(val) {
 Object.defineProperty(Object.prototype, '_values', {
   get: function() {
     if (isDict(this)) return Object.values(this)
+    if (this instanceof Map) return [...this.values()]
     throw new TypeError('This variable must be a dictionary.')
   },
 })
 Object.defineProperty(Object.prototype, '_keys', {
   get: function() {
     if (isDict(this)) return Object.keys(this)
+    if (this instanceof Map) return [...this.keys()]
     throw new TypeError('This variable must be a dictionary.')
   },
 })

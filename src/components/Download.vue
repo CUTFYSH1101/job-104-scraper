@@ -1,15 +1,16 @@
 <template>
   <button @click='toCsv()'>
     <i class='fa fa-download' aria-hidden='true'></i>
-    EXPORT
+    {{ textContent ?? 'EXPORT' }}
   </button>
 </template>
 
 <script>
 import * as utils from '@/js/utils.js'
+import Papa from 'papaparse'
 
 export default {
-  props: ['data', 'format', 'csvName'],
+  props: ['data', 'format', 'csvName', 'textContent'],
   data() {
     return {
       processedData: [],
@@ -20,26 +21,24 @@ export default {
       this.jobToData()
       if (!this.processedData || this.processedData.length === 0) return
 
-      let csvString = ''
-      this.processedData.forEach(row => {
-        row.forEach(cell => {
-          if (cell === undefined || cell === null) return
-          if (utils.includes(cell, ','))
-            cell = '"' + cell + '"'
-          csvString += cell + ','
-        })
-        csvString += '\r\n'
+      const csvString = Papa.unparse(this.processedData, {
+        quotes: true,
+        quoteChar: '"',
+        escapeChar: '"',
+        delimiter: ',',
+        header: false,
+        newline: '\r\n'
       })
 
-      csvString = 'data:application/csv,' + encodeURIComponent('\ufeff' + csvString)
+      let csv = 'data:application/csv,' + encodeURIComponent('\ufeff' + csvString)
       let anchor = document.createElement('a')
-      anchor.setAttribute('href', csvString)
+      anchor.setAttribute('href', csv)
       anchor.setAttribute('download', this.csvName)
       document.body.appendChild(anchor)
       anchor.click()
     },
     jobToData() {
-      if (this.format === 'job') {
+      if (this.format === 'job' || this.format === 'detail') {
         let data = this.data
         let col = Object.keys(data[0])
         let rows = data.map(job => col.map(key => job[key]))

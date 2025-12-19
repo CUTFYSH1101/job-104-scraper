@@ -3,11 +3,13 @@ import { ref } from 'vue'
 import { setCurrentPath as scp1 } from '@/js/detailPreview.js'
 import { setCurrentPath as scp2 } from '@/js/mobile/detailPreviewMobile.js'
 import { setCurrentPath as scp3 } from '@/js/isJobIncludesKeyword.js'
+import { setCurrentPath as scp4 } from '@/js/detailForDownload.js'
 
 let setCurrentPath = async val => {
   await scp1(val)
   await scp2(val)
   await scp3(val)
+  await scp4(val)
 }
 
 let _jobs = ref([])

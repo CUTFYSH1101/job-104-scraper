@@ -1,7 +1,8 @@
 <template>
   <div class='job-search-container'>
     <div class='main-tool'>
-      <Download :data='filterJobs' format='job' csv-name='job-search.csv' class='float-panel'/>
+      <Download :data='filterJobs' text-content='匯出工作(提取關鍵字)' format='job' csv-name='job-search.csv' class='float-panel'/>
+      <Download :data='filterJobsDetail' text-content='匯出工作(原文)' format='detail' csv-name='job-search-detail.csv' class='float-panel'/>
       <div v-show='keyword' class='hint'>共{{ filterJobs.length }}筆搜尋結果</div>
     </div>
     <div ref='jobsView'>
@@ -27,6 +28,7 @@ import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 import { highlightText } from '@/js/highlight.js'
 import filterJobs from '@/js/filterJobs.js'
+import { getDetailsContent } from '@/js/detailForDownload.js'
 
 let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
@@ -41,6 +43,10 @@ export default {
   computed: {
     filterJobs() {
       return filterJobs(this.jobs, this.keyword)
+    },
+    filterJobsDetail() {
+      let filterHrefs = new Set(this.filterJobs.map(job => job['網址']))
+      return getDetailsContent() ? getDetailsContent().filter(detail => filterHrefs.has(detail['job-href'])) : []
     },
   },
   methods: {
