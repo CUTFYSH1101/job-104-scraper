@@ -4,18 +4,6 @@ import { cleanKeyword, splitBySpace, isJobTagsEqualsKeyword, matchKeyword } from
 
 let filterJobs = (jobs, keyword) => {}
 let setHowToFilterJobs = func => filterJobs = func
-const reverseKeyword = keyword => {
-  keyword = cleanKeyword(keyword)
-  let keywords = splitBySpace(keyword)
-  let reverse = keywords.reduce((acc, keyword) => {
-    return acc.flatMap(combo => [
-      [...combo, keyword],
-      [...combo, keyword.isStartsWithDash() ? keyword.dumpFirst() : '-' + keyword],
-    ])
-  }, [[]])
-  reverse = reverse.removeArray(keywords)
-  return reverse
-}
 const chi_squared = (a11, a12, a21, a22) => {
   const n = a11 + a12 + a21 + a22
   const critical = 3.84  // alpha=0.05, k=1, 查表得卡方臨界值=3.84
@@ -48,8 +36,8 @@ const chi_squared = (a11, a12, a21, a22) => {
 //      反之為負相關，不必考慮 a11===a21 的情況，因為已經確定彼此有相關
 // 3-5. h1 = !h0，h0和h1為互斥
 // </pre>
-const calcu = (jobs, keyword) => {
-  let uniqueKeywords = utils.getTotalUniqueTags(jobs)
+const calcu = (universeJobs, keyword) => {
+  let uniqueKeywords = utils.getTotalUniqueTags(universeJobs)
   if (uniqueKeywords.includes('')) uniqueKeywords.remove('')
 
   // 遞迴每個關鍵字，計算正面與負面的次數，回傳[{name,count},{name,count},...]
@@ -73,42 +61,21 @@ const calcu = (jobs, keyword) => {
     .map(key => key.isStartsWithDash() ? key.dumpFirst() : key)
 
   // 計算搜尋結果，所有關鍵字正面與負面的次數
-  let ones = calcuIncludesCount(filterJobs(jobs, keyword), keywords)
-
-  // 計算搜尋結果的補集，所有關鍵字正面與負面的次數
-  // 如果正面結果與負面結果剛好呈現相反才蒐集，反之則是不確定是否相關
-  // 比方搜尋javascript中，bootstrap出現很多次，
-  // 且搜尋-javascript中，bootstrap出現很少次，
-  // 才能表明javascript和bootstrap存在某種關聯
-  // console.log('負向查詢', reverseKeyword(keyword))  // 回傳[['str1','-str2'],['-str1','str2'],['-str1','-str2']]
-  let reverseKeyword2DList = reverseKeyword(keyword)
-  let reverses = []
-  reverseKeyword2DList.forEach(keywords => {
-    let keywordStr = keywords.join(' ').trim()
-    let filteredJobs = filterJobs(jobs, keywordStr)
-    let reverse = calcuIncludesCount(filteredJobs, keywords.map(key => key.isStartsWithDash() ? key.dumpFirst() : key))
-    reverses.push(reverse)
-    // console.log(keywordStr, reverse)
-  })
-  let reverseSum = reverses.flat().reduce((acc, item) => {
-    // item 是單個物件 {name: 'xxx', count: 123}
-    if (acc[item.name]) acc[item.name] += item.count
-    else acc[item.name] = item.count
-    return acc
-  }, {})
-  reverseSum = Object.entries(reverseSum).map(([name, count]) => ({ name, count }))
-  reverseSum = reverseSum.sort((a, b) => b.count - a.count) // 大的排前面
-  // console.log('合併負向查詢', reverseSum)
+  keywords = keywords.map(key => key.isStartsWithDash() ? key.dumpFirst() : key)
+  let A = filterJobs(universeJobs, keyword)
+  let notA = A.complement(universeJobs)
+  let ones = calcuIncludesCount(A, keywords)
+  let notOnes = calcuIncludesCount(notA, keywords)
 
   let chi_notH0_keywords = []
   // [{name,count},{name,count},...] 轉成 dict[name]=count
   let dictOnes = ones.toDict('name', 'count')
-  let dictReversed = reverseSum.toDict('name', 'count')
+  let dictNotOnes = notOnes.toDict('name', 'count')
   uniqueKeywords.forEach(keyword => {
     let a11 = dictOnes[keyword]
     let a12 = dictOnes['-' + keyword]
-    let a21 = dictReversed[keyword]
-    let a22 = dictReversed['-' + keyword]
+    let a21 = dictNotOnes[keyword]
+    let a22 = dictNotOnes['-' + keyword]
     let chi2 = chi_squared(a11, a12, a21, a22)
 
     let posSum = a11 + a12

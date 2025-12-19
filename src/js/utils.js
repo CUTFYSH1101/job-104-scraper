@@ -149,8 +149,17 @@ Object.defineProperty(Object.prototype, '_items', {
  */
 Array.prototype.intersection = function(compare) {
   if (!isArray(compare))
-    throw new TypeError('The comparison must be an array.')
+    throw new TypeError('The argument must be an array.')
   return this.filter(item => compare.includes(item))
+}
+/**
+ * @param {Array} universe
+ * @returns {Array}
+ */
+Array.prototype.complement = function(universe) {
+  if (!isArray(universe))
+    throw new TypeError('The argument must be an array.')
+  return universe.filter(item => !this.includes(item))
 }
 /**
  * @example
@@ -192,6 +201,44 @@ String.prototype.format = function(args) {
 }
 Array.prototype.toDict = function(keyName, valueName) {
   return Object.fromEntries(this.map(item => [item[keyName], item[valueName]]))
+}
+/**
+ * @template T
+ * @param {(el: T) => {}} callback
+ */
+Set.prototype.forEach = function(callback) {
+  for (const el of this) callback(el)
+}
+/**
+ * @template T
+ * @param {(el: T) => boolean} callback
+ * @returns {Set<T>}
+ */
+Set.prototype.filter = function(callback) {
+  const result = new Set()
+  for (const el of this) {
+    if (callback(el))
+      result.add(el)
+  }
+  return result
+}
+/**
+ * @param {Set} compare
+ * @returns {Set}
+ */
+Set.prototype.intersection = function(compare) {
+  if (!(compare instanceof Set))
+    throw new TypeError('The argument must be an set.')
+  return this.filter(item => compare.has(item))
+}
+/**
+ * @param {Set} universe
+ * @returns {Set}
+ */
+Set.prototype.complement = function(universe) {
+  if (!(universe instanceof Set))
+    throw new TypeError('The argument must be an set.')
+  return universe.filter(item => !this.has(item))
 }
 // querySelectorAll
 NodeList.prototype.map = function(callback) {
