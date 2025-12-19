@@ -264,6 +264,7 @@ export default {
 @use '@/styles/variables.sass' as var
 @use '@/styles/tailwind.sass' as tw
 @use '@/styles/jobDetail.sass'
+@use 'sass:math'
 
 // 引用a樣式
 +jobDetail.aStyle
@@ -301,7 +302,7 @@ export default {
 // 從上到下：m5 p5 bt5 p5，共20px
 .resize-slider
   margin: 5px 0
-  padding: 5px calc(#{(100 - 20) / 2}dvw)  // 長度為20dvw
+  padding: 5px #{math.div(100 - 20, 2)}dvw  // 長度為20dvw
   transition: 0.5s
 
   &:before
@@ -311,7 +312,7 @@ export default {
     border-radius: 10px
 
   &.dragging
-    padding: 5px calc(#{(100 - 15) / 2}dvw)
+    padding: 5px #{math.div(100 - 15, 2)}dvw
     background-color: var.$dragOrange
     cursor: row-resize
 </style>
