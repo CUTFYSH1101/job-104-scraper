@@ -92,7 +92,7 @@ export function isJobTagsEqualsKeyword(job, keyword) {
   if (aliases && Array.isArray(aliases))
     return aliases.intersection(tags).length > 0
 
-  return tags.includes(keyword)
+  return tags.some(tag => tag === keyword)  // tags.includes(keyword)
 }
 
 // 這段文字是否包含別名或關鍵字

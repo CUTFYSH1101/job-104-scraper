@@ -1,6 +1,24 @@
+### 2025/12/19 修正甜甜圈圖
+
+- `if (keywords.some(inputKey => matchKeyword(key, inputKey) || key === inputKey)) return`<br>
+  `ai`不該包含`ai`
+- `return tags.some(tag => tag === keyword)  // tags.includes(keyword)`<br>
+  `ml`不該包含`html`、`mac`不該包含`machine`
+- ```javascript
+    if (this.colors.length < data.length)
+      data = [...data]
+        .sort((a, b) => this.value(b) - this.value(a))
+        .slice(0, this.colors.length)
+    let totalValue = d3.sum(data, this.value)
+    data = data.filter(d => this.value(d) / totalValue > 0.01)  // 過濾小於整體資料 1% 的
+    this.data = data  // 方便外部log
+  ```
+  解決甜甜圈容易出錯的問題，
+  `Error: <path> attribute d: Expected arc flag ('0' or '1'), "…664048299328,0,0.999856252,1,-34…".`來自於扇形角度不能太小
+
 ### 2025/12/18 整理專案結構
 
-#### 每個<template><script><style>之間要空格
+#### 每個`<template><script><style>`之間要空格
 
 ```regexp
 </(template|script|style)>\n<(template|script|style)
@@ -42,16 +60,16 @@
 
 ### 整理`src/components`資料夾
 
-移動到detail、results和utils
-由於`KeyHint.vue`被引用次數多因此不放入utils
-由於`SearchPanel.vue`只有一個檔案且results行為依賴於它，因此不創建search資料夾以放置它
+移動到detail、results和utils<br>
+由於`KeyHint.vue`被引用次數多因此不放入utils<br>
+由於`SearchPanel.vue`只有一個檔案且results行為依賴於它，因此不創建search資料夾以放置它<br>
 由於`Site.vue`行為更像`App.vue`因此也不放入results
 
 ### 關聯圖互動整理
 
 ####
 
-在dragging時不要觸發node hover事件
+在dragging時不要觸發node hover事件<br>
 在node hover時不要觸發link hover事件
 
 1. drag start → drag end（假設滑鼠在svg外的狀態，則觸發滑鼠移出）
@@ -59,15 +77,15 @@
 3. svg.mousemove，相當於hover，內文簡稱為link hover事件
    三事件只會進行一邊
 
-1.dragging控制力模擬
-2.hover控制節點+線段透明度
-3.hover控制線段透明度
-在1.dragging時不會觸發2.
+1.dragging控制力模擬<br>
+2.hover控制節點+線段透明度<br>
+3.hover控制線段透明度<br>
+在1.dragging時不會觸發2.<br>
 在2.時不會觸發3.
 
 ####
 
-mouse enter svg → mouse leave svg
+mouse enter svg → mouse leave svg<br>
 偵測滑鼠是否在svg內的狀態
 
 ####
@@ -77,8 +95,7 @@ svg.click控制關鍵字
 ####
 
 ```javascript
-.
-on('mouseenter', this.interaction.mouseenterNode)
+myNodes.on('mouseenter', this.interaction.mouseenterNode)
 ```
 
 相當於呼叫
@@ -90,7 +107,7 @@ onEnterNode: id => {
   this.setOpacityByHoverLine(1)
   this.setOpacity(0)
   this.canvasRenderer.draw()
-},
+}
 ```
 
 ### `Set` `Map` `.map` 與 `Object`字典物件
@@ -103,7 +120,6 @@ onEnterNode: id => {
 
     if (obj['name']) {}
   ```
-
 - `.map`和`Map`完全不一樣，只是剛好名稱一樣
   - 這是`.map`：`let arr2 = arr1.map(el => el.count)`表示轉成一個[count,count,...]陣列後指派給`arr1`
   - 這是`Map`
@@ -115,14 +131,12 @@ onEnterNode: id => {
 
       return map.get(el.name)
     ```
-
 - `Set`
   ```javascript
     let set = new Set([1,2,3])
 
     if (set.has(1)) {}
   ```
-
 - 不管是哪個通常都比`Array`的 `arr.find` 和 `arr.filter` 來得快
   因為`find`和`filter`表示重頭找，時間是 O(n)，其餘都是 O(1)
 
@@ -144,7 +158,7 @@ async function loadingAfterSettingDetailCsvPath(nodes, delay = 100) {
 }
 ```
 
-解法2：在每個async方法，用await等待它載入
+解法2：在每個async方法，用await等待它載入<br>
 缺點是畫面會等待它而卡頓
 
 ```javascript
@@ -212,7 +226,7 @@ function dragging(event, data) {
 
 ### 力學模擬傳入新的nodes或links，節點會飄到不知道哪裡
 
-DEBUG: 更新`nodes`或`links`不會位置跑掉（錯誤原因：會繼承上一次設定的`vx, vy, x, y`導致偏移）
+DEBUG: 更新`nodes`或`links`不會位置跑掉（錯誤原因：會繼承上一次設定的`vx, vy, x, y`導致偏移）<br>
 解決方法有兩種，我選後一種，因為邏輯是每次更新任何屬性，就重新繪製畫面
 
 ```javascript
@@ -296,6 +310,7 @@ taskkill /IM node.exe /F
 
 ### 推送到github
 
+```bash
 npm install gh-pages --save-dev
 
 git init
@@ -303,4 +318,6 @@ git config --global --add safe.directory 'T:/Programing_RightPath/_WebAndHTML/JS
 js/vue-project'
 git remote add origin https://github.com/CUTFYSH1101/job-104-scraper.git
 git pull
-用Fork這款軟體，強制推送master到遠端資料庫origin，所有選項都打勾 詳情看notion教學
+```
+用Fork這款軟體，強制推送master到遠端資料庫origin，所有選項都打勾<br>
+詳情看notion教學

@@ -45,7 +45,7 @@ const calcu = (universeJobs, keyword) => {
   const calcuIncludesCount = (jobs, keywords) => {
     let result = []
     uniqueKeywords.forEach(key => {
-      if (keywords.some(input => matchKeyword(key, input))) return
+      if (keywords.some(inputKey => matchKeyword(key, inputKey) || key === inputKey)) return
 
       let includesCount = utils.count(jobs, job => isJobTagsEqualsKeyword(job, key))
       result.push({ name: key, count: includesCount })

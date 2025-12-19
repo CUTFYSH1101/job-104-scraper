@@ -50,6 +50,8 @@ export default class GraphDonut {
       data = [...data]
         .sort((a, b) => this.value(b) - this.value(a))
         .slice(0, this.colors.length)
+    let totalValue = d3.sum(data, this.value)
+    data = data.filter(d => this.value(d) / totalValue > 0.01)  // 過濾小於整體資料 1% 的
     this.data = data  // 方便外部log
 
     let pieData = this.derived.pie(data)
