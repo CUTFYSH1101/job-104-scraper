@@ -37,6 +37,7 @@ const chi_squared = (a11, a12, a21, a22) => {
 // 3-5. h1 = !h0，h0和h1為互斥
 // </pre>
 const calcu = (universeJobs, keyword) => {
+  // 得到去重的關鍵字列表，包含全部工作裡全部的關鍵字
   let uniqueKeywords = utils.getTotalUniqueTags(universeJobs)
   if (uniqueKeywords.includes('')) uniqueKeywords.remove('')
 
@@ -67,6 +68,7 @@ const calcu = (universeJobs, keyword) => {
   let ones = calcuIncludesCount(A, keywords)
   let notOnes = calcuIncludesCount(notA, keywords)
 
+  // "not H0" => "不是'無相關'" => 即"有相關"
   let chi_notH0_keywords = []
   // [{name,count},{name,count},...] 轉成 dict[name]=count
   let dictOnes = ones.toDict('name', 'count')

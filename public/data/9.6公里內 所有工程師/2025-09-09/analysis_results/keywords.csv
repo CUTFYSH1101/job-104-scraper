@@ -9,7 +9,6 @@ agile
 ai
 ajax
 alerting
-algorithm
 android
 angular
 annotation
@@ -29,14 +28,10 @@ backend
 bash
 bdd
 big data
-black
 bootstrap
-bridge
 builder
-bun
 c#
 c++
-cad
 cdn
 celery
 centos
@@ -45,8 +40,6 @@ cloud run
 cmd
 cocos
 code review
-command
-commit
 composer
 container
 cordova
@@ -69,6 +62,8 @@ documentation
 ec2
 eclipse
 elasticsearch
+electron
+embedded system
 entity framework
 es6
 excel
@@ -81,6 +76,7 @@ firmware
 flask
 flutter
 framework
+frontend
 ftp
 fullstack
 gcp
@@ -93,7 +89,6 @@ gitlabci
 go
 gradle
 grafana
-graph
 graphql
 grpc
 gulp
@@ -104,7 +99,6 @@ html5
 http
 https
 i18n
-ide
 iis
 illustrator
 injection
@@ -130,6 +124,7 @@ keras
 kotlin
 kubernetes
 l10n
+lambda
 laravel
 ldap
 library
@@ -138,18 +133,17 @@ linux
 list
 llm
 logging
-mac
 machine learning
 map
 mariadb
 matlab
 maven
 ml
+module
 mongodb
 monitoring
 motor
 mqtt
-mr
 mvc
 mvvm
 mysql
@@ -178,7 +172,6 @@ pandas
 performance
 photoshop
 php
-pip
 pipeline
 plc
 plugin
@@ -188,10 +181,8 @@ power bi
 powerbuilder
 powerpoint
 powershell
-pr
 prometheus
 prototype
-proxy
 pyqt
 python
 pytorch
@@ -203,7 +194,6 @@ raspberry pi
 react
 react native
 react.js
-rebase
 redis
 redux
 refactoring
@@ -216,7 +206,6 @@ ruby
 rwd
 sass
 scada
-scala
 scikit-learn
 scipy
 scrum
@@ -225,7 +214,6 @@ sdk
 selenium
 seo
 serverless
-session
 sftp
 shell
 shell script
@@ -242,7 +230,6 @@ sql server
 sqlite
 ssl
 ssr
-stack
 stl
 storybook
 strategy
@@ -259,7 +246,6 @@ terraform
 three.js
 token
 tomcat
-trie
 troubleshooting
 typescript
 uat

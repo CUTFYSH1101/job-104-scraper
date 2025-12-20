@@ -27,9 +27,6 @@ bash
 bdd
 big data
 bootstrap
-bridge
-builder
-bun
 c#
 c++
 cad
@@ -43,11 +40,9 @@ cmd
 cocos
 code review
 command
-comment
 complexity
 container
 cordova
-cron
 csr
 css
 cypress
@@ -65,8 +60,11 @@ docker-compose
 documentation
 dotnet
 e2e
+ec2
 eclipse
 elasticsearch
+electron
+embedded system
 entity framework
 es6
 excel
@@ -92,7 +90,6 @@ gitlab ci
 go
 gradle
 grafana
-graph
 graphql
 grpc
 hadoop
@@ -108,7 +105,6 @@ illustrator
 injection
 integration test
 intellij
-interface
 ios
 iot
 iteration
@@ -128,6 +124,7 @@ keras
 kotlin
 kubernetes
 l10n
+lambda
 laravel
 ldap
 library
@@ -150,7 +147,6 @@ ml
 module
 mongodb
 mqtt
-mr
 mvc
 mvvm
 mysql
@@ -180,7 +176,6 @@ pandas
 performance
 photoshop
 php
-pip
 pipeline
 plc
 plugin
@@ -190,7 +185,7 @@ power bi
 powerbuilder
 powerpoint
 powershell
-pr
+profiling
 prometheus
 prototype
 proxy
@@ -207,7 +202,6 @@ raspberry pi
 react
 react native
 react.js
-rebase
 redis
 redux
 release
@@ -220,7 +214,6 @@ rust
 rwd
 sass
 scada
-scala
 scalability
 scikit-learn
 scipy
@@ -231,7 +224,6 @@ selenium
 seo
 serverless
 session
-set
 sftp
 shell
 shell script
@@ -251,7 +243,6 @@ sqlserver
 ssl
 sso
 ssr
-stack
 stl
 storybook
 strategy
@@ -267,7 +258,6 @@ tensorflow
 three.js
 token
 tomcat
-trie
 troubleshooting
 typescript
 uat

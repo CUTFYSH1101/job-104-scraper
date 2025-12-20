@@ -28,14 +28,9 @@ backend
 bash
 bdd
 big data
-black
 bootstrap
-bridge
-builder
-bun
 c#
 c++
-cad
 cdn
 centos
 ci/cd
@@ -45,7 +40,6 @@ cmd
 cocos
 code review
 command
-comment
 composer
 container
 cordova
@@ -68,6 +62,8 @@ e2e
 ec2
 eclipse
 elasticsearch
+electron
+embedded system
 entity framework
 es6
 excel
@@ -104,13 +100,11 @@ html5
 http
 https
 i18n
-ide
 iis
 illustrator
 injection
 integration test
 intellij
-interface
 ionic
 ios
 iot
@@ -131,6 +125,7 @@ keras
 kotlin
 kubernetes
 l10n
+lambda
 laravel
 ldap
 library
@@ -138,7 +133,6 @@ linq
 linux
 list
 llm
-mac
 machine learning
 maintainability
 map
@@ -152,7 +146,6 @@ ml
 module
 mongodb
 mqtt
-mr
 mvc
 mvvm
 mysql
@@ -184,7 +177,6 @@ performance
 perl
 photoshop
 php
-pip
 pipeline
 plc
 plugin
@@ -194,10 +186,8 @@ power bi
 powerbuilder
 powerpoint
 powershell
-pr
 prometheus
 prototype
-proxy
 pwa
 pyqt
 python
@@ -211,7 +201,6 @@ raspberry pi
 react
 react native
 react.js
-rebase
 redis
 redux
 release
@@ -224,7 +213,6 @@ rust
 rwd
 sass
 scada
-scala
 scalability
 scikit-learn
 scipy
@@ -234,7 +222,6 @@ sdk
 selenium
 seo
 serverless
-set
 sftp
 shell
 shell script
@@ -251,9 +238,7 @@ sql
 sql server
 sqlite
 ssl
-sso
 ssr
-stack
 stl
 storybook
 strategy
@@ -268,7 +253,6 @@ tdd
 tensorflow
 token
 tomcat
-trie
 troubleshooting
 typescript
 uat

@@ -4,6 +4,7 @@
 .net framework
 3d
 abstraction
+accessibility
 actionscript
 active directory
 ado.net
@@ -29,7 +30,6 @@ array
 asp
 asp.net
 assembly
-atom
 availability
 aws
 azure
@@ -44,7 +44,6 @@ black
 blazor
 bootstrap
 builder
-bun
 c#
 c++
 cad
@@ -62,17 +61,14 @@ cmd
 cocos
 code review
 command
-commit
 compiler
 composer
-conda
 confluence
 container
 cookie
 cordova
 cors
 coverage
-cron
 csr
 csrf
 css
@@ -84,7 +80,6 @@ database
 debian
 debugger
 deep learning
-defi
 deltav
 dependency
 deployment
@@ -100,13 +95,13 @@ e2e
 ec2
 eclipse
 elasticsearch
+electron
 embedded system
 encryption
 entity framework
 entityframework
 es6
 excel
-expo
 express.js
 extension
 factory
@@ -130,13 +125,12 @@ github actions
 gitlab
 gitlab ci
 go
+gorm
 gradle
 grafana
 graph
 graphql
 grpc
-grunt
-gtk
 gulp
 hadoop
 helm
@@ -207,14 +201,11 @@ middleware
 mitsubishi
 ml
 mocha
-mock
 mockup
 module
 mongodb
 monitoring
-motor
 mqtt
-mr
 mvc
 mvvm
 mysql
@@ -300,7 +291,6 @@ ros
 ruby
 rust
 rwd
-salt
 sass
 scada
 scala
@@ -311,7 +301,6 @@ scp
 scrum
 scss
 sdk
-searching
 selenium
 seo
 serverless
@@ -342,7 +331,6 @@ ssl
 sso
 ssr
 stack
-stash
 state
 stl
 strategy
@@ -361,10 +349,7 @@ three.js
 tls
 token
 tomcat
-toml
 tracing
-tree
-trie
 troubleshooting
 typescript
 uat
@@ -378,7 +363,6 @@ unreal
 vba
 verilog
 vhdl
-vim
 virtualization
 visual studio
 vmware
@@ -478,6 +462,7 @@ yokogawa
 橋接
 機器學習
 注入
+測試驅動開發
 演算法
 瀑布
 無人車

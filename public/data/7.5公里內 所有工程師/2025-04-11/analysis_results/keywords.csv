@@ -17,16 +17,13 @@ apache
 api
 asp
 asp.net
+assembly
 aws
 azure
 babel
-black
 bootstrap
-builder
-bun
 c#
 c++
-cad
 cdn
 centos
 ci/cd
@@ -43,6 +40,7 @@ docker
 docker-compose
 ec2
 elasticsearch
+embedded system
 entity framework
 es6
 excel
@@ -51,6 +49,7 @@ firebase
 firmware
 flutter
 framework
+frontend
 ftp
 fullstack
 gcp
@@ -60,7 +59,6 @@ gitlab
 go
 gradle
 grafana
-graph
 graphql
 gulp
 hibernate
@@ -70,7 +68,6 @@ html5
 http
 https
 i18n
-ide
 iis
 illustrator
 injection
@@ -94,13 +91,12 @@ laravel
 ldap
 linq
 linux
-mac
 mariadb
 material
+microservices
 ml
 mongodb
 mqtt
-mr
 mvc
 mvvm
 mysql
@@ -116,18 +112,16 @@ objective-c
 oop
 opencv
 opengl
+optimization
 oracle
 photoshop
 php
-pip
 pipeline
 plc
 postgresql
 powerbuilder
 powerpoint
-pr
 prometheus
-proxy
 python
 pytorch
 qt
@@ -137,10 +131,10 @@ raspberry pi
 react
 react native
 react.js
-rebase
 redis
 redux
 release
+rest
 restful
 ros
 rwd
@@ -157,7 +151,7 @@ shell
 shell script
 sketch
 soap
-solid
+software
 solidity
 spa
 spark
@@ -166,9 +160,7 @@ sql
 sql server
 sqlite
 ssl
-sso
 ssr
-stack
 svn
 swift
 tag
