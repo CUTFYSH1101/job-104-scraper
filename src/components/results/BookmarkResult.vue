@@ -1,5 +1,8 @@
 <template>
   <div>
+    <div class='main-tool'>
+      <Download :data='filterJobs' text-content='匯出工作(提取關鍵字)' format='job' csv-name='job-bookmark.csv' class='float-panel'/>
+    </div>
     <div>
       <button v-for='color in getColorMap'
               :style='{backgroundColor: color}'
@@ -32,12 +35,13 @@ import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
 import JobAtSiteCenter from '@/js/mobile/jobAtSiteCenter.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
+import Download from '@/components/Download.vue'
 
 let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
 export default {
   name: 'BookmarkResult',
-  components: { Bookmark, KeyHint, JobAtSiteCenter },
+  components: { Bookmark, KeyHint, JobAtSiteCenter, Download },
   props: ['jobs'],
   data() {
     return {
@@ -75,3 +79,6 @@ export default {
 </script>
 
 <style scoped lang='sass' src='@/styles/jobs.sass'></style>
+
+<!-- Download.vue 專用 -->
+<style scoped lang='sass' src='@/styles/download.sass'></style>

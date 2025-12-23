@@ -78,21 +78,8 @@ export default {
 
 <style scoped lang='sass' src='@/styles/jobs.sass'></style>
 
-<style scoped lang='sass'>
-@use '@/styles/rwd.sass'
-
-.float-panel
-  float: right
-  margin-right: 2rem
-  margin-bottom: 1rem
-  +rwd.mobile
-    float: left
-
-+rwd.mobile
-  .main-tool
-    display: flex
-    flex-direction: column
-</style>
+<!-- Download.vue 專用 -->
+<style scoped lang='sass' src='@/styles/download.sass'></style>
 
 <style lang='sass'>
 @use '@/styles/highlight.sass'

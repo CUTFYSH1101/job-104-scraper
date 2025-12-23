@@ -1,0 +1,14 @@
+// Download.vue 專用
+@use 'rwd'
+
+.float-panel
+  float: right
+  margin-right: 2rem
+  margin-bottom: 1rem
+  +rwd.mobile
+    float: left
+
++rwd.mobile
+  .main-tool
+    display: flex
+    flex-direction: column
