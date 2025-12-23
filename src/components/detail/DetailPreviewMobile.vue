@@ -126,7 +126,8 @@ export default {
         await this.$nextTick()
         outerH = this.$refs.jobPreview.offsetHeight
         innerH = this.$refs.content.offsetHeight
-        if (innerH * 1.2 <= outerH) break
+        if (this.order !== -1 && innerH * 1.2 <= outerH) break
+        if (this.order === -1 && innerH * 1.3 <= outerH) break  // 在上方時要多抓一段距離
         this.contentLength -= this.step
       }
     },
@@ -183,6 +184,7 @@ export default {
         height: '100%',
         transform: 'initial',
       })
+      this.calcuContentTextLength()  // 拖曳後容納的字數也會改變
       coConfig.order = coConfig.endsAtBottom ? 'initial' : -1
       coConfig.startsAtBottom = coConfig.endsAtBottom
       setCookie('startsAtBottom', coConfig.startsAtBottom)
