@@ -3,7 +3,7 @@
     <Site class='site'/>
     <DetailPreviewMobile
       v-if='isMobile && !getIsGraphPage'
-      class='detail'
+      class='detail z-50'
       :style='{order: order, flexBasis: height}'/>
     <DetailPreview v-else/>
   </div>
