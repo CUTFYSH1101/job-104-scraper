@@ -237,6 +237,7 @@ spring
 sql
 sql server
 sqlite
+sre
 ssl
 ssr
 stl
@@ -296,6 +297,7 @@ yarn
 可測試性
 可用性
 可維護性
+可觀測性
 可讀性
 可靠性
 告警
