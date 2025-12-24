@@ -38,7 +38,7 @@
       </div>
     </div>
     <div v-if='loading' class='absolute left-0 top-0 z-10 h-full w-full bg-white opacity-70 animate-pulse'>
-      解析中... {{ loadingStep }}
+      <span style='font-family: 源石黑體, monospace'>解析中... {{ loadingStep }}</span>
     </div>
   </div>
 </template>
@@ -224,6 +224,7 @@ export default {
 
 <style lang='sass'>
 @use '@/styles/variables.sass' as var
+@use '@/styles/fonts.sass'
 
 .keyword-coverage .inline-block
   display: inline-block
