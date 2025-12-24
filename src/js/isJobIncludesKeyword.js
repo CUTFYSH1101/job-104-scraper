@@ -1,5 +1,8 @@
 // 輸出結果為 string：cleanKeyword
 // 輸出結果為 string[]：splitBySpace、parseKeyword
+// 輸入 input：cleanKeyword、splitBySpace、parseKeyword
+// 輸出 input：cleanKeyword
+// 輸出 splitKeywords：splitBySpace、splitKeywords
 
 import DetailStorage from '@/js/detailStorage.js'
 import * as utils from '@/js/utils.js'
@@ -27,6 +30,11 @@ export function getDetail(job) {
 // endregion
 
 // region 關鍵字清理與解析（No IO）
+/**
+ * 補空格
+ * @param {string} keyword input
+ * @returns {string} input
+ */
 export function cleanKeyword(keyword) {
   if (utils.isFalsy(keyword)) return ''
 
@@ -53,15 +61,25 @@ export function cleanKeyword(keyword) {
   return keyword
 }
 
+/**
+ * 正則切割->空白切割
+ * @param {string} keyword input
+ * @returns {string[]} splitKeywords
+ */
 export function splitBySpace(keyword) {
   keyword = keyword.trim()
-  return keyword.includes(' ') ? keyword.split(/\s+/) : [keyword]
+
+  let slashParts = keyword.match(myRegex) || []
+  let remaining = keyword.replace(myRegex, '').trim()
+  const spaceParts = remaining ? remaining.split(/\s+/) : []
+
+  return [...slashParts, ...spaceParts]
 }
 
 /**
- *
- * @param {string} keyword
- * @returns {{} | {all: string[], must: string[], not: string[]}}
+ * 補空格->正則切割->空白切割
+ * @param {string} keyword input
+ * @returns {{} | {all: string[], must: string[], not: string[]}} splitKeywords
  */
 export function parseKeyword(keyword) {
   if (utils.isFalsy(keyword)) return {}
@@ -95,24 +113,55 @@ export function isJobTagsEqualsKeyword(job, keyword) {
   return tags.some(tag => tag === keyword)  // tags.includes(keyword)
 }
 
-// 這段文字是否包含別名或關鍵字
-// 若關鍵字等於別名，優先使用別名比對，避免誤中無關內容
-// 比方像搜尋'ai'，等於搜尋以下陣列其一
-// ['ai 工程師', '機器學習', 'machine learning', '深度學習', 'deep learning', 'keras', 'sklearn',
-// 'scikit-learn', 'tensorflow', 'pytorch']
-// 若不使用別名，會誤匹配到如 'taiwan'、'email'、'tailwind' 等含有 ai 的字詞
-export function matchKeyword(text, keyword) {
-  if (!text || !keyword) return false
+export function isJobTagsMatchKeyword(job, keyword) {
+  return isTagsMatchKeyword(utils.getLowerTags(job), keyword)
+}
 
-  // 處理 regex 格式：/pattern/flags，flags（正則修飾符）恆為`gmi`，使用者不可輸入及修改正則修飾符
+export function isTagsMatchKeyword(tags, keyword) {
+  if (!tags || !keyword) return false
+  keyword = keyword.toLowerCase()
+
+  let aliases = config.keywordAliases[keyword]
+  if (aliases && Array.isArray(aliases))
+    return aliases.intersection(tags).length > 0
+
+  let regex = tryParseRegex(keyword)
+  if (regex instanceof RegExp)
+    return tags.some(tag => regex.test(tag))
+  return tags.some(tag => tag === keyword)
+}
+
+/**
+ * @param {string} keyword
+ * @returns {string|RegExp}
+ */
+export function tryParseRegex(keyword) {
   let match = keyword.match(myRegex)
   if (match)
     try {
       let pattern = match[0].slice(1, -1)
-      return new RegExp(pattern, 'gmi').test(text)
+      return new RegExp(pattern, 'gmi')
     } catch (e) {
       console.warn(`正規表達式解析失敗： ${keyword} ，退回用一般搜尋`)
+      return keyword
     }
+  return keyword
+}
+
+// 1. 這段文字是否包含別名或關鍵字
+//    若關鍵字等於別名，優先使用別名比對，避免誤中無關內容
+//    比方像搜尋'ai'，等於搜尋以下陣列其一
+//    ['ai 工程師', '機器學習', 'machine learning', '深度學習', 'deep learning', 'keras', 'sklearn',
+//    'scikit-learn', 'tensorflow', 'pytorch']
+//    若不使用別名，會誤匹配到如 'taiwan'、'email'、'tailwind' 等含有 ai 的字詞
+// 2. 放在補空格->正則切割->空白切割->別名比對之後
+export function matchKeyword(text, keyword) {
+  if (!text || !keyword) return false
+
+  // 處理 regex 格式：/pattern/flags，flags（正則修飾符）恆為`gmi`，使用者不可輸入及修改正則修飾符
+  let regex = tryParseRegex(keyword)
+  if (regex instanceof RegExp)
+    return regex.test(text)
 
   keyword = keyword.toLowerCase()
   text = text.toLowerCase()

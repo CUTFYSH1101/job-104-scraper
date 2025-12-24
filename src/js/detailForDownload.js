@@ -7,6 +7,9 @@ export async function setCurrentPath(val) {
   await detailConfig.setCurrentPath(val)
 }
 
-export  function getDetailsContent() {
+/**
+ * @returns {string[]}
+ */
+export function getDetailsContent() {
   return detailConfig.config.details._values
 }

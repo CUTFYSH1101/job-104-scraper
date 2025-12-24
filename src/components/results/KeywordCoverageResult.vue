@@ -1,6 +1,7 @@
 <template>
   <div class='keyword-coverage relative'>
-    <div v-if='!isKeywordEmpty' class='analysis line-block mb-5'>
+    <!-- 有關鍵字並且載入完畢再顯示 -->
+    <div v-if='!isKeywordEmpty && loadingStep === "4/4"' class='analysis line-block mb-5'>
       <div v-for='[key, value] in Object.entries(skillRateDict)' class='analysis-cell'>
         {{ key }}佔{{ toPercent(value) }}
         <HorizontalBar :width='toPercent(value)'/>
@@ -52,7 +53,7 @@ import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
-import { parseKeyword, isJobIncludesKeyword, matchKeyword } from '@/js/isJobIncludesKeyword.js'
+import { parseKeyword, isJobTagsMatchKeyword, isTagsMatchKeyword } from '@/js/isJobIncludesKeyword.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
@@ -94,7 +95,6 @@ export default {
     getTags,
     async updateResult() {
       if (!this.jobs) this.processedJobs = []
-      this.loading = true
 
       // 處理好關鍵字和jobs
       this.processedJobs = this.jobs
@@ -104,7 +104,12 @@ export default {
         return
       }
       this.processKeywords()
+      let inputs = this.mustKeywords.concat(this.notKeywords)
+      let uniqueTags = utils.getTotalUniqueTags(this.jobs)
+      let tagsIncludesInputs = inputs.some(keyword => isTagsMatchKeyword(uniqueTags, keyword))
+      if (!tagsIncludesInputs) return
 
+      this.loading = true
       this.loadingStep = '1/4'
       await this.calcuTotalRate()
       this.loadingStep = '2/4'
@@ -128,8 +133,8 @@ export default {
     async calcuRateForeachJob() {
       await batcher.forEach(this.processedJobs, job => {
         let total = this.processedKeywords.length
-        let must = this.mustKeywords.filter(key => isJobIncludesKeyword(job, key))
-        let not = this.notKeywords.filter(key => !isJobIncludesKeyword(job, key))  // 全都不包含算符合一次
+        let must = this.mustKeywords.filter(key => isJobTagsMatchKeyword(job, key))
+        let not = this.notKeywords.filter(key => !isJobTagsMatchKeyword(job, key))  // 全都不包含算符合一次
         let count = must.length + not.length
         job.skillRate = count / total
       })
@@ -139,8 +144,8 @@ export default {
     async calcuWeightForeachJob() {
       await batcher.forEach(this.processedJobs, job => {
         let total = getTags(job).length
-        let must = this.mustKeywords.filter(key => isJobIncludesKeyword(job, key))
-        let not = this.notKeywords.filter(key => isJobIncludesKeyword(job, key))  // 每有一個就扣分
+        let must = this.mustKeywords.filter(key => isJobTagsMatchKeyword(job, key))
+        let not = this.notKeywords.filter(key => isJobTagsMatchKeyword(job, key))  // 每有一個就扣分
         let score = must.length - not.length
         if (score < 0) score = 0
         if (score > total) score = total
@@ -165,20 +170,20 @@ export default {
       let total = this.processedJobs.length
       this.skillRateDict = {}
       this.mustKeywords.forEach(key => {
-        let count = utils.count(this.processedJobs, job => isJobIncludesKeyword(job, key))
+        let count = utils.count(this.processedJobs, job => isJobTagsMatchKeyword(job, key))
         this.skillRateDict[key] = count / total
       })
       this.notKeywords.forEach(key => {
-        let count = utils.count(this.processedJobs, job => !isJobIncludesKeyword(job, key))
+        let count = utils.count(this.processedJobs, job => !isJobTagsMatchKeyword(job, key))
         this.skillRateDict['-' + key] = count / total
       })
 
       // 當一個工作每個關鍵字都符合，越多工作符合，表示該關鍵字可以代表很大的市場
       let count = 0
       await batcher.forEach(this.processedJobs, job => {
-        if (!this.mustKeywords.every(key => isJobIncludesKeyword(job, key)))
+        if (!this.mustKeywords.every(key => isJobTagsMatchKeyword(job, key)))
           return
-        if (this.notKeywords.some(key => isJobIncludesKeyword(job, key)))
+        if (this.notKeywords.some(key => isJobTagsMatchKeyword(job, key)))
           return
         count++
       })
@@ -187,7 +192,7 @@ export default {
     tagInKeywords(tag) {
       // 檢查別名
       for (let key of this.mustKeywords)
-        if (matchKeyword(tag, key))
+        if (isTagsMatchKeyword([tag], key))
           return true
 
       return false

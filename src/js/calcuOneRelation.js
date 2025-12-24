@@ -62,7 +62,6 @@ const calcu = (universeJobs, keyword) => {
     .map(key => key.isStartsWithDash() ? key.dumpFirst() : key)
 
   // 計算搜尋結果，所有關鍵字正面與負面的次數
-  keywords = keywords.map(key => key.isStartsWithDash() ? key.dumpFirst() : key)
   let A = filterJobs(universeJobs, keyword)
   let notA = A.complement(universeJobs)
   let ones = calcuIncludesCount(A, keywords)

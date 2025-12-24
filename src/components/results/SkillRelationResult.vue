@@ -70,7 +70,7 @@ let concatKeyword = computed(() => {
 // endregion
 
 // 直到`isJobIncludesKeyword.setCurrentPath`觸發，`calcuLoading.jobsData.getDetail`才不為`undefined`
-// @param {Number}delay
+// @param {Number} delay
 async function loadingAfterSettingDetailCsvPath(nodes) {
   return await CalcuLoading.loading(utils.parse(props.jobs), nodes)
 }
