@@ -291,6 +291,11 @@ export function toPercent(f) {
   return `${f}%`
 }
 
+export function fractionToFloat(s) {
+  let [numerator, denominator] = s.split('/').map(Number)
+  return numerator / denominator
+}
+
 // 不分大小寫
 export function replace(text, search, replace) {
   let regex = new RegExp(`(${search})`, 'gmi')  // /search/gmi 不分大小寫 m包含^$

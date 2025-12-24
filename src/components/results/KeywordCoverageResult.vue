@@ -1,5 +1,5 @@
 <template>
-  <div class='keyword-coverage'>
+  <div class='keyword-coverage relative'>
     <div v-if='!isKeywordEmpty' class='analysis line-block mb-5'>
       <div v-for='[key, value] in Object.entries(skillRateDict)' class='analysis-cell'>
         {{ key }}佔{{ toPercent(value) }}
@@ -35,6 +35,9 @@
         </div>
         <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if='isHovering(job)'/>
       </div>
+    </div>
+    <div v-if='loading' class='absolute left-0 top-0 z-10 h-full w-full bg-white opacity-70 animate-pulse'>
+      解析中... {{ loadingStep }}
     </div>
   </div>
 </template>
@@ -73,6 +76,8 @@ export default {
       notKeywords: [],
       skillRateDict: {},
       skillRateNum: 1.00,
+      loading: false,
+      loadingStep: '',
     }
   },
   methods: {
@@ -89,6 +94,7 @@ export default {
     getTags,
     async updateResult() {
       if (!this.jobs) this.processedJobs = []
+      this.loading = true
 
       // 處理好關鍵字和jobs
       this.processedJobs = this.jobs
@@ -99,10 +105,15 @@ export default {
       }
       this.processKeywords()
 
+      this.loadingStep = '1/4'
       await this.calcuTotalRate()
+      this.loadingStep = '2/4'
       await this.calcuRateForeachJob()
+      this.loadingStep = '3/4'
       await this.calcuWeightForeachJob()
+      this.loadingStep = '4/4'
       this.sortJobs()
+      this.loading = false
     },
     isValidKeyword() {
       return this.keyword && typeof this.keyword !== 'object'
@@ -196,6 +207,7 @@ export default {
   activated() {
     this.updateResult()
     SetJobsAndPoses.activated(this.$refs.jobsView)
+    if (!this.keyword) this.loading = false
   },
   deactivated() {
     SetJobsAndPoses.deactivated()
