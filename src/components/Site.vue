@@ -5,7 +5,7 @@
       <hr width='100%'>
     </header>
     <!-- 只在該範圍顯示滾動條，上級須設定為overflow-hidden/overflow-y-hidden -->
-    <main class='mt-3 p-3 overflow-y-auto' @scroll='changeJobDetail'>
+    <main class='mt-3 p-3 overflow-y-auto relative' @scroll='changeJobDetail'>
       <div class='tabs'>
         <button class='tab'
                 :class="{active: activeTab==='jobSearch'}"
@@ -34,6 +34,9 @@
           <component :is="activeTab + 'Result'" :jobs='jobs' :keyword='keyword'></component>
         </keep-alive>
       </div>
+      <DrawRay :posY="rayPosY.top" color='orangered'/>
+      <DrawRay :posY="rayPosY.center" color='fuchsia'/>
+      <DrawRay :posY="rayPosY.bottom" color='aqua'/>
     </main>
     <footer class='bg-stone-300 text-stone-700'>© Elico.org - 版權所有</footer>
   </div>
@@ -49,9 +52,11 @@ import { jobs } from '@/js/jobsLoader.js'
 import JobAtSiteCenter from '@/js/mobile/jobAtSiteCenter.js'
 import { setCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
 import { setKeyword } from '@/js/keyword.js'
+import DrawRay from '@/components/utils/DrawRay.vue'
 
 export default {
   components: {
+    DrawRay,
     SearchPanel,
     JobSearchResult,
     KeywordCoverageResult,
@@ -63,6 +68,7 @@ export default {
       keyword: '',
       tabs: ['jobSearch', 'keywordCoverage', 'skillRecommend', 'bookmark'],
       activeTab: 'jobSearch',
+      rayPosY: { top: 0, center: 0, bottom: 0 },
     }
   },
   methods: {
@@ -73,6 +79,10 @@ export default {
     changeJobDetail(e) {
       JobAtSiteCenter.changeJobDetail(e)
       setCurrentJobDetail()
+      let el = e.currentTarget
+      this.rayPosY.top = el.scrollTop
+      this.rayPosY.bottom = el.scrollTop + el.clientHeight
+      this.rayPosY.center = el.scrollTop + (el.clientHeight * 0.65)
     },
   },
   computed: {
