@@ -1,10 +1,11 @@
 <template>
-  <div class='site' @scroll='changeJobDetail'>
-    <header class='page-header pl-5 pr-5 pt-3 sticky top-0 bg-white z-40'>
+  <div class='site'>
+    <header class='pl-5 pr-5 pt-3 sticky top-0 bg-white z-40'>
       <SearchPanel @change='changeKeyword'/>
       <hr width='100%'>
     </header>
-    <main class='page-content mt-3 p-3'>
+    <!-- 只在該範圍顯示滾動條，上級須設定為overflow-hidden/overflow-y-hidden -->
+    <main class='mt-3 p-3 overflow-y-auto' @scroll='changeJobDetail'>
       <div class='tabs'>
         <button class='tab'
                 :class="{active: activeTab==='jobSearch'}"
@@ -34,7 +35,7 @@
         </keep-alive>
       </div>
     </main>
-    <footer class='page-footer bg-stone-300 text-stone-700'>© Elico.org - 版權所有</footer>
+    <footer class='bg-stone-300 text-stone-700'>© Elico.org - 版權所有</footer>
   </div>
 </template>
 
