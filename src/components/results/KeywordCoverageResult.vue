@@ -54,6 +54,7 @@ import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 import { parseKeyword, isJobTagsMatchKeyword, isTagsMatchKeyword } from '@/js/isJobIncludesKeyword.js'
+import AppendRay from '@/js/mobile/appendRay.js'
 
 let batcher = new Batcher()
 batcher.batch = 10
@@ -213,9 +214,11 @@ export default {
     this.updateResult()
     SetJobsAndPoses.activated(this.$refs.jobsView)
     if (!this.keyword) this.loading = false
+    AppendRay.activated(this.$refs.jobsView)
   },
   deactivated() {
     SetJobsAndPoses.deactivated()
+    AppendRay.deactivated(this.$refs.jobsView)
   },
 }
 </script>

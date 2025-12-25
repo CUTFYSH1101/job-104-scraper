@@ -3,14 +3,14 @@ import { jobs as jobDatas } from '@/js/jobsLoader.js'
 
 let listener = null
 
-// 預設`jobHrefs`為全部資料、如果`jobViews`非空會從中抓取`<a>`的`href`屬性
+// 預設`jobHrefs`為全部資料、如果`jobEls`非空會從中抓取`<a>`的`href`屬性
 function setJobsAndPoses(jobsView) {
-  let jobViews = jobsView.querySelectorAll('.job')
-  let jobHrefs = jobViews
-    ? jobViews.map(el => el.querySelector('a').getAttribute('href'))
+  let jobEls = jobsView.querySelectorAll('.job')
+  let jobHrefs = jobEls
+    ? jobEls.map(el => el.querySelector('a').getAttribute('href'))
     : jobDatas().map(job => job['網址'])
-  if (!jobViews) console.warn('Jobs not found')
-  JobAtSiteCenter.setJobsAndPoses(jobViews, jobHrefs)
+  if (!jobEls) console.warn('Jobs not found')
+  JobAtSiteCenter.setJobsAndPoses(jobEls, jobHrefs)
 }
 
 export function updated(jobsView) {  // 等到props和dom都有值再去抓取

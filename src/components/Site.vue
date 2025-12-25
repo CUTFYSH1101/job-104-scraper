@@ -82,7 +82,7 @@ export default {
       let el = e.currentTarget
       this.rayPosY.top = el.scrollTop
       this.rayPosY.bottom = el.scrollTop + el.clientHeight
-      this.rayPosY.center = el.scrollTop + (el.clientHeight * 0.65)
+      this.rayPosY.center = el.scrollTop + (el.clientHeight * 0.5)
     },
   },
   computed: {

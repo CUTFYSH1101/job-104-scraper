@@ -29,6 +29,7 @@ import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
 import { highlightText } from '@/js/highlight.js'
 import filterJobs from '@/js/filterJobs.js'
 import { getDetailsContent } from '@/js/detailForDownload.js'
+import AppendRay from '@/js/mobile/appendRay.js'
 
 let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
@@ -69,9 +70,11 @@ export default {
   },
   activated() {
     SetJobsAndPoses.activated(this.$refs.jobsView)
+    AppendRay.activated(this.$refs.jobsView)
   },
   deactivated() {
     SetJobsAndPoses.deactivated()
+    AppendRay.deactivated(this.$refs.jobsView)
   },
 }
 </script>
