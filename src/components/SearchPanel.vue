@@ -23,6 +23,7 @@
 <script>
 import { setCookie, getCookie, insert } from '@/js/utils.js'
 import ChangeOpenFile from '@/components/ChangeOpenFile.vue'
+import {isMobile} from '@/js/mobile/rwd.js'
 
 export default {
   components: { ChangeOpenFile },
@@ -50,7 +51,8 @@ export default {
         this.localKeyword = val
         this.$emit('change', this.keyword)  // keywordJobSearch step 1
       }
-    }
+    },
+    isMobile,
   },
   mounted() {
     this.historyKeywords = getCookie('historyKeywords')  // 初始化時先載入cookie
@@ -132,8 +134,6 @@ export default {
     margin-left: initial
   .history-panel
     display: none
-  //.history-btn
-  //  border: none
-  //  color: black
-  //  background-color: var.$gray
+  .search-btn
+    display: none
 </style>
