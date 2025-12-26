@@ -5,7 +5,7 @@
       <hr width='100%'>
     </header>
     <!-- 只在該範圍顯示滾動條，上級須設定為overflow-hidden/overflow-y-hidden -->
-    <main class='mt-3 p-3 overflow-y-auto relative' @scroll='changeJobDetail'>
+    <main class='mt-3 p-3 overflow-y-auto relative' @scroll='changeJobDetail' ref='main'>
       <div class='tabs'>
         <button class='tab'
                 :class="{active: activeTab==='jobSearch'}"
@@ -31,7 +31,8 @@
       <hr class='border-b-4 border-gray-100'>
       <div class='block'>
         <keep-alive>
-          <component :is="activeTab + 'Result'" :jobs='jobs' :keyword='keyword'></component>
+          <component :is="activeTab + 'Result'" :jobs='jobs' :keyword='keyword'
+                     :relativeMainHeight='relativeMainHeight'></component>
         </keep-alive>
       </div>
       <DrawRay :posY="rayPosY.top" color='orangered'/>
@@ -69,6 +70,7 @@ export default {
       tabs: ['jobSearch', 'keywordCoverage', 'skillRecommend', 'bookmark'],
       activeTab: 'jobSearch',
       rayPosY: { top: 0, center: 0, bottom: 0 },
+      relativeMainHeight: 0,
     }
   },
   methods: {
@@ -87,6 +89,9 @@ export default {
   },
   computed: {
     jobs,
+  },
+  updated() {
+    this.relativeMainHeight = this.$refs.main.scrollHeight
   },
 }
 </script>

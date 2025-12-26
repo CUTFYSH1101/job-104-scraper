@@ -1,5 +1,5 @@
 <template>
-  <div class='keyword-coverage relative'>
+  <div class='keyword-coverage'>
     <!-- 有關鍵字並且載入完畢再顯示 -->
     <div v-if='!isKeywordEmpty && loadingStep === "4/4"' class='analysis line-block mb-5'>
       <div v-for='[key, value] in Object.entries(skillRateDict)' class='analysis-cell'>
@@ -37,7 +37,8 @@
         <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if='isHovering(job)'/>
       </div>
     </div>
-    <div v-if='loading' class='absolute left-0 top-0 z-10 h-full w-full bg-white opacity-70 animate-pulse'>
+    <div v-if='loading' class='absolute left-0 top-0 z-10 w-full bg-white opacity-70 animate-pulse pl-5 pt-5'
+         :style='{height: relativeMainHeight + "px"}'>
       <span style='font-family: 源石黑體, monospace'>解析中... {{ loadingStep }}</span>
     </div>
   </div>
@@ -68,7 +69,7 @@ export default {
     HorizontalBar,
     KeyHint,
   },
-  props: ['jobs', 'keyword'],
+  props: ['jobs', 'keyword', 'relativeMainHeight'],
   data() {
     return {
       processedJobs: [],
