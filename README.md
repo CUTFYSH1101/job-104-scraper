@@ -1,3 +1,22 @@
+### DEBUG：使用者在輸入正則中...可能會因為正則替代.replace而記憶體爆炸
+
+```javascript
+if (keyword.includes('/') && keyword.length > 3) {
+  let pattern = keyword.slice(1, -1)  // 去除頭尾/
+  let matches = text.match(new RegExp(pattern, 'gmi'))
+  if (!matches || matches.length === 0) {
+    // console.warn(`${keyword}找不到匹配，原文：${text}`)
+    return text
+  }
+  if (matches.length > 100) {
+    // console.warn(`${keyword}匹配數量過多，無法全部高亮，原文：${text}`)
+    return text
+  }
+  // console.log(`${keyword}匹配到：${text}`)
+  return utils.replace(text, pattern, '<span class="highlight">$1</span>')
+}
+```
+
 ### 2025/12/19 修正甜甜圈圖
 
 - `if (keywords.some(inputKey => matchKeyword(key, inputKey) || key === inputKey)) return`<br>

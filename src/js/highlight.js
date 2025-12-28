@@ -66,3 +66,28 @@ export function highlightText(text, keyword) {
   // 只有一個正向關鍵字
   return utils.replace(text, keyword, '<span class="highlight">$1</span>')
 }
+
+export function isTimeout(text, keyword) {
+  if (utils.isFalsy(text) || utils.isFalsy(keyword)) return false
+
+  // 包含正則與空格
+  if (keyword.includes('/') && keyword.includes(' ')) {
+    let regexes = keyword.match(myRegex)
+    let patterns = []
+    regexes.forEach(regex => patterns.push(regex.slice(1, -1)))  // 去除頭尾/
+
+    // 避免輸入過程記憶體爆炸
+    let matches = text.match(new RegExp(patterns.join('|'), 'gmi'))
+    if (matches && matches.length > 100) return true
+  }
+
+  // 單一正則
+  if (keyword.includes('/') && keyword.length > 3) {
+    let pattern = keyword.slice(1, -1)  // 去除頭尾/
+
+    // 避免輸入過程記憶體爆炸
+    let matches = text.match(new RegExp(pattern, 'gmi'))
+    if (matches && matches.length > 100) return true
+  }
+  return false
+}

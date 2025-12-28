@@ -26,9 +26,10 @@ import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
-import { highlightText } from '@/js/highlight.js'
+import { highlightText, isTimeout } from '@/js/highlight.js'
 import filterJobs from '@/js/filterJobs.js'
 import { getDetailsContent } from '@/js/detailForDownload.js'
+import { isFalsy, joinDictValues } from '@/js/utils.js'
 
 let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
@@ -61,6 +62,7 @@ export default {
     isHovering,
 
     highlightText(text) {
+      if (isFalsy(this.keyword) || this.firstTextTimeout) return text
       return highlightText(text, this.keyword)
     },
   },
@@ -72,6 +74,20 @@ export default {
   },
   deactivated() {
     SetJobsAndPoses.deactivated()
+  },
+  data() {
+    return {
+      firstTextTimeout: false,
+    }
+  },
+  watch: {
+    async keyword() {
+      if (!this.jobs) await this.$nextTick()  // 多等一次讓 jobs 載入
+      let firstJob = joinDictValues(this.jobs[0], ',')
+      this.firstTextTimeout = isTimeout(firstJob, this.keyword)
+      if (this.firstTextTimeout)
+        console.warn('超時保護')
+    },
   },
 }
 </script>
