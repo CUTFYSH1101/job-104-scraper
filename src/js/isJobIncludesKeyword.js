@@ -128,6 +128,7 @@ export function isTagsMatchKeyword(tags, keyword) {
   if (regex instanceof RegExp)
     return tags.some(tag => regex.test(tag))
 
+  tags = tags.map(tag => tag.toLowerCase())
   keyword = keyword.toLowerCase()
 
   let aliases = config.keywordAliases[keyword]
