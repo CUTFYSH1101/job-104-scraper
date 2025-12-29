@@ -39,25 +39,30 @@ export function cleanKeyword(keyword) {
   if (utils.isFalsy(keyword)) return ''
 
   // 去除前後空格
-  keyword = keyword.toLowerCase().trim()
+  keyword = keyword.trim()
 
   // 判斷是否在斜槓內
-  let inSlash = keyword.startsWith('/')
+  let inSlash = false
 
-  if (keyword.includes('-'))
-    for (let i = 1; i < keyword.length; i++) {
-      // 只切換狀態
-      if (keyword.charAt(i) === '/') {
-        inSlash = !inSlash
-        continue
-      }
-
-      // 只有在不在 // 內、且是-、且前面沒空格時，可能是忘記加空格，補空格，避免後續split(' ')失敗
-      if (keyword.charAt(i) === '-' && keyword.charAt(i - 1) !== ' ' && !inSlash) {
-        keyword = keyword.substring(0, i) + ' ' + keyword.substring(i)
-        i++  // 跳過剛剛補進去的那個空格
-      }
+  let chars = keyword.split('')
+  for (let i = 0; i < chars.length; i++) {
+    // 只切換狀態
+    if (chars[i] === '/') {
+      inSlash = !inSlash
+      continue
     }
+
+    // 只有在不在 // 內、且是-、且前面沒空格時，可能是忘記加空格，補空格，避免後續split(' ')失敗
+    if (i >= 1 && chars[i] === '-' && chars[i - 1] !== ' ' && !inSlash) {
+      chars.splice(i, 0, ' ')
+      i++  // 跳過剛剛補進去的那個空格
+    }
+
+    if (!inSlash) {
+      chars[i] = chars[i].toLowerCase()
+    }
+  }
+  keyword = chars.join('')
   return keyword
 }
 
@@ -119,15 +124,16 @@ export function isJobTagsMatchKeyword(job, keyword) {
 
 export function isTagsMatchKeyword(tags, keyword) {
   if (!tags || !keyword) return false
+  let regex = tryParseRegex(keyword)
+  if (regex instanceof RegExp)
+    return tags.some(tag => regex.test(tag))
+
   keyword = keyword.toLowerCase()
 
   let aliases = config.keywordAliases[keyword]
   if (aliases && Array.isArray(aliases))
     return aliases.intersection(tags).length > 0
 
-  let regex = tryParseRegex(keyword)
-  if (regex instanceof RegExp)
-    return tags.some(tag => regex.test(tag))
   return tags.some(tag => tag === keyword)
 }
 
