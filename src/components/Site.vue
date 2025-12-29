@@ -96,6 +96,8 @@ export default {
   display: grid
   grid-template-rows: auto 1fr auto
   grid-template-columns: minmax(0, 1fr)
+  flex: 1
+  overflow: hidden  // 隱藏原本整個畫面的滾動軸
 
 .tab
   padding: 10px 20px

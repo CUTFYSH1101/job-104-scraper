@@ -42,9 +42,7 @@ export default {
   flex-direction: column
   height: 100dvh
   overflow: hidden  // 隱藏原本整個畫面的滾動軸
-.site
-  flex: 1
-  overflow: hidden  // 隱藏原本整個畫面的滾動軸
+
 .detail
   flex-basis: 50dvh  // 統一把flex寫成flex-basis
   flex-grow: 0
