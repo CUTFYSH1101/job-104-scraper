@@ -21,7 +21,7 @@ export default class GraphLoadingNodeOpacity {
   }
 
   get _isNodeIncludesCountKey() {
-    return this.nodes && this.nodes[0].count
+    return this.nodes && this.nodes.length !== 0 && this.nodes[0].count
   }
 
   _applyNodeOpacityScale() {
