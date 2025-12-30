@@ -64,6 +64,7 @@ export default class GraphDonut {
           .attr('text-anchor', 'middle')        // 左右置中
           .attr('dominant-baseline', 'middle')  // 上下置中
           .attr('fill', 'white')
+        g.insert('rect', 'text')  // 放在<text>底下，讓甜甜圈文字顯示得更清楚
         return g
       })
   }
@@ -76,12 +77,32 @@ export default class GraphDonut {
       d3.select(event.currentTarget)
         .transition(transition)
         .attr('transform', 'scale(1.1)')
+      this.g  // 讓甜甜圈文字顯示得更清楚
+        .selectAll('text.big-text')
+        .data([data])
+        .join('text')
+        .text(this.text)
+        .attr('class', 'big-text')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .attr('font-family', 'monospace')
+        .attr('font-size', '1rem')
+        .attr('font-weight', '600')
+        .attr('letter-spacing', '0.1rem')
+        .attr('pointer-events', 'none')
+        .lower()
+        .transition(transition)
+        .attr('opacity', 0.8)
     })
     this.gs.on('mouseleave', (event, data) => {
       let transition = d3.transition('hover').duration(100)
       d3.select(event.currentTarget)
         .transition(transition)
         .attr('transform', 'scale(1)')
+      this.g
+        .selectAll('text.big-text')
+        .transition(transition)
+        .attr('opacity', 0)
     })
   }
 
@@ -92,10 +113,23 @@ export default class GraphDonut {
       .attr('d', this.derived.arc)
       .attr('fill', (d, i) => this.colorScale(i))
     this.gs.select('text')
-      .transition(transition)
-      .text(this.text)
-      .attr('transform', d => `translate(${this.derived.arc.centroid(d)})`)
+      .text(this.text)  // 先算出寬高給背景<rect>使用
       .attr('font-size', this.derived.fontSize)
+      .each(function(d) {
+        d.width = this.getBBox().width
+        d.height = this.getBBox().height
+      })
+      .transition(transition)
+      .attr('transform', d => `translate(${this.derived.arc.centroid(d)})`)
+    this.gs.select('rect')
+      .transition(transition)
+      .attr('transform', d => {
+        let [centerX, centerY] = this.derived.arc.centroid(d)
+        return `translate(${centerX - d.width / 2}, ${centerY - d.height / 2})`
+      })
+      .attr('width', d => d.width)
+      .attr('height', d => d.height)
+      .attr('fill', (d, i) => this.colorScale(i))
   }
 
   updateSize(svgSize) {
