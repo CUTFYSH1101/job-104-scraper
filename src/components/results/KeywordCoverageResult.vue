@@ -97,7 +97,10 @@ export default {
 
     getTags,
     async updateResult() {
-      if (!this.jobs) this.processedJobs = []
+      if (!this.jobs) {
+        this.processedJobs = []
+        return
+      }
 
       // 處理好關鍵字和jobs
       this.processedJobs = this.jobs
@@ -107,7 +110,7 @@ export default {
         return
       }
       this.processKeywords()
-      let inputs = this.mustKeywords.concat(this.notKeywords)
+      let inputs = (this.mustKeywords ?? []).concat(this.notKeywords)
       let uniqueTags = utils.getTotalUniqueTags(this.jobs)
       let tagsIncludesInputs = inputs.some(keyword => isTagsMatchKeyword(uniqueTags, keyword))
       if (!tagsIncludesInputs) return
@@ -193,6 +196,9 @@ export default {
       this.skillRateNum = count / total
     },
     tagInKeywords(tag) {
+      if (!this.mustKeywords || this.mustKeywords.length === 0)
+        return false
+
       // 檢查別名
       for (let key of this.mustKeywords)
         if (isTagsMatchKeyword([tag], key))

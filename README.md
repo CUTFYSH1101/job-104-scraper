@@ -1,3 +1,32 @@
+### DEBUG：覆蓋率頁有時會空白一片，已修正，紀錄報錯如下
+
+```javascript
+function Bs(t) {
+  let e = t.querySelectorAll(".job")
+    , n = e ? e.map(i => i.querySelector("a").getAttribute("href")) : Vu().map(i => i.網址);
+  e || console.warn("Jobs not found"),
+    $o.setJobsAndPoses(e, n)
+}
+
+// index-n1-UlX4u.js:1 TypeError: Cannot read properties of null (reading 'querySelectorAll')
+
+tagInKeywords(t)
+{
+  for (let e of this.mustKeywords)
+    if (Fs([t], e))
+      return !0;
+  return !1
+}
+,
+// index-n1-UlX4u.js:1 TypeError: this.mustKeywords is not iterable
+
+this.processKeywords();
+let t = this.mustKeywords.concat(this.notKeywords)
+  , e = Qr(this.jobs);
+t.some(i => Fs(e, i)) && (this.loading = !0,
+// index-n1-UlX4u.js:11 Uncaught (in promise) TypeError: Cannot read properties of undefined (reading 'concat')
+```
+
 ### DEBUG：使用者在輸入正則中...可能會因為正則替代.replace而記憶體爆炸
 
 ```javascript
@@ -349,5 +378,6 @@ js/vue-project'
 git remote add origin https://github.com/CUTFYSH1101/job-104-scraper.git
 git pull
 ```
+
 用Fork這款軟體，強制推送master到遠端資料庫origin，所有選項都打勾<br>
 詳情看notion教學
