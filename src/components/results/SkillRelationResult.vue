@@ -57,6 +57,16 @@ let resize = () => {
 }
 let slice = utils.slice
 
+// 只顯示前16名
+let maxSize = (nodes, links, size = 16) => {
+  nodes = utils.slice(nodes.sort((a, b) => b.count - a.count), size)
+  let ids = new Set(nodes.map(node => node.id))
+  links = links.filter(link =>
+      (ids.has(link.source.id) && ids.has(link.target.id))
+      || ids.has(link.source) && ids.has(link.target))
+  return { nodes, links }
+}
+
 // endregion
 
 // region computed
@@ -82,6 +92,9 @@ watch(
     async newVal => {
       let [nodes, links] = CalcuBetweenRelation.calcu(utils.parse(props.jobs))
       let loadingNodesCount = await loadingAfterSettingDetailCsvPath(nodes)
+      const _ = maxSize(loadingNodesCount, links)
+      loadingNodesCount = _.nodes
+      links = _.links
       graph.args = {
         links: links,
         nodes: loadingNodesCount,
@@ -96,6 +109,9 @@ onActivated(async () => {
   if (init) return
   init = true
   let [nodes, links] = CalcuBetweenRelation.calcu(utils.parse(props.jobs))
+  let _ = maxSize(nodes, links)
+  nodes = _.nodes
+  links = _.links
   graph = new GraphRelation({
     svgSelector: svgRef.value,
     canvas: canvasRef.value,
@@ -107,8 +123,12 @@ onActivated(async () => {
   resize()
 
   let loadingNodesCount = await loadingAfterSettingDetailCsvPath(nodes)
+  _ = maxSize(loadingNodesCount, links)
+  loadingNodesCount = _.nodes
+  links = _.links
   graph.args = {
     nodes: loadingNodesCount,
+    links: links,
   }
   clickInteraction.update(loadingNodesCount, links)
 })

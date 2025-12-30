@@ -20,6 +20,10 @@ const replacementRules = [
   {
     pattern: /(@use|from|src=)(\s*)"([^"]+)"/g,
     replacement: "$1$2'$3'"
+  },
+  {
+    pattern: /;$/gmi,
+    replacement: ''
   }
 ]
 

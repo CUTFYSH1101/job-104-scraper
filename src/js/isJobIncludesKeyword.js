@@ -8,6 +8,7 @@ import DetailStorage from '@/js/detailStorage.js'
 import * as utils from '@/js/utils.js'
 import * as config from '@/js/config.js'
 import myRegex from '@/js/myRegex.js'
+import myRegexHref from '@/js/myRegexHref.js'
 
 // region 獲取職缺細節
 let detailConfig = new DetailStorage()
@@ -180,7 +181,9 @@ export function matchKeyword(text, keyword) {
 }
 
 export function isJobIncludesKeyword(job, keyword) {
-  return matchKeyword(getDetail(job), keyword)
+  let detail = getDetail(job)
+  if (detail) detail = detail.replace(myRegexHref, '')
+  return matchKeyword(detail, keyword)
 }
 
 // endregion

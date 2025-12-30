@@ -12,10 +12,6 @@ const calcu = (jobs) => {
   let eachJobTags = jobs.map(job => utils.getLowerTags(job))
   let totalTags = utils.getTotalUniqueTags(jobs)
 
-  // `http`出現在網址開頭，所以比對每個項目必中，且本身不是技能關鍵字，所以直接去除
-  eachJobTags = eachJobTags.filter(list => !list.includes('http'))
-  totalTags = totalTags.filter(tag => tag !== 'http')
-
   // nodes
   let nodes = totalTags.map(tag => ({ id: tag }))
 
