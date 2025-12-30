@@ -1,5 +1,5 @@
 <template>
-  <div class='event-listener' @mousemove='userHoverJob' @mouseover='userLeaveJob'>
+  <div class='event-listener' ref='eventListener'>
     <div class='bookmark' v-if='getBookmark()' :style='{backgroundColor: getBookmark()}'></div>
   </div>
 </template>
@@ -19,7 +19,42 @@ export default {
     getBookmark() {
       return getBookmark(this.job['網址'])
     },
+    touchstart(e) {
+      const touch = e.touches[0]
+      const element = this.$refs.eventListener
+      const rect = element.getBoundingClientRect()
+
+      const isInside = (
+          touch.clientX >= rect.left &&
+          touch.clientX <= rect.right &&
+          touch.clientY >= rect.top &&
+          touch.clientY <= rect.bottom
+      )
+
+      if (isInside) this.userHoverJob()
+    },
+    mousemove(e) {
+      const element = this.$refs.eventListener
+      const rect = element.getBoundingClientRect()
+
+      const isInside = (
+          e.clientX >= rect.left &&
+          e.clientX <= rect.right &&
+          e.clientY >= rect.top &&
+          e.clientY <= rect.bottom
+      )
+
+      if (isInside) this.userHoverJob()
+    },
   },
+  activated() {
+    window.addEventListener('touchstart', this.touchstart)
+    window.addEventListener('mousemove', this.mousemove)
+  },
+  deactivated() {
+    window.removeEventListener('touchstart', this.touchstart)
+    window.removeEventListener('mousemove', this.mousemove)
+  }
 }
 </script>
 
@@ -30,6 +65,7 @@ export default {
   margin: 0
   box-sizing: border-box
   z-index: -1  // 避免遮擋原來的<a>標籤造成無法click
+  pointer-events: none
 
   // 跟job圓角一致
   border-radius: 5px

@@ -15,7 +15,9 @@
       <div class='job' v-for='(job, i) in processedJobs'
            @mousemove='userHoverJob($event, job)'
            @mouseleave='userLeaveJob'>
-        <Bookmark :job='job'/>
+        <keep-alive>
+          <Bookmark :job='job'/>
+        </keep-alive>
         <a class='cell' :href='job.網址' target='_blank'>{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class='cell'>
           <span class='inline-block' v-for='tag in getTags(job)'

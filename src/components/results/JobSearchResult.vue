@@ -7,13 +7,15 @@
     </div>
     <div ref='jobsView'>
       <div class='job' v-for='(job, i) in filterJobs' @mousemove='userHoverJob($event, job)' @mouseleave='userLeaveJob'>
-        <Bookmark :job='job'/>
+        <keep-alive>
+          <Bookmark :job='job'/>
+        </keep-alive>
         <a class='cell' :href='job.網址' target='_blank'>
           {{ i + 1 }}:<span v-html='highlightText(job.工作名稱)'></span>
         </a>
         <div class='cell' v-html='highlightText(job.工作標籤)'></div>
         <div class='cell' v-html='highlightText(job.關鍵字)'></div>
-        <KeyHint :keys="['Q','W','E','R','T','Y','U','P']" v-if='isHovering(job)'/>
+        <KeyHint :keys="['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'P']" v-if='isHovering(job)'/>
       </div>
     </div>
   </div>
