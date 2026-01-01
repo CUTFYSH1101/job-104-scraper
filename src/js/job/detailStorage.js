@@ -1,7 +1,7 @@
 import * as utils from '@/js/core/utils.js'
 import { dictIncludes } from '@/js/core/utils.js'
 
-export default class DetailStorage {
+class DetailStorage {
   constructor() {
     this.config = {
       currentJob: {},
@@ -70,4 +70,11 @@ export default class DetailStorage {
     if (!details || !details.size) return undefined
     return details.get(target)
   }
+}
+
+export const detailConfig = new DetailStorage()
+await detailConfig.init()
+
+export async function setCurrentPath(val) {
+  await detailConfig.setCurrentPath(val)
 }

@@ -1,16 +1,10 @@
-import DetailStorage from '@/js/job/detailStorage.js'
+import { detailConfig } from '@/js/job/detailStorage.js'
 import { ref } from 'vue'
 
-let detailConfig = new DetailStorage()
-await detailConfig.init()
 let detail = ref({})
 
 export function setCurrentJob(jobHref) {  // href
   detailConfig.setCurrentJob(jobHref)
-}
-
-export async function setCurrentPath(val) {
-  await detailConfig.setCurrentPath(val)
 }
 
 export function setCurrentJobDetail() {

@@ -4,20 +4,13 @@
 // 輸出 input：cleanKeyword
 // 輸出 splitKeywords：splitBySpace、splitKeywords
 
-import DetailStorage from '@/js/job/detailStorage.js'
+import { detailConfig } from '@/js/job/detailStorage.js'
 import * as utils from '@/js/core/utils.js'
 import * as config from '@/js/core/config.js'
 import myRegex from '@/js/core/myRegex.js'
 import myRegexHref from '@/js/core/myRegexHref.js'
 
 // region 獲取職缺細節
-let detailConfig = new DetailStorage()
-await detailConfig.init()
-
-export async function setCurrentPath(val) {
-  await detailConfig.setCurrentPath(val)
-}
-
 export function getDetail(job) {
   // jobsLoader.setCurrentPath -> setCurrentJob -> getCurrentDetail
   // 路徑設定：由 jobsLoader 指定 details.csv 的所在路徑

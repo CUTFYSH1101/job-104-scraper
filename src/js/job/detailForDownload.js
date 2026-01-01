@@ -1,11 +1,4 @@
-import DetailStorage from '@/js/job/detailStorage.js'
-
-let detailConfig = new DetailStorage()
-await detailConfig.init()
-
-export async function setCurrentPath(val) {
-  await detailConfig.setCurrentPath(val)
-}
+import { detailConfig } from '@/js/job/detailStorage.js'
 
 /**
  * @returns {string[]}

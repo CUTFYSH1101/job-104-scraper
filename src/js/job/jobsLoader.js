@@ -1,16 +1,6 @@
 import * as utils from '@/js/core/utils.js'
 import { ref } from 'vue'
-import { setCurrentPath as scp1 } from '@/js/job/detailPreview.js'
-import { setCurrentPath as scp2 } from '@/js/mobile/detailPreviewMobile.js'
-import { setCurrentPath as scp3 } from '@/js/job/isJobIncludesKeyword.js'
-import { setCurrentPath as scp4 } from '@/js/job/detailForDownload.js'
-
-let setCurrentPath = async val => {
-  await scp1(val)
-  await scp2(val)
-  await scp3(val)
-  await scp4(val)
-}
+import { setCurrentPath } from '@/js/job/detailStorage.js'
 
 let _jobs = ref([])
 export let jobs = () => _jobs.value

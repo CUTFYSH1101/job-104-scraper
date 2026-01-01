@@ -1,9 +1,6 @@
 import * as utils from '@/js/core/utils.js'
 import { clientHeight, clientWidth } from '@/js/core/utils.js'
-import DetailStorage from '@/js/job/detailStorage.js'
-
-let detailConfig = new DetailStorage()
-await detailConfig.init()
+import { detailConfig } from '@/js/job/detailStorage.js'
 
 export let config = {
   pos: [],
@@ -54,8 +51,4 @@ async function setPos(...args) {  // 無法阻擋undefined, null
 
 export function hoverJobDetail() {
   return detailConfig.getCurrentJobDetail()
-}
-
-export async function setCurrentPath(val) {
-  await detailConfig.setCurrentPath(val)
 }
