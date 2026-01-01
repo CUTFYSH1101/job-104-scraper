@@ -1,4 +1,4 @@
-import { isFalsy } from '@/js/utils.js'
+import { isFalsy } from '@/js/core/utils.js'
 import * as d3 from 'd3'
 
 export default class InteractionForHoverLine {

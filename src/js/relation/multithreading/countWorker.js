@@ -1,4 +1,4 @@
-import * as config from '@/js/config.js'
+import * as config from '@/js/core/config.js'
 
 function matchKeyword(text, keyword) {
   if (!text || !keyword) return false

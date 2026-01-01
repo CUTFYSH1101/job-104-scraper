@@ -1,5 +1,5 @@
 import { ref } from 'vue'  // reactive只能用於物件陣列, ref使用時要加上.value索取值
-import { setLocalStorage, getLocalStorage } from '@/js/utils.js'  // 永久保存我的最愛
+import { setLocalStorage, getLocalStorage } from '@/js/core/utils.js'  // 永久保存我的最愛
 
 let bookmark = ref({})  // 變更時觸發Vue更新畫面
 let colorMap = [

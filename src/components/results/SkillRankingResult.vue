@@ -12,10 +12,10 @@ export default {
 
 <script setup>
 import { ref, onMounted, onActivated, onDeactivated, computed, watch } from 'vue'
-import * as utils from '@/js/utils.js'
+import * as utils from '@/js/core/utils.js'
 import CalcuOneRelation from '@/js/calcuOneRelation.js'
 import GraphDonut from '@/js/graphDonut.js'
-import filterJobs from '@/js/filterJobs.js'
+import filterJobs from '@/js/job/filterJobs.js'
 
 let graphDonut = null
 

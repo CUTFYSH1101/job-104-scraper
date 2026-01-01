@@ -1,6 +1,6 @@
-import * as utils from '@/js/utils.js'
-import { clientHeight, clientWidth } from '@/js/utils.js'
-import DetailStorage from '@/js/detailStorage.js'
+import * as utils from '@/js/core/utils.js'
+import { clientHeight, clientWidth } from '@/js/core/utils.js'
+import DetailStorage from '@/js/job/detailStorage.js'
 
 let detailConfig = new DetailStorage()
 await detailConfig.init()

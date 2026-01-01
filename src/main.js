@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
 import App from '@/App.vue'
-import { loadAndSetJobs } from '@/js/jobsLoader.js'
+import { loadAndSetJobs } from '@/js/job/jobsLoader.js'
 import '@/styles/styles.css'  // Tailwind Css
 
 window.vm = createApp(App).mount('#app')

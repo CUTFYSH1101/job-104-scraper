@@ -1,3 +1,23 @@
+### 程式碼關聯圖
+
+- 安裝
+  ```bash
+  npm i dependency-cruiser -D
+  choco install graphviz -y # 如果有choco，反之用別的安裝
+  ```
+- 輸出html(只需要前者)
+  ```bash
+  npx dependency-cruiser src -T html > dependencies.html
+  ```
+- 輸出svg(需要graphviz)
+  ```bash
+  npx dependency-cruiser src -T dot | dot -T svg > dependencies.svg
+  ```
+- 用 Claude 著色 AI-Prompt
+  ```markdown
+  根據關聯圖的耦合程度和程式碼相關性，用不同顏色著色，使用彩虹色票，對比度拉高
+  ```
+
 ### DEBUG：覆蓋率頁有時會空白一片，已修正，紀錄報錯如下
 
 ```javascript
@@ -103,9 +123,9 @@ if (keyword.includes('/') && keyword.length > 3) {
 #### 取代"為'
 
 - 搜尋目標
-  - 要包含`=`/空格開頭，空格/換行/>/`/>`結尾
-  - 由於`"`是單字邊界，無法搭配`/b`使用
-  - `(?=)`內無法被辨識成`$3`
+    - 要包含`=`/空格開頭，空格/換行/>/`/>`結尾
+    - 由於`"`是單字邊界，無法搭配`/b`使用
+    - `(?=)`內無法被辨識成`$3`
   ```regexp
   (=|\s)"([^'"<>]+)"(?=\s|>|,|/|$)
   ```
@@ -197,16 +217,16 @@ onEnterNode: id => {
     if (obj['name']) {}
   ```
 - `.map`和`Map`完全不一樣，只是剛好名稱一樣
-  - 這是`.map`：`let arr2 = arr1.map(el => el.count)`表示轉成一個[count,count,...]陣列後指派給`arr1`
-  - 這是`Map`
-    ```javascript
-      let map = new Map()
-      arr1.forEach(el => map.set(el.name, el))  // 注意格式是 `.set(key,value)`
-
-      let map = new Map(arr1.map(el => [el.name, el]))  // 注意格式是 `new Map(.map([key,value]))`
-
-      return map.get(el.name)
-    ```
+    - 這是`.map`：`let arr2 = arr1.map(el => el.count)`表示轉成一個[count,count,...]陣列後指派給`arr1`
+    - 這是`Map`
+      ```javascript
+        let map = new Map()
+        arr1.forEach(el => map.set(el.name, el))  // 注意格式是 `.set(key,value)`
+  
+        let map = new Map(arr1.map(el => [el.name, el]))  // 注意格式是 `new Map(.map([key,value]))`
+  
+        return map.get(el.name)
+      ```
 - `Set`
   ```javascript
     let set = new Set([1,2,3])

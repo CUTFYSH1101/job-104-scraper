@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import { hoverJobDetail, config, updateBodyWidthHeight, showDetail, hideDetail } from '@/js/detailPreview.js'
-import { dictIncludes, setCookie, getCookie, isFalsy } from '@/js/utils.js'
+import { hoverJobDetail, config, updateBodyWidthHeight, showDetail, hideDetail } from '@/js/job/detailPreview.js'
+import { dictIncludes, setCookie, getCookie, isFalsy } from '@/js/core/utils.js'
 import Satisfied from '@/js/satisfied.js'
 import { isMobile } from '@/js/mobile/rwd.js'
 import KeyHint from '@/components/KeyHint.vue'
-import { highlightText } from '@/js/highlight.js'
+import { highlightText } from '@/js/job/highlight.js'
 import { getKeyword } from '@/js/keyword.js'
 
 export default {

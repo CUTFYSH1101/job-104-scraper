@@ -1,5 +1,5 @@
-import * as utils from '@/js/utils.js'
-import { dictIncludes } from '@/js/utils.js'
+import * as utils from '@/js/core/utils.js'
+import { dictIncludes } from '@/js/core/utils.js'
 
 export default class DetailStorage {
   constructor() {

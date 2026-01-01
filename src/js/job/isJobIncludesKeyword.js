@@ -4,11 +4,11 @@
 // 輸出 input：cleanKeyword
 // 輸出 splitKeywords：splitBySpace、splitKeywords
 
-import DetailStorage from '@/js/detailStorage.js'
-import * as utils from '@/js/utils.js'
-import * as config from '@/js/config.js'
-import myRegex from '@/js/myRegex.js'
-import myRegexHref from '@/js/myRegexHref.js'
+import DetailStorage from '@/js/job/detailStorage.js'
+import * as utils from '@/js/core/utils.js'
+import * as config from '@/js/core/config.js'
+import myRegex from '@/js/core/myRegex.js'
+import myRegexHref from '@/js/core/myRegexHref.js'
 
 // region 獲取職缺細節
 let detailConfig = new DetailStorage()

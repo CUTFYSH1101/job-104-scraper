@@ -1,5 +1,5 @@
 import Timer from './timer.js'
-import * as utils from '@/js/utils.js'
+import * as utils from '@/js/core/utils.js'
 
 async function readFile() {
   await Timer.callbackTimer('readFile', async () => {

@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import * as utils from '@/js/utils.js'
+import * as utils from '@/js/core/utils.js'
 import Papa from 'papaparse'
 
 export default {

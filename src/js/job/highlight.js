@@ -1,10 +1,10 @@
 // keyword 型別為 string，而非 string[]
 // 輸出結果為 string：expandAllAliases、expandMustAliases、highlightText
 
-import * as utils from '@/js/utils.js'
-import { keywordAliases } from '@/js/config.js'
-import { cleanKeyword, splitBySpace } from '@/js/isJobIncludesKeyword.js'
-import myRegex from '@/js/myRegex.js'
+import * as utils from '@/js/core/utils.js'
+import { keywordAliases } from '@/js/core/config.js'
+import { cleanKeyword, splitBySpace } from '@/js/job/isJobIncludesKeyword.js'
+import myRegex from '@/js/core/myRegex.js'
 
 /**
  * @param {string} keyword

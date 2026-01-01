@@ -27,9 +27,9 @@ import GraphRelation from '@/js/relation/graphRelation.js'
 import CalcuBetweenRelation from '@/js/relation/calcuBetweenRelation.js'
 import CalcuLoading from '@/js/relation/multithreading/calcuLoading.js'
 import InteractionForClick from '@/js/relation/interactionForClick.js'
-import * as utils from '@/js/utils.js'
-import { parse, parseValue } from '@/js/utils.js'
-import filterJobs from '@/js/filterJobs.js'
+import * as utils from '@/js/core/utils.js'
+import { parse, parseValue } from '@/js/core/utils.js'
+import filterJobs from '@/js/job/filterJobs.js'
 
 let graph = null
 let clickInteraction = null

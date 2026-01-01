@@ -1,4 +1,4 @@
-import * as utils from '../utils.js'
+import * as utils from '../core/utils.js'
 
 const pairs = arr => {
   let result = []

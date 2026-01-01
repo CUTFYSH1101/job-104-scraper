@@ -1,5 +1,5 @@
 import * as d3 from 'd3'
-import MyD3 from '@/js/myD3.js'
+import MyD3 from '@/js/core/myD3.js'
 import ForceSimulation from '@/js/relation/forceSimulation.js'
 import CanvasRenderer from '@/js/relation/canvasRenderer.js'
 import Interaction from '@/js/relation/interaction.js'

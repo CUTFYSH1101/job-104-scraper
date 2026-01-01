@@ -19,13 +19,13 @@
 </template>
 
 <script>
-import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh, isFalsy } from '@/js/utils.js'
+import { dictIncludes, setCookie, getCookie, windowHeight, dvh2px, px2dvh, isFalsy } from '@/js/core/utils.js'
 import { useTouchEvent } from '@/js/mobile/touchEvent.js'
 import Vec2 from '@/js/mobile/vec2.js'
 import { config as coConfig } from '@/js/mobile/changeOrder.js'
 import { getCurrentJobDetail } from '@/js/mobile/detailPreviewMobile.js'
 import KeyHint from '@/components/KeyHint.vue'
-import { highlightText } from '@/js/highlight.js'
+import { highlightText } from '@/js/job/highlight.js'
 import { getKeyword } from '@/js/keyword.js'
 
 let orderTouch = useTouchEvent()

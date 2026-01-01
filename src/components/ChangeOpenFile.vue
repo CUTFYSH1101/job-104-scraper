@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import * as utils from '@/js/utils.js'
-import { loadAndSetJobs } from '@/js/jobsLoader.js'
+import * as utils from '@/js/core/utils.js'
+import { loadAndSetJobs } from '@/js/job/jobsLoader.js'
 
 export default {
   data() {

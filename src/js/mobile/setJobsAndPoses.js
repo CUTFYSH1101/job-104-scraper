@@ -1,5 +1,5 @@
 import JobAtSiteCenter from '@/js/mobile/jobAtSiteCenter.js'
-import { jobs as jobDatas } from '@/js/jobsLoader.js'
+import { jobs as jobDatas } from '@/js/job/jobsLoader.js'
 
 let listener = null
 

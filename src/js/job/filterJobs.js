@@ -1,5 +1,5 @@
-import * as utils from '@/js/utils.js'
-import { cleanKeyword, parseKeyword, isJobIncludesKeyword } from '@/js/isJobIncludesKeyword.js'
+import * as utils from '@/js/core/utils.js'
+import { cleanKeyword, parseKeyword, isJobIncludesKeyword } from '@/js/job/isJobIncludesKeyword.js'
 
 export default function(jobs, keyword_) {
   if (!jobs) return []

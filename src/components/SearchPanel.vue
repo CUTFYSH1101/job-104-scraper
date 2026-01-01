@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { setCookie, getCookie, insert } from '@/js/utils.js'
+import { setCookie, getCookie, insert } from '@/js/core/utils.js'
 import ChangeOpenFile from '@/components/ChangeOpenFile.vue'
 import {isMobile} from '@/js/mobile/rwd.js'
 

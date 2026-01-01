@@ -1,4 +1,4 @@
-import DetailStorage from '@/js/detailStorage.js'
+import DetailStorage from '@/js/job/detailStorage.js'
 
 let detailConfig = new DetailStorage()
 await detailConfig.init()

@@ -23,15 +23,15 @@
 
 <script>
 import Download from '@/components/Download.vue'
-import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
+import { userHoverJob, userLeaveJob } from '@/js/job/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
-import { highlightText, isTimeout } from '@/js/highlight.js'
-import filterJobs from '@/js/filterJobs.js'
-import { getDetailsContent } from '@/js/detailForDownload.js'
-import { isFalsy, joinDictValues } from '@/js/utils.js'
+import { highlightText, isTimeout } from '@/js/job/highlight.js'
+import filterJobs from '@/js/job/filterJobs.js'
+import { getDetailsContent } from '@/js/job/detailForDownload.js'
+import { isFalsy, joinDictValues } from '@/js/core/utils.js'
 
 let { isHovering, setJobOnHover } = useKeyHintOnJob()
 

@@ -1,5 +1,5 @@
-import MyD3 from '@/js/myD3.js'
-import * as utils from '@/js/utils.js'
+import MyD3 from '@/js/core/myD3.js'
+import * as utils from '@/js/core/utils.js'
 import * as d3 from 'd3'
 
 export default class GraphDonut {

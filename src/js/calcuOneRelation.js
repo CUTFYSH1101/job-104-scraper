@@ -1,6 +1,6 @@
 // 計算單一關鍵字與搜尋條件之間的相關性
-import * as utils from '@/js/utils.js'
-import { cleanKeyword, splitBySpace, isJobTagsEqualsKeyword, matchKeyword } from '@/js/isJobIncludesKeyword.js'
+import * as utils from '@/js/core/utils.js'
+import { cleanKeyword, splitBySpace, isJobTagsEqualsKeyword, matchKeyword } from '@/js/job/isJobIncludesKeyword.js'
 
 let filterJobs = (jobs, keyword) => {}
 let setHowToFilterJobs = func => filterJobs = func

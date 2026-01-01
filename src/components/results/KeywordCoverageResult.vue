@@ -47,16 +47,16 @@
 </template>
 
 <script>
-import * as utils from '@/js/utils.js'
+import * as utils from '@/js/core/utils.js'
 import Batcher from '@/js/batcher.js'
-import { getTags, prefixEach } from '@/js/utils.js'
+import { getTags, prefixEach } from '@/js/core/utils.js'
 import HorizontalBar from '@/components/utils/HorizontalBar.vue'
-import { userHoverJob, userLeaveJob } from '@/js/detailPreview.js'
+import { userHoverJob, userLeaveJob } from '@/js/job/detailPreview.js'
 import Bookmark from '@/components/Bookmark.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
-import { parseKeyword, isJobTagsMatchKeyword, isTagsMatchKeyword } from '@/js/isJobIncludesKeyword.js'
+import { parseKeyword, isJobTagsMatchKeyword, isTagsMatchKeyword } from '@/js/job/isJobIncludesKeyword.js'
 
 let batcher = new Batcher()
 batcher.batch = 10

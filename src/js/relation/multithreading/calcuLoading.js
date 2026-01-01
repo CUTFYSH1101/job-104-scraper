@@ -1,6 +1,6 @@
-import * as utils from '@/js/utils.js'
-import { getDetail } from '@/js/isJobIncludesKeyword.js'
-import myRegexHref from '@/js/myRegexHref.js'
+import * as utils from '@/js/core/utils.js'
+import { getDetail } from '@/js/job/isJobIncludesKeyword.js'
+import myRegexHref from '@/js/core/myRegexHref.js'
 
 export const loading = async (jobs, nodes) => {
   // 點 抓取符合該Tag的所有工作

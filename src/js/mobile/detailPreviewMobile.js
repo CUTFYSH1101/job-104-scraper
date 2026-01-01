@@ -1,4 +1,4 @@
-import DetailStorage from '@/js/detailStorage.js'
+import DetailStorage from '@/js/job/detailStorage.js'
 import { ref } from 'vue'
 
 let detailConfig = new DetailStorage()
