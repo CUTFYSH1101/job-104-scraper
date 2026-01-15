@@ -61,14 +61,8 @@ export const bookmarkListener = {
     const job = binding.value
 
     // 定義處理函式並掛載到 el 上以便移除
-    el._handleEnter = () => {
-      console.log('mouseenter')
-      startListening(job)
-    }
-    el._handleLeave = () => {
-      console.log('mouseleave')
-      stopListening()
-    }
+    el._handleEnter = () => startListening(job)
+    el._handleLeave = () => stopListening()
 
     el.addEventListener('mouseenter', el._handleEnter)
     el.addEventListener('mouseleave', el._handleLeave)
