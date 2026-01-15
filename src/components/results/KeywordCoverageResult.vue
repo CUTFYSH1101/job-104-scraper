@@ -14,10 +14,9 @@
     <div ref='jobsView'>
       <div class='job' v-for='(job, i) in processedJobs'
            @mousemove='userHoverJob($event, job)'
-           @mouseleave='userLeaveJob'>
-        <keep-alive>
-          <Bookmark :job='job'/>
-        </keep-alive>
+           @mouseleave='userLeaveJob'
+           v-bookmark-listener='job'>
+        <BookmarksView :job='job'/>
         <a class='cell' :href='job.網址' target='_blank'>{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class='cell'>
           <span class='inline-block' v-for='tag in getTags(job)'
@@ -52,7 +51,7 @@ import Batcher from '@/js/batcher.js'
 import { getTags, prefixEach } from '@/js/core/utils.js'
 import HorizontalBar from '@/components/utils/HorizontalBar.vue'
 import { userHoverJob, userLeaveJob } from '@/js/job/detailPreview.js'
-import Bookmark from '@/components/Bookmark.vue'
+import BookmarksView from '@/components/BookmarksView.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
@@ -66,7 +65,7 @@ let { isHovering, setJobOnHover } = useKeyHintOnJob()
 export default {
   name: 'KeywordCoverageResult',
   components: {
-    Bookmark,
+    BookmarksView,
     HorizontalBar,
     KeyHint,
   },

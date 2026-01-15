@@ -44,16 +44,41 @@ function switchBookmark(e) {
   setBookmark(activeJob.value['網址'], keyMap.indexOf(key))
 }
 
-export function startListening(job) {
+function startListening(job) {
   activeJob.value = job
   window.addEventListener('keyup', switchBookmark)
 }
 
-export function stopListening() {
+function stopListening() {
   window.removeEventListener('keyup', switchBookmark)
 }
 
 if (getLocalStorage('bookmark') !== null)
   bookmark.value = getLocalStorage('bookmark')
 
-export default { getBookmark, startListening, stopListening, getColorMap }
+export const bookmarkListener = {
+  mounted(el, binding) {
+    const job = binding.value
+
+    // 定義處理函式並掛載到 el 上以便移除
+    el._handleEnter = () => {
+      console.log('mouseenter')
+      startListening(job)
+    }
+    el._handleLeave = () => {
+      console.log('mouseleave')
+      stopListening()
+    }
+
+    el.addEventListener('mouseenter', el._handleEnter)
+    el.addEventListener('mouseleave', el._handleLeave)
+    el.addEventListener('touchstart', el._handleEnter, { passive: true })
+  },
+  unmounted(el) {
+    el.removeEventListener('mouseenter', el._handleEnter)
+    el.removeEventListener('mouseleave', el._handleLeave)
+    el.removeEventListener('touchstart', el._handleEnter)
+  }
+}
+
+export default { getBookmark, getColorMap, bookmarkListener }

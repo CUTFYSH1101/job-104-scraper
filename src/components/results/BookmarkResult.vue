@@ -16,10 +16,9 @@
     <div ref='jobsView'>
       <div class='job' v-for='(job, i) in filterJobs'
            @mousemove='userHoverJob($event, job)'
-           @mouseleave='userLeaveJob'>
-        <keep-alive>
-          <Bookmark :job='job'/>
-        </keep-alive>
+           @mouseleave='userLeaveJob'
+           v-bookmark-listener='job'>
+        <BookmarksView :job='job'/>
         <a class='cell' :href='job.網址' target='_blank'>{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class='cell'>{{ job.工作標籤 }}</div>
         <div class='cell'>{{ job.關鍵字 }}</div>
@@ -30,7 +29,7 @@
 </template>
 
 <script>
-import Bookmark from '@/components/Bookmark.vue'
+import BookmarksView from '@/components/BookmarksView.vue'
 import { getColorMap, getBookmark } from '@/js/bookmark.js'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
@@ -43,7 +42,7 @@ let { isHovering, setJobOnHover } = useKeyHintOnJob()
 
 export default {
   name: 'BookmarkResult',
-  components: { Bookmark, KeyHint, JobAtSiteCenter, Download },
+  components: { BookmarksView, KeyHint, JobAtSiteCenter, Download },
   props: ['jobs'],
   data() {
     return {

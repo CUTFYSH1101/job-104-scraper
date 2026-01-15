@@ -1,3 +1,26 @@
+### 使用`BookmarksView.vue`者要搭配
+
+- `BookmarksView.vue`用途是顯示當前工作的書籤號
+- `v-bookmark-listener='job'`
+- 在`main.js`註冊
+  ```javascript
+  import { bookmarkListener } from '@/js/bookmark.js'
+  app.directive('bookmark-listener', bookmarkListener)
+  ```
+  或是在組件中註冊
+  ```vue
+  <script>
+  import { bookmarkListener } from '@/js/bookmark.js'
+  
+  export default {
+    directives: {
+      bookmarkListener
+    },
+  }
+  </script>
+  ```
+  由於有三個 xxxResult.vue 都依賴書籤，因此註冊在`main.js`就可以通用在其他 SFC 檔案
+
 ### 程式碼關聯圖
 
 - 安裝
@@ -16,6 +39,20 @@
 - 用 Claude 著色 AI-Prompt
   ```markdown
   根據關聯圖的耦合程度和程式碼相關性，用不同顏色著色，使用彩虹色票，對比度拉高
+  ```
+  ```markdown
+  根據關聯圖的耦合程度和程式碼相關性，用不同顏色著色，使用彩虹色票，對比度拉高，使用圖二的色票著色圖三，應用圖一到圖二的著色邏輯到圖三
+  ### 線段邏輯
+  橙色到紅色 (#ffd400, #ff0000)：高耦合
+  黃綠到黃色 (#b4ff00, #cfff00, #e9ff00)：中高耦合
+  綠色系 (#36ff8a, #21ff55, #15ff00)：中等耦合
+  青綠色系 (#5ffff4, #4bffbf)：中低耦合
+  藍色系 (#1484ff, #29a4ff, #3ec4ff, #53e5ff)：低耦合模組
+  ### 節點邏輯
+  紅色 (#ff0000)：最高耦合度（如 src/js/core/utils.js）
+  綠色系 (#36ff8a, #21ff55, #15ff00, #0cff1f)：中高耦合
+  青色系 (#5ffff4, #4bffbf, #3ec4ff)：中等耦合
+  藍色系 (#53e5ff, #29a4ff, #1484ff)：低耦合
   ```
 
 ### DEBUG：覆蓋率頁有時會空白一片，已修正，紀錄報錯如下

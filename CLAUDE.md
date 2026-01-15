@@ -24,7 +24,7 @@ A Vue 3 job search visualization application (job-104-scraper) that displays job
   Core Components Structure
 
   - App.vue - Root component with split-screen layout (Site + DetailPreview)
-  - Site.vue - Main container with tabs: JobSearch, KeywordCoverage, SkillRecommend, Bookmark
+  - Site.vue - Main container with tabs: JobSearch, KeywordCoverage, SkillRecommend, BookmarksView
   - components/results/ - Tab content components (JobSearchResult, KeywordCoverageResult, etc.)
   - components/detail/ - Job detail preview panels (desktop/mobile variants)
   - components/utils/ - Reusable UI components (AlertDialog, HorizontalBar, MouseTracker)

@@ -6,10 +6,8 @@
       <div v-show='keyword' class='hint'>共{{ filterJobs.length }}筆搜尋結果</div>
     </div>
     <div ref='jobsView'>
-      <div class='job' v-for='(job, i) in filterJobs' @mousemove='userHoverJob($event, job)' @mouseleave='userLeaveJob'>
-        <keep-alive>
-          <Bookmark :job='job'/>
-        </keep-alive>
+      <div class='job' v-for='(job, i) in filterJobs' @mousemove='userHoverJob($event, job)' @mouseleave='userLeaveJob' v-bookmark-listener='job'>
+        <BookmarksView :job='job'/>
         <a class='cell' :href='job.網址' target='_blank'>
           {{ i + 1 }}:<span v-html='highlightText(job.工作名稱)'></span>
         </a>
@@ -24,7 +22,7 @@
 <script>
 import Download from '@/components/Download.vue'
 import { userHoverJob, userLeaveJob } from '@/js/job/detailPreview.js'
-import Bookmark from '@/components/Bookmark.vue'
+import BookmarksView from '@/components/BookmarksView.vue'
 import KeyHint from '@/components/KeyHint.vue'
 import useKeyHintOnJob from '@/js/keyHintOnJob.js'
 import SetJobsAndPoses from '@/js/mobile/setJobsAndPoses.js'
@@ -39,7 +37,7 @@ export default {
   name: 'JobSearchResult',
   components: {
     Download,
-    Bookmark,
+    BookmarksView,
     KeyHint,
   },
   props: ['jobs', 'keyword'],
