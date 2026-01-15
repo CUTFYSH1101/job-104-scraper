@@ -8,7 +8,6 @@ import { detailConfig } from '@/js/job/detailStorage.js'
 import * as utils from '@/js/core/utils.js'
 import * as config from '@/js/core/config.js'
 import myRegex from '@/js/core/myRegex.js'
-import myRegexHref from '@/js/core/myRegexHref.js'
 
 // region 獲取職缺細節
 export function getDetail(job) {
@@ -19,6 +18,16 @@ export function getDetail(job) {
   detailConfig.setCurrentJob(job)
   let detail = detailConfig.getCurrentJobDetail()
   return detail ? utils.joinDictValues(detail) : ''
+}
+
+export function getDetailWithoutUrl(job) {
+  detailConfig.setCurrentJob(job)
+  let detail = detailConfig.getCurrentJobDetail()
+  if (detail) {
+    detail['job-href'] = ''
+    return utils.joinDictValues(detail)
+  }
+  return ''
 }
 
 // endregion
@@ -174,8 +183,7 @@ export function matchKeyword(text, keyword) {
 }
 
 export function isJobIncludesKeyword(job, keyword) {
-  let detail = getDetail(job)
-  if (detail) detail = detail.replace(myRegexHref, '')
+  let detail = getDetailWithoutUrl(job)
   return matchKeyword(detail, keyword)
 }
 

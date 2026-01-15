@@ -1,6 +1,5 @@
 import * as utils from '@/js/core/utils.js'
-import { getDetail } from '@/js/job/isJobIncludesKeyword.js'
-import myRegexHref from '@/js/core/myRegexHref.js'
+import { getDetailWithoutUrl } from '@/js/job/isJobIncludesKeyword.js'
 
 export const loading = async (jobs, nodes) => {
   // 點 抓取符合該Tag的所有工作
@@ -9,7 +8,7 @@ export const loading = async (jobs, nodes) => {
   // 預先在主線程獲取所有 job 的 detail 和 tags
   const jobsData = jobs.map(job => ({
     tags: utils.getLowerTags(job),
-    detail: getDetail(job) ? getDetail(job).replace(myRegexHref, '') : '',
+    detail: getDetailWithoutUrl(job) ?? '',
   }))
 
   const worker = new Worker(
