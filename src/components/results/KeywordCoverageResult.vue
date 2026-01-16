@@ -81,6 +81,7 @@ export default {
       skillRateNum: 1.00,
       loading: false,
       loadingStep: '',
+      highlightTagsSet: new Set(),
     }
   },
   methods: {
@@ -133,6 +134,17 @@ export default {
       this.processedKeywords = keywords.all
       this.mustKeywords = keywords.must
       this.notKeywords = keywords.not
+      this.buildHighlightTagsSet()
+    },
+    buildHighlightTagsSet() {
+      this.highlightTagsSet = new Set()
+      if (!this.mustKeywords?.length) return
+      let uniqueTags = utils.getTotalUniqueTags(this.jobs)
+      for (let tag of uniqueTags) {
+        if (this.mustKeywords.some(key => isTagsMatchKeyword([tag], key))) {
+          this.highlightTagsSet.add(tag)
+        }
+      }
     },
     // 這個工作的技能要求中，有多少比例符合你搜尋的關鍵字，越大表示這個工作越符合你的搜尋條件
     async calcuRateForeachJob() {
@@ -195,15 +207,7 @@ export default {
       this.skillRateNum = count / total
     },
     tagInKeywords(tag) {
-      if (!this.mustKeywords || this.mustKeywords.length === 0)
-        return false
-
-      // 檢查別名
-      for (let key of this.mustKeywords)
-        if (isTagsMatchKeyword([tag], key))
-          return true
-
-      return false
+      return this.highlightTagsSet.has(tag.toLowerCase())
     },
     toPercent(f) {
       return utils.toPercent(f)
