@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import { setCookie, getCookie, insert } from '@/js/core/utils.js'
+import { setCookie, getCookie, insert, debounce } from '@/js/core/utils.js'
 import ChangeOpenFile from '@/components/ChangeOpenFile.vue'
 import {isMobile} from '@/js/mobile/rwd.js'
 
@@ -31,7 +31,8 @@ export default {
   data() {
     return {
       localKeyword: '',
-      historyKeywords: []
+      historyKeywords: [],
+      emitChange: debounce(val => this.$emit('change', val), 150)
     }
   },
   methods: {
@@ -54,7 +55,7 @@ export default {
       },
       set(val) {
         this.localKeyword = val
-        this.$emit('change', this.keyword)  // keywordJobSearch step 1
+        this.emitChange(val)  // keywordJobSearch step 1 (debounced)
       }
     },
     isMobile,

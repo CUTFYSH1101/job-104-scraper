@@ -429,3 +429,13 @@ export function parse(val) {
 }
 
 // endregion
+
+// region 效能優化
+export function debounce(fn, delay = 150) {
+  let timer = null
+  return function(...args) {
+    clearTimeout(timer)
+    timer = setTimeout(() => fn(...args), delay)
+  }
+}
+// endregion
