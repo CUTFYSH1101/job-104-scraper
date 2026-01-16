@@ -3,7 +3,8 @@
     <div class='tool-panel'>  <!-- 工具區 -->
       <div class='input-wrapper'>  <!-- 搜尋框 -->
         <i class='fa fa-search input-icon opacity-60'></i>
-        <input class='search-input' type='text' v-model='keyword' v-on:keydown.enter='addHistory()'
+        <!-- 使用.stop阻止鍵盤事件向外冒泡，避免被 window 鍵盤事件監聽捕獲到 -->
+        <input class='search-input' type='text' v-model='keyword' @keydown.stop='handleKeydown' @keyup.stop=''
                placeholder='例：python django -高級'>
         <button class='search-btn' @click='addHistory()'><i class='fa fa-plus'></i></button>
       </div>
@@ -34,6 +35,10 @@ export default {
     }
   },
   methods: {
+    handleKeydown(e) {
+      if (e.key === 'Enter')
+        this.addHistory()
+    },
     addHistory() {
       this.historyKeywords = insert(this.historyKeywords, 0, this.localKeyword)  // pushFirst
       this.historyKeywords = [...new Set(this.historyKeywords)]
