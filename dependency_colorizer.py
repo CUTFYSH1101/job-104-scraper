@@ -1,62 +1,44 @@
 #!/usr/bin/env python3
 """
 依賴圖自動著色工具
-根據耦合程度和程式碼相關性對 GraphViz 生成的 SVG 依賴圖進行著色
-使用彩虹色票，高對比度設計
-
-使用方法:
-    python dependency_colorizer.py input.svg [output.svg]
-
-    如果不指定輸出文件，將自動生成 input_colored.svg
+使用方法: python dependency_colorizer.py input.svg [output.svg]
 """
 
-import re
+import re  # 用正則取代 XML 宣告字串
 import sys
 import os
 import xml.etree.ElementTree as ET
 from collections import defaultdict
 from pathlib import Path
-from datetime import datetime
 
-# ============================================================================
-# 顏色配置
-# ============================================================================
-
-# 線段（邊）顏色配置
+# region 配色方案
+# 線段顏色：根據平均耦合度
 EDGE_COLORS = {
-    'high': ['#ffd400', '#ff0000'],  # 橙色到紅色：高耦合
-    'medium_high': ['#b4ff00', '#cfff00', '#e9ff00'],  # 黃綠到黃色：中高耦合
-    'medium': ['#36ff8a', '#21ff55', '#15ff00'],  # 綠色系：中等耦合
-    'medium_low': ['#5ffff4', '#4bffbf'],  # 青綠色系：中低耦合
-    'low': ['#1484ff', '#29a4ff', '#3ec4ff', '#53e5ff']  # 藍色系：低耦合
+    'high': ['#ffd400', '#ff0000'],  # 橙紅：高耦合（≥60%）
+    'medium_high': ['#b4ff00', '#cfff00', '#e9ff00'],  # 黃綠：中高耦合（45-60%）
+    'medium': ['#36ff8a', '#21ff55', '#15ff00'],  # 綠色：中等耦合（30-45%）
+    'medium_low': ['#5ffff4', '#4bffbf'],  # 青綠：中低耦合（15-30%）
+    'low': ['#1484ff', '#29a4ff', '#3ec4ff', '#53e5ff']  # 藍色：低耦合（<15%）
 }
 
-# 節點顏色配置
+# 節點顏色：根據總耦合度（連接線段數 = 入度 + 出度）
+# 先算「入度 + 出度」
+# 再除以最大耦合度，變成比例
+# 再用比例分級（0.8 / 0.6 / 0.4）
 NODE_COLORS = {
-    'highest': '#ff0000',  # 紅色：最高耦合度
-    'high': ['#36ff8a', '#21ff55', '#15ff00', '#0cff1f'],  # 綠色系：中高耦合
-    'medium': ['#5ffff4', '#4bffbf', '#3ec4ff'],  # 青色系：中等耦合
-    'low': ['#53e5ff', '#29a4ff', '#1484ff']  # 藍色系：低耦合
+    'highest': '#ff0000',  # 紅色：最高耦合（≥80%）
+    'high': ['#36ff8a', '#21ff55', '#15ff00', '#0cff1f'],  # 綠色：中高耦合（60-80%）
+    'medium': ['#5ffff4', '#4bffbf', '#3ec4ff'],  # 青色：中等耦合（40-60%）
+    'low': ['#53e5ff', '#29a4ff', '#1484ff']  # 藍色：低耦合（<40%）
 }
 
-# 不透明度設置
 EDGE_OPACITY = '0.7'
 
 
-# ============================================================================
-# 工具函數
-# ============================================================================
+# endregion
 
+# region 工具函數
 def parse_svg(filepath):
-    """
-    解析 SVG 文件
-
-    Args:
-        filepath: SVG 文件路徑
-
-    Returns:
-        tuple: (tree, root, namespaces)
-    """
     try:
         # 先嘗試直接解析
         tree = ET.parse(filepath)
@@ -107,21 +89,13 @@ def parse_svg(filepath):
                 encoding_used = 'UTF-8 (with errors ignored)'
 
             print(f"✅ 使用 {encoding_used} 編碼成功")
-
-            # 修復 XML 聲明中的編碼問題
-            import re
-            # 移除或修正 XML 聲明
+            # 強制修正 XML 聲明為 UTF-8 編碼（注意：若原始不是 UTF-8，強制替換可能造成不一致）
             content_str = re.sub(r'<\?xml[^>]*\?>', '<?xml version="1.0" encoding="UTF-8"?>', content_str, count=1)
 
             # 解析修復後的內容
             root = ET.fromstring(content_str.encode('utf-8'))
             tree = ET.ElementTree(root)
-
-            namespaces = {
-                'svg': 'http://www.w3.org/2000/svg',
-                'xlink': 'http://www.w3.org/1999/xlink'
-            }
-
+            namespaces = {'svg': 'http://www.w3.org/2000/svg', 'xlink': 'http://www.w3.org/1999/xlink'}
             print(f"✅ 文件已修復並成功解析")
             return tree, root, namespaces
 
@@ -135,19 +109,10 @@ def parse_svg(filepath):
 
 
 def analyze_dependencies(root):
-    """
-    分析依賴關係並計算耦合度
-
-    Args:
-        root: SVG 根元素
-
-    Returns:
-        tuple: (node_coupling, edges, node_in_degree, node_out_degree)
-    """
-    # 統計每個節點的入度和出度
+    # 計算有多少條線連接在同一個節點上
     node_in_degree = defaultdict(int)
     node_out_degree = defaultdict(int)
-    edges = []
+    edges = []  # 收集所有邊及其 SVG 元素
 
     # 遍歷所有邊
     for edge in root.findall('.//{http://www.w3.org/2000/svg}g[@class="edge"]'):
@@ -157,7 +122,7 @@ def analyze_dependencies(root):
             # 嘗試 -> 格式
             match = re.match(r'(.+?)->(.+)', title.text)
             if not match:
-                # 嘗試 &#45;&gt; 格式（HTML 實體編碼）
+                # 處理 Graphviz 輸出中常見的 HTML 實體編碼箭頭（->）
                 match = re.match(r'(.+?)&#45;&gt;(.+)', title.text)
 
             if match:
@@ -171,7 +136,6 @@ def analyze_dependencies(root):
     all_nodes = set(list(node_in_degree.keys()) + list(node_out_degree.keys()))
 
     for node in all_nodes:
-        # 耦合度 = 入度 + 出度
         coupling = node_in_degree[node] + node_out_degree[node]
         node_coupling[node] = coupling
 
@@ -179,21 +143,9 @@ def analyze_dependencies(root):
 
 
 def get_coupling_level(coupling_value, max_coupling):
-    """
-    根據耦合值獲取耦合等級
-
-    Args:
-        coupling_value: 節點的耦合度
-        max_coupling: 最大耦合度
-
-    Returns:
-        str: 耦合等級 ('highest', 'high', 'medium', 'low')
-    """
     if max_coupling == 0:
         return 'low'
-
     ratio = coupling_value / max_coupling
-
     if ratio >= 0.8:
         return 'highest'
     elif ratio >= 0.6:
@@ -205,25 +157,12 @@ def get_coupling_level(coupling_value, max_coupling):
 
 
 def get_edge_coupling_level(source, target, node_coupling, max_coupling):
-    """
-    根據源和目標節點的耦合度獲取邊的耦合等級
-
-    Args:
-        source: 源節點名稱
-        target: 目標節點名稱
-        node_coupling: 節點耦合度字典
-        max_coupling: 最大耦合度
-
-    Returns:
-        str: 邊的耦合等級
-    """
     source_coupling = node_coupling.get(source, 0)
     target_coupling = node_coupling.get(target, 0)
     avg_coupling = (source_coupling + target_coupling) / 2
 
     if max_coupling == 0:
         return 'low'
-
     ratio = avg_coupling / max_coupling
 
     if ratio >= 0.6:
@@ -238,38 +177,9 @@ def get_edge_coupling_level(source, target, node_coupling, max_coupling):
         return 'low'
 
 
-def select_color_from_range(color_range, index=0):
-    """
-    從顏色範圍中選擇一個顏色
-
-    Args:
-        color_range: 單一顏色字串或顏色列表
-        index: 選擇的索引
-
-    Returns:
-        str: 顏色代碼
-    """
-    if isinstance(color_range, str):
-        return color_range
-    if isinstance(color_range, list):
-        return color_range[index % len(color_range)]
-    return color_range
-
-
 def colorize_nodes(root, node_coupling, max_coupling):
-    """
-    為節點著色
-
-    Args:
-        root: SVG 根元素
-        node_coupling: 節點耦合度字典
-        max_coupling: 最大耦合度
-
-    Returns:
-        dict: 各耦合等級的節點統計
-    """
     node_stats = defaultdict(int)
-    node_count_by_level = defaultdict(int)  # 用於循環選色
+    node_count_by_level = defaultdict(int)  # 用於同等級節點循環選色
 
     for node_elem in root.findall('.//{http://www.w3.org/2000/svg}g[@class="node"]'):
         title = node_elem.find('.//{http://www.w3.org/2000/svg}title')
@@ -284,7 +194,6 @@ def colorize_nodes(root, node_coupling, max_coupling):
                 color = NODE_COLORS['highest']
             else:
                 colors = NODE_COLORS.get(level, NODE_COLORS['low'])
-                # 使用計數器循環選擇顏色
                 idx = node_count_by_level[level] % len(colors)
                 color = colors[idx]
                 node_count_by_level[level] += 1
@@ -305,21 +214,9 @@ def colorize_nodes(root, node_coupling, max_coupling):
 
 
 def colorize_edges(root, edges, node_coupling, max_coupling):
-    """
-    為邊著色
-
-    Args:
-        root: SVG 根元素
-        edges: 邊的列表
-        node_coupling: 節點耦合度字典
-        max_coupling: 最大耦合度
-
-    Returns:
-        dict: 各耦合等級的邊統計
-    """
     edge_count_by_level = defaultdict(int)
 
-    # 計算每條邊的耦合度並排序：低耦合先處理，高耦合後處理
+    # 按耦合度排序，確保高耦合線段繪製在最上層
     edges_with_coupling = []
     for source, target, edge_elem in edges:
         source_coupling = node_coupling.get(source, 0)
@@ -356,150 +253,22 @@ def colorize_edges(root, edges, node_coupling, max_coupling):
                 polygon.set('stroke', color)
                 polygon.set('stroke-opacity', EDGE_OPACITY)
 
-            # 將邊元素移到最後（高耦合的會在最上層）
+            # 重新排列元素順序，後繪製的線段會覆蓋先繪製的
             graph.remove(edge_elem)
             graph.append(edge_elem)
 
     return edge_count_by_level
 
 
-def generate_report(output_dir, node_coupling, edge_stats, max_coupling, total_nodes, total_edges):
-    """
-    生成分析報告
-
-    Args:
-        output_dir: 輸出目錄
-        node_coupling: 節點耦合度字典
-        edge_stats: 邊統計字典
-        max_coupling: 最大耦合度
-        total_nodes: 總節點數
-        total_edges: 總邊數
-    """
-    report_path = os.path.join(output_dir, 'dependency_analysis_report.md')
-
-    # 排序節點
-    sorted_nodes = sorted(node_coupling.items(), key=lambda x: x[1], reverse=True)
-    top_10 = sorted_nodes[:10]
-
-    # 生成報告內容
-    report = f"""# 依賴圖著色分析報告
-
-生成時間: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-
-## 著色方案說明
-
-### 線段（邊）顏色邏輯
-根據連接節點的平均耦合程度，使用以下顏色範圍：
-
-| 耦合等級 | 顏色範圍 | 說明 |
-|---------|---------|------|
-| 高耦合 | #ffd400, #ff0000（橙色到紅色） | 80%+ 最大耦合度 |
-| 中高耦合 | #b4ff00, #cfff00, #e9ff00（黃綠到黃色） | 60-80% 最大耦合度 |
-| 中等耦合 | #36ff8a, #21ff55, #15ff00（綠色系） | 40-60% 最大耦合度 |
-| 中低耦合 | #5ffff4, #4bffbf（青綠色系） | 20-40% 最大耦合度 |
-| 低耦合 | #1484ff, #29a4ff, #3ec4ff, #53e5ff（藍色系） | <20% 最大耦合度 |
-
-### 節點顏色邏輯
-根據節點的總耦合度（入度 + 出度），使用以下顏色：
-
-| 耦合等級 | 顏色範圍 | 說明 |
-|---------|---------|------|
-| 最高耦合 | #ff0000（紅色） | 80%+ 最大耦合度 |
-| 中高耦合 | #36ff8a, #21ff55, #15ff00, #0cff1f（綠色系） | 60-80% 最大耦合度 |
-| 中等耦合 | #5ffff4, #4bffbf, #3ec4ff（青色系） | 40-60% 最大耦合度 |
-| 低耦合 | #53e5ff, #29a4ff, #1484ff（藍色系）+ 白色文字和邊框 | <40% 最大耦合度 |
-
-## 分析結果
-
-### 總體統計
-- **節點總數**: {total_nodes} 個
-- **邊總數**: {total_edges} 條
-- **最大耦合度**: {max_coupling}
-
-### Top 10 高耦合節點
-
-"""
-
-    for i, (node, coupling) in enumerate(top_10, 1):
-        report += f"{i}. **{node}** - 耦合度: {coupling}\n"
-
-    report += "\n### 邊的耦合分佈\n\n"
-    report += "| 耦合等級 | 數量 | 百分比 |\n"
-    report += "|---------|------|--------|\n"
-
-    for level in ['high', 'medium_high', 'medium', 'medium_low', 'low']:
-        count = edge_stats.get(level, 0)
-        percentage = (count / total_edges * 100) if total_edges > 0 else 0
-        level_name = {
-            'high': '高耦合',
-            'medium_high': '中高耦合',
-            'medium': '中等耦合',
-            'medium_low': '中低耦合',
-            'low': '低耦合'
-        }[level]
-        report += f"| {level_name} | {count} | {percentage:.1f}% |\n"
-
-    report += """
-### 關鍵發現
-
-1. **整體架構評估**: 
-   - 分析依賴分佈，大部分依賴處於中低耦合說明架構相對健康
-   - 高耦合比例過高需要重點關注和重構
-
-2. **核心瓶頸識別**: 
-   - 耦合度最高的模組是潛在的維護風險點
-   - 建議拆分功能，降低單一模組的責任
-
-3. **模組化建議**:
-   - 提取共享邏輯到獨立模組
-   - 使用依賴注入模式減少直接依賴
-   - 考慮使用事件驅動架構降低耦合
-
-## 改進建議
-
-### 短期改進
-1. 重構高耦合模組，拆分職責
-2. 識別並消除循環依賴
-3. 為核心模組添加接口層
-
-### 長期規劃
-1. 建立清晰的模組邊界
-2. 採用分層架構設計
-3. 定期進行依賴分析和重構
-
----
-*本報告由依賴圖自動著色工具生成*
-"""
-
-    # 寫入報告
-    with open(report_path, 'w', encoding='utf-8') as f:
-        f.write(report)
-
-    return report_path
-
-
 def colorize_svg(input_file, output_file=None):
-    """
-    為 SVG 文件著色的主函數
-
-    Args:
-        input_file: 輸入 SVG 文件路徑
-        output_file: 輸出 SVG 文件路徑（可選）
-
-    Returns:
-        tuple: (output_svg_path, report_path)
-    """
-    # 檢查輸入文件
     if not os.path.exists(input_file):
         print(f"❌ 輸入文件不存在: {input_file}")
         sys.exit(1)
 
-    # 確定輸出文件路徑
     if output_file is None:
         input_path = Path(input_file)
         output_file = str(input_path.parent / f"{input_path.stem}_colored{input_path.suffix}")
 
-    # 確保輸出目錄存在
     output_dir = os.path.dirname(output_file) or '.'
     os.makedirs(output_dir, exist_ok=True)
 
@@ -507,10 +276,8 @@ def colorize_svg(input_file, output_file=None):
     print(f"📄 輸入文件: {input_file}")
     print(f"📄 輸出文件: {output_file}")
 
-    # 解析 SVG
     tree, root, ns = parse_svg(input_file)
 
-    # 分析依賴關係
     print("\n🔍 分析依賴關係...")
     node_coupling, edges, node_in_degree, node_out_degree = analyze_dependencies(root)
 
@@ -526,15 +293,12 @@ def colorize_svg(input_file, output_file=None):
     print(f"✅ 找到 {total_edges} 條邊")
     print(f"✅ 最大耦合度: {max_coupling}")
 
-    # 為節點著色
     print("\n🎨 為節點著色...")
     node_stats = colorize_nodes(root, node_coupling, max_coupling)
 
-    # 為邊著色
     print("🎨 為邊著色...")
     edge_stats = colorize_edges(root, edges, node_coupling, max_coupling)
 
-    # 保存結果
     print("\n💾 保存著色後的 SVG...")
     ET.register_namespace('', 'http://www.w3.org/2000/svg')
     ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
@@ -542,7 +306,6 @@ def colorize_svg(input_file, output_file=None):
     tree.write(output_file, encoding='utf-8', xml_declaration=True)
     print(f"✅ 已保存到: {output_file}")
 
-    # 打印統計摘要
     print("\n" + "=" * 60)
     print("📈 統計摘要")
     print("=" * 60)
@@ -564,12 +327,10 @@ def colorize_svg(input_file, output_file=None):
     return output_file
 
 
-# ============================================================================
-# 命令列介面
-# ============================================================================
+# endregion
 
+# region 命令列介面
 def main():
-    """主函數"""
     if len(sys.argv) < 2:
         print("依賴圖自動著色工具")
         print("\n使用方法:")
@@ -593,6 +354,8 @@ def main():
         traceback.print_exc()
         sys.exit(1)
 
+
+# endregion
 
 if __name__ == '__main__':
     main()
