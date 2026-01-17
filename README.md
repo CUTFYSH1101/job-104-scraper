@@ -1,3 +1,81 @@
+### 測試 vitest 與 jsdom
+
+- ```bash
+  npm install -D vitest
+  ```
+- ```bash
+  npm install -D jsdom
+  ```
+- 如果要直接測試.vue文件（SFC文件）
+  ```bash
+  npm install -D @vue/test-utils
+  ```
+- 在 vite.config.js
+  ```javascript
+  import { defineConfig } from 'vite'
+
+  export default defineConfig({
+    base: './',
+    test: {
+      environment: 'jsdom',
+    },
+  })
+  ```
+- ```bash
+  npx vitest
+  ```
+  或
+  配置在 package.json 的 script
+  "test": "vitest"
+  "test list": "vitest list"
+  再用
+  ```bash
+  npm test
+  ```
+
+#### 全域導入，不必在每個測試文件導入`import { test, describe, it, expect, assert, vi } from 'vitest'`
+
+- `vite.config.js`寫入`globals: true`
+  ```javascript
+  export default defineConfig({
+    test: {
+      environment: 'jsdom',
+      include: 'tests/**/*.{test,spec}.{js,ts}',
+      globals: true,
+    },
+  })
+  ```
+  或`vitest.config.js`寫入`globals: true`
+  ```javascript
+  import { defineConfig } from 'vitest/config'
+  import vue from '@vitejs/plugin-vue'
+  import vueDevTools from 'vite-plugin-vue-devtools'
+  import tailwindcss from '@tailwindcss/vite'
+
+  export default defineConfig({
+    plugins: [
+      vue(),  // 由於`vitest.config.js`優先級大於`vite.config.js`，他不認得.vue檔了
+      vueDevTools(),  // 可選
+      tailwindcss(),  // 可選
+    ],
+    test: {
+      environment: 'jsdom',
+      include: 'tests/**/*.{test,spec}.{js,ts}',
+      globals: true,
+    },
+  })
+  ```
+- 有ts的話，`tsconfig.json`寫入以下：
+  ```json
+  {
+    "compilerOptions": {
+      "types": [
+        "vitest/globals"
+      ]
+    }
+  }
+  ```
+
 ### 使用`BookmarksView.vue`者要搭配
 
 - `BookmarksView.vue`用途是顯示當前工作的書籤號
@@ -455,3 +533,17 @@ git pull
 
 用Fork這款軟體，強制推送master到遠端資料庫origin，所有選項都打勾<br>
 詳情看notion教學
+
+### 創建vite
+
+```bash
+npm create vite@latest
+```
+運行
+```bash
+npx vite
+```
+或
+```bash
+npm run dev
+```

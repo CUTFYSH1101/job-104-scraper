@@ -13,7 +13,8 @@
     "format": "node format-code.js",
     "deploy": "npm run build && gh-pages -d dist",
     "deps": "dependency-cruiser src -T dot | dot -T svg > dependencies.svg",
-    "deps:html": "dependency-cruiser src -T html > dependencies.html"
+    "deps:html": "dependency-cruiser src -T html > dependencies.html",
+    "test": "vitest run"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
@@ -25,9 +26,11 @@
     "@vitejs/plugin-vue": "^6.0.1",
     "dependency-cruiser": "^15.5.0",
     "gh-pages": "^6.3.0",
+    "jsdom": "^27.4.0",
     "prettier": "3.6.2",
     "sass-embedded": "^1.93.2",
     "vite": "^7.1.7",
-    "vite-plugin-vue-devtools": "^8.0.2"
+    "vite-plugin-vue-devtools": "^8.0.2",
+    "vitest": "^4.0.17"
   }
 }
