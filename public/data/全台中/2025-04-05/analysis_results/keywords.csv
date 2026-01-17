@@ -27,6 +27,7 @@ api
 apk
 appium
 array
+asana
 asp
 asp.net
 assembly
@@ -137,6 +138,7 @@ helm
 hibernate
 hmi
 honeywell
+hotjar
 html
 html5
 http
@@ -225,6 +227,7 @@ object oriented
 object-oriented
 objective c
 objective-c
+odoo
 omron
 oop
 opencv
@@ -366,6 +369,7 @@ verilog
 vhdl
 virtualization
 visual studio
+vite
 vmware
 vs code
 vscode
@@ -380,6 +384,8 @@ websocket
 winforms
 wireframe
 wireshark
+wix
+woocommerce
 word
 wordpress
 wpf
@@ -506,5 +512,6 @@ yokogawa
 重構
 陣列
 雲端運算
+電商
 非對稱
 響應式設計

@@ -92,6 +92,7 @@ gulp
 hadoop
 hibernate
 hmi
+hotjar
 html
 html5
 http
@@ -222,6 +223,7 @@ serverless
 sftp
 shell
 shell script
+shopify
 sketch
 soap
 software
@@ -260,6 +262,7 @@ unity
 unix
 vba
 visual studio
+vite
 vmware
 vs code
 vscode
@@ -269,6 +272,7 @@ web3
 webpack
 websocket
 wireframe
+woocommerce
 word
 wordpress
 wpf
@@ -365,4 +369,5 @@ xss
 部署
 重構
 雲端運算
+電商
 響應式設計

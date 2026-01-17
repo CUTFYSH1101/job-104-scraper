@@ -95,6 +95,7 @@ graphql
 grpc
 hadoop
 hmi
+hotjar
 html
 html5
 http
@@ -228,6 +229,7 @@ session
 sftp
 shell
 shell script
+shopify
 sketch
 soap
 software
@@ -271,6 +273,7 @@ unix
 vba
 virtualization
 visual studio
+vite
 vmware
 vs code
 vue
@@ -281,6 +284,7 @@ webpack
 websocket
 wireframe
 wireshark
+woocommerce
 word
 wordpress
 wpf
@@ -382,4 +386,5 @@ yarn
 部署
 重構
 雲端運算
+電商
 響應式設計
