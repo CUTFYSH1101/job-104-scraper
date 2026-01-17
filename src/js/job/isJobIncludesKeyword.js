@@ -24,6 +24,7 @@ export function getDetailWithoutUrl(job) {
   detailConfig.setCurrentJob(job)
   let detail = detailConfig.getCurrentJobDetail()
   if (detail) {
+    detail = { ...detail }  // 避免改到`getDetailsContent`的 detail 物件而無法下載
     detail['job-href'] = ''
     return utils.joinDictValues(detail)
   }
