@@ -7,7 +7,7 @@ vi.mock('@/js/job/detailStorage.js', () => ({
     }
 }))
 
-import { parseKeyword, isTagsMatchKeyword } from '../isJobIncludesKeyword.js'
+import { parseKeyword, isTagsMatchKeyword } from '@/js/job/isJobIncludesKeyword.js'
 
 describe('parseKeyword', () => {
     it('應該正確解析關鍵字', () => {

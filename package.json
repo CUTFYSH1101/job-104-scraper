@@ -14,7 +14,8 @@
     "deploy": "npm run build && gh-pages -d dist",
     "deps": "dependency-cruiser src -T dot | dot -T svg > dependencies.svg",
     "deps:html": "dependency-cruiser src -T html > dependencies.html",
-    "test": "vitest run"
+    "test": "vitest",
+    "test list": "vitest list"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
