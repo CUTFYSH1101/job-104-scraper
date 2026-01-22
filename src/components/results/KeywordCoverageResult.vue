@@ -1,5 +1,7 @@
 <template>
   <div class='keyword-coverage'>
+    <Download :data='filterJobs' text-content='匯出完全符合的工作(提取關鍵字)' format='job'
+              csv-name='keyword-coverage.csv' class='float-panel'/>
     <!-- 有關鍵字並且載入完畢再顯示 -->
     <div v-if='!isKeywordEmpty && loadingStep === "4/4"' class='analysis line-block mb-5'>
       <div v-for='[key, value] in Object.entries(skillRateDict)' class='analysis-cell'>
@@ -48,6 +50,7 @@
 </template>
 
 <script>
+import Download from '@/components/Download.vue'
 import * as utils from '@/js/core/utils.js'
 import Batcher from '@/js/batcher.js'
 import { getTags, prefixEach } from '@/js/core/utils.js'
@@ -67,6 +70,7 @@ let { isHovering, setJobOnHover } = useKeyHintOnJob()
 export default {
   name: 'KeywordCoverageResult',
   components: {
+    Download,
     BookmarksView,
     HorizontalBar,
     KeyHint,
@@ -84,6 +88,7 @@ export default {
       loading: false,
       loadingStep: '',
       highlightTagsSet: new Set(),
+      filterJobs: [],
     }
   },
   methods: {
@@ -105,7 +110,7 @@ export default {
       }
 
       // 處理好關鍵字和jobs
-      this.processedJobs = this.jobs
+      this.processedJobs = this.jobs.map(job => ({ ...job }))  // [{...job} for job in this.job] 避免複寫到其他 xxxResult.vue 的 jobs
       this.isKeywordEmpty = false
       if (!this.isValidKeyword()) {
         this.isKeywordEmpty = true
@@ -127,6 +132,7 @@ export default {
       this.calcuWeightForeachJob()
       this.loadingStep = '4/4'
       this.sortJobs()
+      this.filterJobs = this.processedJobs.filter(job => job.skillRate === 1)
       this.loading = false
     },
     isValidKeyword() {
@@ -239,6 +245,9 @@ export default {
 </script>
 
 <style scoped lang='sass' src='@/styles/jobs.sass'></style>
+
+<!-- Download.vue 專用 -->
+<style scoped lang='sass' src='@/styles/download.sass'></style>
 
 <style lang='sass'>
 @use '@/styles/variables.sass' as var
