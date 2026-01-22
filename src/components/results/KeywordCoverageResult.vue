@@ -110,7 +110,7 @@ export default {
       }
 
       // 處理好關鍵字和jobs
-      this.processedJobs = this.jobs.map(job => ({ ...job }))  // [{...job} for job in this.job] 避免複寫到其他 xxxResult.vue 的 jobs
+      this.processedJobs = this.jobs.map(job => ({ ...job }))  // [{...job} for job in this.job] 避免覆寫到其他 xxxResult.vue 的 jobs
       this.isKeywordEmpty = false
       if (!this.isValidKeyword()) {
         this.isKeywordEmpty = true
