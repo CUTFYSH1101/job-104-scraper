@@ -7,8 +7,10 @@
         <HorizontalBar :width='toPercent(value)'/>
       </div>
       <div class='analysis-cell'>
-        總共{{ toPercent(skillRateNum) }}
-        <HorizontalBar :width='toPercent(skillRateNum)'/>
+        全部工作有{{ skillRateNum.total }}筆，所有關鍵字完全符合有{{
+          skillRateNum.count
+        }}筆，佔{{ toPercent(skillRateNum.result) }}
+        <HorizontalBar :width='toPercent(skillRateNum.result)'/>
       </div>
     </div>
     <div ref='jobsView'>
@@ -78,7 +80,7 @@ export default {
       mustKeywords: [],
       notKeywords: [],
       skillRateDict: {},
-      skillRateNum: 1.00,
+      skillRateNum: { count: 1, total: 1, result: 1.00 },
       loading: false,
       loadingStep: '',
       highlightTagsSet: new Set(),
@@ -208,7 +210,7 @@ export default {
           return
         count++
       })
-      this.skillRateNum = count / total
+      this.skillRateNum = { count, total, result: count / total }
     },
     tagInKeywords(tag) {
       return this.highlightTagsSet.has(tag.toLowerCase())
