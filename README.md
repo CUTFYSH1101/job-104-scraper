@@ -1,5 +1,5 @@
-Live Demo：https://cutfysh1101.github.io/job-104-scraper/
-GitHub Repo：https://github.com/CUTFYSH1101/job-104-scraper/
+- Live Demo：https://cutfysh1101.github.io/job-104-scraper/
+- GitHub Repo：https://github.com/CUTFYSH1101/job-104-scraper/
 
 ---
 
