@@ -3,6 +3,14 @@
 
 ---
 
+### pnpm
+
+1. 用系統管理員開啟cmd
+2. （cd到專案目錄，否則將在全局啟用pnpm）
+3. corepack enable
+4. corepack prepare pnpm@latest --activate
+5. 回到 WebStorm 使用`pnpm -v`看是否安裝成功
+
 ### 測試 vitest 與 jsdom
 
 - ```bash
