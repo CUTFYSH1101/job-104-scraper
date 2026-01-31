@@ -21,6 +21,7 @@ assembly
 aws
 azure
 babel
+backend
 bootstrap
 c#
 c++
@@ -71,6 +72,7 @@ i18n
 iis
 illustrator
 injection
+internet of things
 ios
 iot
 java
@@ -136,6 +138,7 @@ redux
 release
 rest
 restful
+robotics
 ros
 rwd
 sass
