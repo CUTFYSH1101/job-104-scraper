@@ -23,9 +23,9 @@
         <BookmarksView :job='job'/>
         <a class='cell' :href='job.網址' target='_blank'>{{ i + 1 }}:{{ job.工作名稱 }}</a>
         <div class='cell'>
-          <span class='inline-block' v-for='tag in getTags(job)'
-                :class='{ highlight: !isKeywordEmpty && tagInKeywords(tag) }'>
-            {{ tag }}
+          <span class='inline-block' v-for='tag in job.tags'
+                :class='{ highlight: tag.isHighlight }'>
+            {{ tag.tag }}
           </span>
         </div>
         <!-- skillRate 或 skillWeight 任一有值時顯示，避免undefined顯示NaN -->
@@ -133,6 +133,7 @@ export default {
       this.loadingStep = '4/4'
       this.sortJobs()
       this.filterJobs = this.processedJobs.filter(job => job.skillRate === 1)
+      this.calcuTagsHighlight()
       this.loading = false
     },
     isValidKeyword() {
@@ -194,6 +195,21 @@ export default {
       })
       console.log('排序工作')
     },
+    // 解決GC問題
+    calcuTagsHighlight() {
+      this.processedJobs.forEach(job =>
+          job.tags = getTags(job).map(tag => ({
+            tag: tag,
+            isHighlight: this.tagInKeywords(tag)
+          })))
+    },
+    // 解決GC問題
+    reset() {
+      this.processedJobs = []
+      this.skillRateDict = {}
+      this.highlightTagsSet = new Set()
+      this.filterJobs = []
+    },
     calcuTotalRate() {
       // python佔6成，表示個別關鍵字佔整體市場多少工作
       let total = this.processedJobs.length
@@ -240,6 +256,7 @@ export default {
   },
   deactivated() {
     SetJobsAndPoses.deactivated()
+    this.reset()
   },
 }
 </script>
