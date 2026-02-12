@@ -19,13 +19,14 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.18",
+    "@vue/test-utils": "^2.4.6",
     "d3": "^7.9.0",
     "papaparse": "^5.5.3",
     "vue": "^3.5.22"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.1",
-    "dependency-cruiser": "^15.5.0",
+    "dependency-cruiser": "^17.3.8",
     "gh-pages": "^6.3.0",
     "jsdom": "^27.4.0",
     "prettier": "3.6.2",
