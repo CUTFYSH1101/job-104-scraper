@@ -1,5 +1,6 @@
 import { test, describe, it, expect, vi, afterEach, beforeAll, assert } from 'vitest'
 import { mount } from '@vue/test-utils'
+import * as utilsVitest from './utilsVitest.js'
 import { loadJobs } from './jobsLoader.js'
 import { loadText } from './utils.js'
 
@@ -28,32 +29,36 @@ import * as utils from '@/js/core/utils.js'
 import KeywordCoverageResult from '@/components/results/KeywordCoverageResult.vue'
 // endregion
 
+let jobs
+let wrapper
 
-describe('test', async () => {
-    let jobs
-    let wrapper
-
-    beforeAll(async () => {
-        jobs = loadJobs(csvPath)
-        let path = await loadText(pathPath)
-        expect(jobs.length).toBe(502)
-        assert(path)
-        // calcuTotalRate
-        wrapper = mount(KeywordCoverageResult, {
-            props: {
-                jobs,
-                keyword: '',
+async function mountKeywordCoverageResult() {
+    jobs = loadJobs(csvPath)
+    wrapper = mount(KeywordCoverageResult, {
+        props: {
+            jobs,
+            keyword: '',
+        },
+        // 未呼叫 main.js 因此未掛載 app.directive('bookmark-listener', bookmarkListener)
+        // KeywordCoverageResult 呼叫 v-bookmark-listener='job' 發警告
+        // 大量 jobs 輸出的來源是 Vue 的警告機制，不是程式碼中的 console.log
+        global: {
+            directives: {
+                'bookmark-listener': () => {}
             },
-            // 未呼叫 main.js 因此未掛載 app.directive('bookmark-listener', bookmarkListener)
-            // KeywordCoverageResult 呼叫 v-bookmark-listener='job' 發警告
-            // 大量 jobs 輸出的來源是 Vue 的警告機制，不是程式碼中的 console.log
-            global: {
-                directives: {
-                    'bookmark-listener': () => {}
-                },
-            },
-        })
+        },
     })
+}
+
+test('jobs 和 loadText 是否運作正常', async () => {
+    await mountKeywordCoverageResult()
+    let path = await loadText(pathPath)
+    expect(jobs.length).toBe(502)
+    assert(path)
+})
+
+describe('calcuTotalRate', async () => {
+    beforeAll(mountKeywordCoverageResult)
 
     async function assertSearchResultLength(keyword, expected) {
         await wrapper.setProps({ keyword: keyword })
@@ -89,4 +94,33 @@ describe('test', async () => {
         await assertSearchResultLength('python java', 21))
     it('應該找到同時包含 python 和 JavaScript 的工作', async () =>
         await assertSearchResultLength('python JavaScript', 23))
+})
+
+describe('calcuRateForeachJob 和 calcuWeightForeachJob', async () => {
+    beforeAll(mountKeywordCoverageResult)
+
+    // assert(工作有的標籤, 搜尋的關鍵字, 預期比例, 預期比重)
+    async function assert_(jobKeys, search, rate, weight) {
+        let fakeJob = {
+            '網址': '',
+            '工作名稱': '',
+            '工作標籤': '',
+            '關鍵字': jobKeys
+        }
+        await wrapper.setProps({
+            keyword: search,
+            jobs: [fakeJob]
+        })
+        await wrapper.vm.updateResult()
+        fakeJob = wrapper.vm.processedJobs[0]
+        utilsVitest.expectOrNone(fakeJob.skillRate, rate)
+        utilsVitest.expectOrNone(fakeJob.skillWeight, weight)
+    }
+
+    it('正面 負面 ', async () =>
+        await assert_('python,vue,JavaScript', 'python vue -java', 1, 2 / 3))
+    it('正則', async () => {
+        await assert_('python,vue,JavaScript', '/java(?!s)/', undefined, undefined)
+        await assert_('python,vue,JAVA', '/java(?!s)/', 1, 1 / 3)
+    })
 })
