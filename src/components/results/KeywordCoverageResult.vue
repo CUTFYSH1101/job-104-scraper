@@ -84,7 +84,7 @@ export default {
       mustKeywords: [],
       notKeywords: [],
       skillRateDict: {},
-      skillRateNum: { count: 1, total: 1, result: 1.00 },
+      skillRateNum: { count: 0, total: 1, result: 1.00 },
       loading: false,
       loadingStep: '',
       highlightTagsSet: new Set(),
@@ -104,6 +104,8 @@ export default {
 
     getTags,
     async updateResult() {
+      this.reset()  // 歸零
+
       if (!this.jobs) {
         this.processedJobs = []
         return
@@ -203,12 +205,19 @@ export default {
             isHighlight: this.tagInKeywords(tag)
           })))
     },
-    // 解決GC問題
+    // 解決GC問題、歸零
     reset() {
       this.processedJobs = []
       this.skillRateDict = {}
       this.highlightTagsSet = new Set()
       this.filterJobs = []
+      this.isKeywordEmpty = true
+      this.processedKeywords = []
+      this.mustKeywords = []
+      this.notKeywords = []
+      this.skillRateNum = { count: 0, total: 1, result: 1.00 }
+      this.loading = false
+      this.loadingStep = ''
     },
     calcuTotalRate() {
       // python佔6成，表示個別關鍵字佔整體市場多少工作
@@ -256,7 +265,7 @@ export default {
   },
   deactivated() {
     SetJobsAndPoses.deactivated()
-    this.reset()
+    this.reset()  // 解決GC問題
   },
 }
 </script>
