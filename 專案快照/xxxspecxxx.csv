@@ -1,0 +1,126 @@
+﻿"job-href","job","content","types","salary","business_trip"
+"https://www.104.com.tw/job/8jr5m?app_jobsource=m_time4jobs&jobsource=new_map","【台中辦公室】軟韌體工程師 (BU1660)","主要工作內容:
+1. Bring-up switch and develop test tool to ensure function and reliability of all peripherals.
+2. Porting SDK of switch ASIC and develop commands/utilities to verify switch functions/interfaces.
+3. Cooperate with other teams for HW function validation and signal measurement. 
+4. Capable to analysis and solve issue reported by other teams.
+*本職缺有出差需求，能接受短期1~3個月出差情形*(面試詳談)
+次要工作內容:
+1. Capable to provide strategy/method to verify all the hardware components and interfaces.
+2. Verify and analysis issue reported by customer.
+(本職缺可於台中Office工作，面試詳談),必備技能:
+1. Familiar  with C language and script languages(shell script or python). 2. Experience of embedded Linux system development. 3. Knowledge on PCIE/I2C/SMBUS/SPI/SATA interfaces.
+次要技能:
+1. Experience of porting BSP into new hardware platform. 2. Experience of kernel driver development. 3. Network protocol, especially layer 2 and layer 3 protocol.,不拘,不拘","通訊軟體工程師
+、軟體工程師
+、軟體專案管理師","待遇面議","需出差，一年累積時間約三個月以下"
+"https://www.104.com.tw/job/8id2y?app_jobsource=m_time4jobs&jobsource=new_map","【部分遠距外商新創AI品牌】Desktop Application Engineer_ITS_839 (#C++ #QT #跨平台應用程式)","【工作內容】
+
+我們正在尋找一位充滿熱情且具備經驗的桌面應用程式工程師，加入我們充滿創新精神的團隊。您將站在打造下一代資料安全與隱私保護工具的最前線，這項產品將運用尖端的 AI 技術，全面守護使用者的資料安全。
+
+這是一個難得的機會，讓您能主導一款高效能、跨平台桌面應用程式的開發工作。該應用以 Qt 框架為基礎，結合穩健的 C++ 後端邏輯與現代化的 WebView 使用者介面，為全球用戶提供流暢且安全的使用體驗。
+
+【Responsibilities】
+
+1. Design, develop, and maintain a high-performance, cross-platform desktop application for Windows, macOS, and Linux using the C++ and Qt framework.
+2. Collaborate with the UI/UX design team to implement responsive and intuitive user interfaces and interaction logic using WebView technology, ensuring seamless communication between the UI and underlying C++ logic. 
+3. Integrate on-device AI models for document scanning, architecting a robust multi-threaded solution to process files in parallel without blocking the user interface.
+4. Develop a core security feature that, upon explicit user consent, monitors for sensitive information within web browse sessions or network transmissions.
+5. For detected sensitive information, intercept and substitute it with a masked version in real-time during data transfer to ensure user privacy and data security.
+6. Optimize application performance, including startup time, memory consumption, and CPU usage.
+7. Work closely with AI Engineers, Quality Assurance (QA) teams, and Product Managers (PM) to ensure precise feature implementation.
+
+如對職缺有興趣者，可直接投遞履歷至 summer.hsieh@adecco.com
+或官方Line:@260pmatg (記得+@)加入後請提供職缺名稱/聯繫方式,【Minimum qualifications】
+1. Bachelor's or Master's degree in Computer Science, Software Engineering, or a related field.
+2. 3+ years of professional software development experience in C++.
+3. 2+ years of hands-on experience developing commercial applications with the Qt/QML framework, with a strong portfolio of cross-platform development (Windows & macOS).
+4. Experience in system-level programming, such as file system monitoring or API hooking.
+5. Proven experience in low-level Windows systems programming, including developing kernel-mode drivers (WDM/WDF) for Filesystem Minifilters and the Windows Filtering Platform (WFP).
+6. Deep understanding and practical experience with multi-threading, concurrency, and asynchronous programming, especially when integrating external libraries (e.g., calling Python libraries for AI model utilization)
+7. Proficiency with version control systems, especially Git.
+8. Proven ability to independently solve complex technical problems.
+
+
+【Preferred qualifications】
+1. Experience in network programming (e.g., TCP/IP, HTTP/S, Sockets) or developing system-level proxies.
+2. Expertise in advanced process introspection and manipulation techniques, utilizing API hooking frameworks (e.g., Microsoft Detours, MinHook) to implement data lineage tracking and intercept memory operations (memcpy, etc.) for security purposes.
+3. Hands-on experience integrating AI/ML models (e.g., using ONNX Runtime, TensorFlow Lite, or custom C++ libraries).
+4. Familiarity with CI/CD pipelines and tools (e.g., GitLab CI).
+5. Experience with unit testing frameworks (e.g., Google Test, Qt Test) and a commitment to writing clean, maintainable code.
+6. Familiarity with leveraging AI-powered development tools (e.g., AI code assistants, intelligent refactoring tools) to enhance productivity and code quality.,C++、Git、TCP/IP、tensorflow、Linux
+提升專業能力
+提升專業能力,不拘","軟體工程師","待遇面議","部分遠端，前期須進辦公室，後期獨立作業可遠端辦公"
+"https://www.104.com.tw/job/8uisp?app_jobsource=m_time4jobs&jobsource=new_map","電商平台建置與營運專員 E-commerce Platform Development & Operations Specialist","【工作內容｜Responsibilities】（三大階段） 
+一、短期 — 平台建置（起步階段，Shopify 為主） 
+• 規劃並建置公司自有電商平台（以 Shopify 為首選，同時評估其他 SaaS 平台）。 
+• 設計平台架構：商品分類、會員系統、訂單流程、支付與物流整合（含電子發票、超商取貨）。 
+• 評估建置模式（SaaS / 客製化 / 外包），提供利弊分析與操作建議。 
+• 與設計、行銷及技術夥伴協作，推進網站上線時程與素材整合。 
+• 建立初期營運 SOP（商品上架、訂單處理、客服流程、庫存同步）。 
+二、中期 — 平台營運與成長 
+• 管理商品上架、資料維護、圖片與文案品質，確保品牌調性一致。 
+• 規劃商品分類與陳列策略，提升使用者體驗與轉換率。 
+• 與行銷團隊協作執行促銷、檔期、會員方案，確保活動素材與頁面一致。 
+• 監控訂單、物流、客服流程，優化營運效率與客戶體驗。 
+三、中長期 — 優化與國際化擴展 
+• 定期追蹤數據（流量、轉換率、客單價、回購率、退貨率），提出優化建議。 
+• 導入自動化工具或第三方插件（CRM、行銷自動化、訂閱系統），提升營運效率。 
+• 規劃跨境與 APP 化可行性（Shopify-to-App 或原生 APP 方案）。 
+• 預備國際化技術與流程，支持未來品牌走向全球市場。,【必要條件｜Requirements】 
+• 熟悉 Shopify 建置與營運，可獨立完成規劃到上線流程。 
+• 了解電商核心功能：會員、支付、物流、電子發票、商品管理。 
+• 具商品上架與資料管理實務經驗，能維持品牌調性一致。 
+• 基本數據分析能力（Excel、Google Analytics GA4）。 
+• 良好中文溝通；具英文閱讀與商務書信能力佳（會話能力加分）。 
+【加分條件｜Plus】 
+• 熟悉 Shopline、Cyberbiz、EasyStore 等在地電商平台。 
+• 有跨境電商經驗（多語系、多幣別、關稅與國際物流）。 
+• 熟悉 SEO、行銷自動化、UX 或熱點追蹤工具（Hotjar）。 
+• 有 App 導入或 Shopify-to-App 解決方案經驗。 
+ 
+【我們提供｜We Offer】 
+• 0 → 1 的完整電商實戰：從平台架構、營運到國際化策略。 
+• 決策影響力：直接影響品牌數位通路成長與用戶體驗。 
+• 高自主性新創舞台：扁平決策、快速實驗，能累積實務與成就感。 
+• 國際視野：接觸海外品牌、參與跨境銷售規劃。 
+• 明確職涯成長路徑：平台擴張後，有機會晉升電商主管或跨境專案負責人。,不拘,不拘","電商行銷
+、電子商務技術主管
+、網站行銷企劃","待遇面議","無需出差外派"
+"https://www.104.com.tw/job/8u5ce?app_jobsource=m_time4jobs&jobsource=new_map","Project Coordinator","***此職缺需與國外團隊溝通合作，應試者需具備基本英文溝通能力***
+
+
+The Project Coordinator will serve as a liaison between business stakeholders, development teams, and project management. The role focuses on business analysis, with additional responsibilities in project coordination and testing support. Candidates with experience in iGaming, Social Casino, or Gamification are highly preferred.
+
+
+【Roles and Responsibilities】
+
+● Gather, analyze, and document business requirements.
+● Translate business needs into functional specifications and user stories.
+● Collaborate with product owners, stakeholders, and developers to ensure requirements are clearly understood.
+● Maintain requirement traceability throughout the project lifecycle.
+● Track project progress, monitor risks/issues, and maintain project documentation.
+● Facilitate cross-functional communication and follow up on action items.
+● Ensure project deliverables align with timelines, quality standards, and scope.
+● Support UAT (User Acceptance Testing) planning and execution.
+● Develop and maintain test cases based on business requirements.
+● Assist in defect tracking, prioritization, and resolution with QA and development teams.,未填寫,不拘,不拘","軟體專案管理師
+、系統分析師
+、商業分析師","月薪40,000~50,000元","無需出差外派"
+"https://www.104.com.tw/job/8tjpu?app_jobsource=m_time4jobs&jobsource=new_map","Marketing Specialist（PT）","1.數據分析
+2.商務對接
+3.線上行銷,不拘,不拘,不拘","市場調查／市場分析
+、行銷企劃
+、數據分析師／資料分析師","月薪30,000元以上","無需出差外派"
+"https://www.104.com.tw/job/8ueom?app_jobsource=m_time4jobs&jobsource=new_map","軟體工程師","我們正在尋找注重細節、擅長邏輯與數學的軟體工程師。此職缺專注於打造「會生產軟體的基礎設施」，目前聚焦 Cursorrules 與測試案例/框架，提升開發流程的品質、可靠性與速度。我們特別重視深度思考：能從本質拆解問題、建立可驗證假設、明確權衡取捨，並用數據與測試閉環驗證。
+
+工作內容
+
+- 設計、實作並維護可自動化、加速軟體開發的基礎設施系統。
+- 撰寫乾淨、可維護、結構良好的程式碼（跨語言/平台）。
+- 建立穩健的測試框架與自動化驗證流程（單元、整合、端對端）。
+- 以第一性原理拆解需求與問題，制定假設、定義度量指標並評估 trade-offs。
+- 與產品工程合作，確保基礎設施符合實際開發需求。
+- 與語言模型（AI）協作，依據 spec 驅動開發，進行 code review 與測試驗證。
+- 專案自規劃到落地全程負責，確保品質與可追蹤性。,不拘,不拘,不拘","軟體工程師
+、AI工程師","月薪60,000元以上","無需出差外派"

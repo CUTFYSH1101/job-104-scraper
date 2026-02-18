@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3 效能比較：Canvas vs SVG 檢測</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Microsoft JhengHei', sans-serif;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+        .panel {
+            width: 50%;
+            height: 100%;
+            position: relative;
+            border-right: 2px solid #333;
+        }
+        .panel:last-child {
+            border-right: none;
+        }
+        .title {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: bold;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .stats {
+            position: absolute;
+            top: 50px;
+            left: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            font-family: monospace;
+            min-width: 200px;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            cursor: crosshair;
+        }
+        svg {
+            width: 100%;
+            height: 100%;
+            cursor: crosshair;
+        }
+        .node-rect {
+            fill: white;
+            stroke: #666;
+            stroke-width: 1.5px;
+        }
+        .node-rect:hover {
+            fill: #e0f7fa;
+            stroke: #00796b;
+            stroke-width: 2px;
+        }
+        .node-rect.highlighted {
+            fill: #fff9c4;
+            stroke: #f57f17;
+            stroke-width: 2.5px;
+        }
+        .node-text {
+            pointer-events: none;
+            user-select: none;
+            font-size: 11px;
+            fill: #333;
+        }
+        .link {
+            stroke: #999;
+            stroke-opacity: 0.4;
+            fill: none;
+        }
+        .link.highlighted {
+            stroke: #f57f17;
+            stroke-opacity: 1;
+            stroke-width: 3px;
+        }
+        .tooltip {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 2000;
+            display: none;
+            max-width: 300px;
+            word-wrap: break-word;
+        }
+        .loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 左側：Canvas 檢測 -->
+    <div class="panel" id="canvas-panel">
+        <div class="title">方法1：Canvas isPointInStroke 檢測</div>
+        <div class="stats" id="canvas-stats">
+            節點數: <span id="canvas-nodes">0</span><br>
+            連結數: <span id="canvas-links">0</span><br>
+            FPS: <span id="canvas-fps">0</span><br>
+            偵測時間: <span id="canvas-detect">0</span>ms<br>
+            Hover: <span id="canvas-hover">-</span>
+        </div>
+        <canvas id="canvas"></canvas>
+        <svg id="canvas-svg"></svg>
+        <div class="loading">載入中...</div>
+    </div>
+
+    <!-- 右側：SVG DOM 檢測 -->
+    <div class="panel" id="svg-panel">
+        <div class="title">方法2：SVG DOM getBBox 檢測</div>
+        <div class="stats" id="svg-stats">
+            節點數: <span id="svg-nodes">0</span><br>
+            連結數: <span id="svg-links">0</span><br>
+            FPS: <span id="svg-fps">0</span><br>
+            偵測時間: <span id="svg-detect">0</span>ms<br>
+            Hover: <span id="svg-hover">-</span>
+        </div>
+        <svg id="svg"></svg>
+        <div class="loading">載入中...</div>
+    </div>
+</div>
+
+<div class="tooltip" id="tooltip"></div>
+
+<script>
+    class ForceGraph {
+        constructor(containerId, useCanvas = false) {
+            this.containerId = containerId
+            this.useCanvas = useCanvas
+            this.nodes = []
+            this.links = []
+            this.simulation = null
+            this.nodeHeight = 24
+            this.linkDistance = 100
+            this.intermolecularForce = -300
+
+            const panel = document.getElementById(containerId)
+            this.width = panel.clientWidth
+            this.height = panel.clientHeight
+            this.svgSize = { w: this.width, h: this.height }
+
+            if (useCanvas) {
+                this.canvas = document.getElementById('canvas')
+                this.canvas.width = this.width
+                this.canvas.height = this.height
+                this.ctx = this.canvas.getContext('2d')
+                this.svg = d3.select('#canvas-svg')
+            } else {
+                this.svg = d3.select('#svg')
+            }
+
+            // 效能統計
+            this.fps = 0
+            this.lastFrameTime = performance.now()
+            this.frameCount = 0
+            this.detectTime = 0
+            this.hoveredNode = null
+        }
+
+        loadData(csvPath) {
+            return new Promise((resolve, reject) => {
+                Papa.parse(csvPath, {
+                    download: true,
+                    header: true,
+                    skipEmptyLines: true,
+                    complete: (results) => {
+                        this.processData(results.data)
+                        resolve()
+                    },
+                    error: reject
+                })
+            })
+        }
+
+        processData(data) {
+            // 建立節點：工作標籤
+            const tagSet = new Set()
+            const keywordSet = new Set()
+
+            data.forEach(row => {
+                if (row['工作標籤']) tagSet.add(row['工作標籤'])
+                if (row['關鍵字']) {
+                    row['關鍵字'].split(',').forEach(k => {
+                        const keyword = k.trim().replace(/"/g, '')
+                        if (keyword) keywordSet.add(keyword)
+                    })
+                }
+            })
+
+            // 限制節點數量以便觀察
+            const tags = Array.from(tagSet).slice(0, 20)
+            const keywords = Array.from(keywordSet).slice(0, 30)
+
+            this.nodes = [
+                ...tags.map(tag => ({ id: tag, type: 'tag', width: 100 })),
+                ...keywords.map(keyword => ({ id: keyword, type: 'keyword', width: 80 }))
+            ]
+
+            // 建立連結：標籤與關鍵字的關係
+            const linkMap = new Map()
+
+            data.forEach(row => {
+                const tag = row['工作標籤']
+                if (tag && tags.includes(tag)) {
+                    if (row['關鍵字']) {
+                        row['關鍵字'].split(',').forEach(k => {
+                            const keyword = k.trim().replace(/"/g, '')
+                            if (keyword && keywords.includes(keyword)) {
+                                const key = `${tag}-${keyword}`
+                                linkMap.set(key, (linkMap.get(key) || 0) + 1)
+                            }
+                        })
+                    }
+                }
+            })
+
+            this.links = Array.from(linkMap.entries()).map(([key, count]) => {
+                const [source, target] = key.split('-')
+                return { source, target, count }
+            })
+
+            console.log(`Nodes: ${this.nodes.length}, Links: ${this.links.length}`)
+
+            // 更新統計
+            const prefix = this.useCanvas ? 'canvas' : 'svg'
+            document.getElementById(`${prefix}-nodes`).textContent = this.nodes.length
+            document.getElementById(`${prefix}-links`).textContent = this.links.length
+        }
+
+        applySimulation() {
+            // 清除舊的位置
+            this.nodes.forEach(node => {
+                delete node.x
+                delete node.y
+                delete node.vx
+                delete node.vy
+                delete node.fx
+                delete node.fy
+            })
+
+            // 轉回字串
+            if (this.links?.length > 0 && this.links[0].source?.id) {
+                this.links.forEach(link => {
+                    link.source = link.source.id
+                    link.target = link.target.id
+                })
+            }
+
+            this.simulation = d3.forceSimulation(this.nodes)
+                .force('link', d3.forceLink(this.links).id(d => d.id).distance(this.linkDistance))
+                .force('center', d3.forceCenter(this.svgSize.w / 2, this.svgSize.h / 2))
+                .force('charge', d3.forceManyBody().strength(this.intermolecularForce).distanceMax(200))
+                .force('collision', d3.forceCollide().radius(40))
+                .on('tick', () => this.onTick())
+                .alpha(1)
+                .alphaDecay(0.02)
+                .restart()
+        }
+
+        onTick() {
+            if (this.useCanvas) {
+                this.renderCanvas()
+            } else {
+                this.renderSVG()
+            }
+            this.updateFPS()
+        }
+
+        renderCanvas() {
+            const ctx = this.ctx
+            ctx.clearRect(0, 0, this.width, this.height)
+
+            // 繪製連結
+            ctx.strokeStyle = '#999'
+            ctx.lineWidth = 1
+            ctx.globalAlpha = 0.4
+            this.links.forEach(link => {
+                ctx.beginPath()
+                ctx.moveTo(link.source.x, link.source.y)
+                ctx.lineTo(link.target.x, link.target.y)
+                ctx.stroke()
+            })
+            ctx.globalAlpha = 1
+
+            // 繪製節點
+            this.nodes.forEach(node => {
+                // 計算文字寬度
+                ctx.font = '11px Microsoft JhengHei'
+                const textWidth = ctx.measureText(node.id).width
+                node.width = textWidth + 16
+
+                const halfWidth = node.width / 2
+                const halfHeight = this.nodeHeight / 2
+
+                // 繪製矩形
+                ctx.fillStyle = node === this.hoveredNode ? '#fff9c4' : 'white'
+                ctx.strokeStyle = node === this.hoveredNode ? '#f57f17' : '#666'
+                ctx.lineWidth = node === this.hoveredNode ? 2.5 : 1.5
+                ctx.fillRect(node.x - halfWidth, node.y - halfHeight, node.width, this.nodeHeight)
+                ctx.strokeRect(node.x - halfWidth, node.y - halfHeight, node.width, this.nodeHeight)
+
+                // 繪製文字
+                ctx.fillStyle = '#333'
+                ctx.textAlign = 'center'
+                ctx.textBaseline = 'middle'
+                ctx.fillText(node.id, node.x, node.y)
+            })
+        }
+
+        renderSVG() {
+            if (!this.linkSelection) {
+                this.linkSelection = this.svg.append('g')
+                    .attr('class', 'links')
+                    .selectAll('line')
+
+                this.nodeSelection = this.svg.append('g')
+                    .attr('class', 'nodes')
+                    .selectAll('g')
+            }
+
+            // 更新連結
+            this.linkSelection = this.linkSelection
+                .data(this.links, d => `${d.source.id}-${d.target.id}`)
+                .join('line')
+                .attr('class', 'link')
+                .attr('x1', d => d.source.x)
+                .attr('y1', d => d.source.y)
+                .attr('x2', d => d.target.x)
+                .attr('y2', d => d.target.y)
+
+            // 更新節點
+            this.nodeSelection = this.nodeSelection
+                .data(this.nodes, d => d.id)
+                .join(
+                    enter => {
+                        const g = enter.append('g')
+
+                        g.append('text')
+                            .attr('class', 'node-text')
+                            .attr('text-anchor', 'middle')
+                            .attr('dominant-baseline', 'middle')
+                            .text(d => d.id)
+                            .each(function(d) {
+                                d.width = this.getBBox().width + 16
+                            })
+
+                        g.append('rect')
+                            .attr('class', 'node-rect')
+                            .attr('width', d => d.width)
+                            .attr('height', this.nodeHeight)
+                            .attr('x', d => -d.width / 2)
+                            .attr('y', -this.nodeHeight / 2)
+                            .lower()
+                            .on('mouseenter', (event, d) => this.onNodeHover(d, event))
+                            .on('mouseleave', () => this.onNodeLeave())
+
+                        return g
+                    },
+                    update => update
+                )
+                .attr('transform', d => `translate(${d.x},${d.y})`)
+        }
+
+        setupCanvasDetection() {
+            this.canvas.addEventListener('mousemove', e => {
+                const startTime = performance.now()
+
+                const rect = this.canvas.getBoundingClientRect()
+                const x = e.clientX - rect.left
+                const y = e.clientY - rect.top
+
+                // 偵測節點（矩形）
+                let clicked = this.nodes.find(d =>
+                    x >= d.x - d.width / 2 &&
+                    x <= d.x + d.width / 2 &&
+                    y >= d.y - this.nodeHeight / 2 &&
+                    y <= d.y + this.nodeHeight / 2
+                )
+
+                // 偵測連結（線段）
+                if (!clicked) {
+                    clicked = this.links.find(d => {
+                        const path = new Path2D()
+                        path.moveTo(d.source.x, d.source.y)
+                        path.lineTo(d.target.x, d.target.y)
+                        this.ctx.lineWidth = 5 // 增加檢測範圍
+                        return this.ctx.isPointInStroke(path, x, y)
+                    })
+                }
+
+                this.detectTime = (performance.now() - startTime).toFixed(3)
+                document.getElementById('canvas-detect').textContent = this.detectTime
+
+                if (clicked !== this.hoveredNode) {
+                    this.hoveredNode = clicked
+                    if (clicked) {
+                        const label = clicked.id || `${clicked.source.id} → ${clicked.target.id}`
+                        document.getElementById('canvas-hover').textContent = label
+                        this.showTooltip(e.pageX, e.pageY, label)
+                    } else {
+                        document.getElementById('canvas-hover').textContent = '-'
+                        this.hideTooltip()
+                    }
+                }
+            })
+
+            this.canvas.addEventListener('mouseleave', () => {
+                this.hoveredNode = null
+                this.hideTooltip()
+            })
+        }
+
+        setupSVGDetection() {
+            const svgElement = document.getElementById('svg')
+            svgElement.addEventListener('mousemove', e => {
+                const startTime = performance.now()
+
+                // SVG 會自動處理 hover 事件，這裡只記錄檢測時間
+                this.detectTime = (performance.now() - startTime).toFixed(3)
+                document.getElementById('svg-detect').textContent = this.detectTime
+            })
+        }
+
+        onNodeHover(node, event) {
+            this.hoveredNode = node
+            document.getElementById('svg-hover').textContent = node.id
+            this.showTooltip(event.pageX, event.pageY, node.id)
+        }
+
+        onNodeLeave() {
+            this.hoveredNode = null
+            document.getElementById('svg-hover').textContent = '-'
+            this.hideTooltip()
+        }
+
+        showTooltip(x, y, text) {
+            const tooltip = document.getElementById('tooltip')
+            tooltip.textContent = text
+            tooltip.style.display = 'block'
+            tooltip.style.left = (x + 10) + 'px'
+            tooltip.style.top = (y + 10) + 'px'
+        }
+
+        hideTooltip() {
+            document.getElementById('tooltip').style.display = 'none'
+        }
+
+        updateFPS() {
+            this.frameCount++
+            const now = performance.now()
+            const elapsed = now - this.lastFrameTime
+
+            if (elapsed >= 1000) {
+                this.fps = Math.round(this.frameCount * 1000 / elapsed)
+                const prefix = this.useCanvas ? 'canvas' : 'svg'
+                document.getElementById(`${prefix}-fps`).textContent = this.fps
+                this.frameCount = 0
+                this.lastFrameTime = now
+            }
+        }
+
+        init() {
+            this.applySimulation()
+            if (this.useCanvas) {
+                this.setupCanvasDetection()
+            } else {
+                this.setupSVGDetection()
+            }
+        }
+    }
+
+    // 初始化
+    async function initialize() {
+        try {
+            const canvasGraph = new ForceGraph('canvas-panel', true)
+            const svgGraph = new ForceGraph('svg-panel', false)
+
+            await canvasGraph.loadData('6.8公里內 所有工程師.csv')
+            await svgGraph.loadData('6.8公里內 所有工程師.csv')
+
+            // 移除載入提示
+            document.querySelectorAll('.loading').forEach(el => el.remove())
+
+            canvasGraph.init()
+            svgGraph.init()
+
+            console.log('✅ 兩個圖表初始化完成')
+        } catch (error) {
+            console.error('❌ 初始化失敗:', error)
+            alert('無法載入 6.8公里內 所有工程師.csv，請確認檔案在相同目錄下')
+        }
+    }
+
+    initialize()
+</script>
+</body>
+</html>

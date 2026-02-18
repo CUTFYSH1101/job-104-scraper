@@ -1,0 +1,112 @@
+/* 全域重置與基礎設定 */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
+}
+
+body {
+  /* CSS Variables */
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --color-gray-100: oklch(96.7% 0.003 264.542);
+  --color-gray-200: oklch(92.8% 0.006 264.531);
+  --color-stone-300: oklch(86.9% 0.005 56.366);
+  --color-stone-700: oklch(37.4% 0.01 67.558);
+  --color-white: #fff;
+  --spacing: 0.25rem;
+  --font-weight-bold: 700;
+  --ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --animate-pulse: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --default-transition-duration: 150ms;
+  --default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  --default-font-family: var(--font-sans);
+  --default-mono-font-family: var(--font-mono);
+  --fa-font-brands: normal 400 1em/1 "Font Awesome 6 Brands";
+  --fa-font-regular: normal 400 1em/1 "Font Awesome 6 Free";
+  --fa-font-solid: normal 900 1em/1 "Font Awesome 6 Free";
+  --drag-orange: rgba(255, 165, 0, 0.4);
+  --vueuse-safe-area-top: env(safe-area-inset-top, 0px);
+  --vueuse-safe-area-right: env(safe-area-inset-right, 0px);
+  --vueuse-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --vueuse-safe-area-left: env(safe-area-inset-left, 0px);
+
+  /* 字體設定 */
+  line-height: 1.5;
+  font-family: var(--default-font-family);
+  font-feature-settings: var(--default-font-feature-settings, normal);
+  font-variation-settings: var(--default-font-variation-settings, normal);
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+  tab-size: 4;
+  word-wrap: break-word;
+}
+
+/* Layout 層級 */
+#app {
+  /* 繼承 body 的所有變數 */
+}
+
+.split-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.site {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-columns: minmax(0, 1fr);
+  flex: 1;
+  overflow: hidden;
+}
+
+main {
+  position: relative;
+  margin-top: calc(var(--spacing) * 3);
+  overflow-y: auto;
+  padding: calc(var(--spacing) * 3);
+}
+
+/* Component 層級 */
+.block {
+  display: block;
+  margin-bottom: 20px;
+  background-color: white;
+  padding: 20px;
+}
+
+.job-search-container {
+  /* 無額外樣式，繼承 block */
+}
+
+.job {
+  width: 400px;
+  max-width: 100%;
+  border: solid 1px #eee;
+  padding: 20px;
+  border-radius: 5px;
+  margin: 0 10px 10px 0;
+  display: inline-block;
+  vertical-align: top;
+  font-weight: 600;
+  opacity: 0.9;
+  position: relative;
+  background-color: #ffeedf;
+}
+
+.keys {
+  font-weight: 600;
+  display: flex;
+  width: fit-content;
+  height: fit-content;
+  position: absolute;
+  right: 0.25rem;
+  max-width: calc(100% - 0.5rem);
+  flex-direction: row;
+  bottom: 0.25rem;
+}
