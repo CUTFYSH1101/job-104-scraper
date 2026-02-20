@@ -117,6 +117,16 @@ describe('calcuRateForeachJob 和 calcuWeightForeachJob', async () => {
         utilsVitest.expectOrNone(fakeJob.skillWeight, weight)
     }
 
+    it('正面', async () => {
+        await assert_('python,vue,JavaScript', 'python', 1, 1 / 3)
+        await assert_('python,vue,JavaScript', 'python javascript', 1, 2 / 3)
+        await assert_('python,vue,JavaScript', 'micropython', undefined, undefined)
+        await assert_('python,vue,JavaScript', 'python micropython', 1 / 2, 1 / 3)
+        await assert_('python,vue,node.js', 'node', 1, 1 / 3)  // node 等同於 node.js
+        await assert_('python,vue,node.js', 'node.js', 1, 1 / 3)
+        await assert_('python,vue,node.js', 'nodejs', undefined, undefined)
+        await assert_('python,vue,前端', '前端', 1, 1 / 3)
+    })
     it('正面 負面 ', async () =>
         await assert_('python,vue,JavaScript', 'python vue -java', 1, 2 / 3))
     it('正則', async () => {
