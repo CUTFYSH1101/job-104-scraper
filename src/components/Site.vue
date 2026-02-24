@@ -1,7 +1,7 @@
 <template>
   <div class='site'>
     <header class='pl-5 pr-5 pt-3 sticky top-0 bg-white z-40'>
-      <SearchPanel @change='changeKeyword'/>
+      <SearchPanel @keyword-change='changeKeyword'/>
       <hr width='100%'>
     </header>
     <!-- 只在該範圍顯示滾動條，上級須設定為overflow-hidden/overflow-y-hidden -->

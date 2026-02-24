@@ -32,7 +32,7 @@ export default {
     return {
       localKeyword: '',
       historyKeywords: [],
-      emitChange: debounce(val => this.$emit('change', val), 150)
+      emitChange: debounce(val => this.$emit('keyword-change', val), 150)
     }
   },
   methods: {
