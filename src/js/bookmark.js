@@ -56,23 +56,31 @@ function stopListening() {
 if (getLocalStorage('bookmark') !== null)
   bookmark.value = getLocalStorage('bookmark')
 
+let mounted = (el, binding) => {
+  const job = binding.value
+
+  // 定義處理函式並掛載到 el 上以便移除
+  el._handleEnter = () => startListening(job)
+  el._handleLeave = () => stopListening()
+
+  el.addEventListener('mouseenter', el._handleEnter)
+  el.addEventListener('mouseleave', el._handleLeave)
+  el.addEventListener('touchstart', el._handleEnter, { passive: true })
+}
+let unmounted = el => {
+  el.removeEventListener('mouseenter', el._handleEnter)
+  el.removeEventListener('mouseleave', el._handleLeave)
+  el.removeEventListener('touchstart', el._handleEnter)
+}
+
+// 掛載在main.js上
 export const bookmarkListener = {
-  mounted(el, binding) {
-    const job = binding.value
-
-    // 定義處理函式並掛載到 el 上以便移除
-    el._handleEnter = () => startListening(job)
-    el._handleLeave = () => stopListening()
-
-    el.addEventListener('mouseenter', el._handleEnter)
-    el.addEventListener('mouseleave', el._handleLeave)
-    el.addEventListener('touchstart', el._handleEnter, { passive: true })
+  mounted,
+  updated(el, binding) {
+    unmounted(el)
+    mounted(el, binding)
   },
-  unmounted(el) {
-    el.removeEventListener('mouseenter', el._handleEnter)
-    el.removeEventListener('mouseleave', el._handleLeave)
-    el.removeEventListener('touchstart', el._handleEnter)
-  }
+  unmounted
 }
 
 export default { getBookmark, getColorMap, bookmarkListener }
