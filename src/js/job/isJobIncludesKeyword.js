@@ -96,9 +96,16 @@ export function parseKeyword(keyword) {
   if (!cleaned) return {}
 
   let all = splitBySpace(cleaned)
+  let parseOrGroup = word => {
+    if (word.includes('|') && !word.startsWith('/')) {
+      let parts = word.split('|').filter(w => w)
+      return parts.length > 1 ? parts : word
+    }
+    return word
+  }
   return {
     all: all,
-    must: all.filter(utils.notStartsWithDash),
+    must: all.filter(utils.notStartsWithDash).map(parseOrGroup),
     not: all.filter(utils.isStartsWithDash).map(utils.dumpFirst)
   }
 }
