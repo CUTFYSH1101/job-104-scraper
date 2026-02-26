@@ -11,7 +11,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "format": "node format-code.js",
-    "deploy": "npm run build && gh-pages -d dist",
+    "deploy": "npm run build && gh-pages -d dist -f",
     "deps": "dependency-cruiser src -T dot | dot -T svg > dependencies.svg",
     "deps:html": "dependency-cruiser src -T html > dependencies.html",
     "test": "vitest",
