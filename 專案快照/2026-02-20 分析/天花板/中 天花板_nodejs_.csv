@@ -1,0 +1,64 @@
+﻿job-href,job,content,types,salary,business_trip,date,position_text,position_href,company
+https://www.104.com.tw/job/75ofx?jobsource=new_map&app_jobsource=m_time4jobs,資深全端工程師,"1. 後端系統開發與整合
+2. 熟悉任一程式語言 (NodeJS, C#, GO等)
+3. 熟悉前後端分離開發模式
+4. 具Docker 或 K8S 工作經驗
+5. 後端工作經驗兩年以上
+6. 具備微服務開發經驗者佳,不拘,C#、Go、JavaScript、Node.js、VueJS
+提升專業能力
+提升專業能力,軟體工程系統開發、軟體程式設計、網路程式設計","Internet程式設計師
+、軟體工程師
+、電玩程式設計師","月薪55,000~90,000元",無需出差外派,2025/9/9,,,
+https://www.104.com.tw/job/8ouu0?jobsource=new_map&app_jobsource=m_time4jobs,Senior Backend Engineer 資深後端工程師（Python）台中,"我們正在開發一套基於 Home Assistant/KNX/Homekit核心的 MAX'Is 平台，後端採用 Python ，部署於 AWS 雲端，整合 Flutter 前端 App。將參與整個後端架構設計與實作，打造一套穩定、模組化且易於擴充的 AioT 控制平台。
+
+主要工作內容包含：
+1.與 Home Assistant 平台深度整合建構服務器（透過 REST API / WebSocket / MQTT）。
+2.使用xKNX建構服務器，可跟KNX設備整合。
+3.需整合HAP-python（公司有加入Apple MFi 計畫）
+4.整合 MQTT/ REST API訊息服務與裝置事件推送機制。
+5.資料庫開發設計（PostgreSQL / MySQL / DynamoDB 任一種）
+6.部署與監控服務於 AWS（EC2 / ECS / S3 ...等）。
+7.撰寫API技術開發文件（ 使用Apidog ）。
+
+必備技能：
+• 熟悉 Python 3.x，具備使用 FastAPI / Flask 等框架實作 API 經驗
+• 熟悉 RESTful API 設計與實作，具備 JWT / OAuth2 認證實作經驗
+• 熟悉GitLab 等版本控制平台
+• 熟悉AWS
+• 具備 Linux 環境下部署與網路設定能力
+
+未來上班地點：台中市西屯區市政北七路98號30樓
+備註：需要有5年以上後端開發經驗和iOT產業經驗才錄取,不拘,Python、PostgreSQL、AWS、MySQL、Git、Jenkins、Node.js、Linux、IoT
+提升專業能力
+提升專業能力,資料庫程式設計、系統架構規劃",後端工程師,"月薪70,000~150,000元",無需出差外派,2025/9/9,,,
+https://www.104.com.tw/job/8vs75?app_jobsource=m_time4jobs&jobsource=new_map,資深軟體工程師-線上面試,"工作內容
+1.對系統架構有深入研究
+2.後端系統開發，包含 API 與後端各項服務，與外部系統介接 
+3.開發與維護資料庫資料 
+4.分析各項資料用來除錯，產生相關報表 
+5.參與部分管理系統的介面開發
+6.即時處理線上問題 
+7.與各個團隊合作處理需求與問題，並主動回報進度與狀況
+
+*必要條件
+1. 1-3年 Node.js 開發經驗，或相關的後端服務開發與維護經驗 MySQL 
+    或其他關聯式資料庫(RDBMS)使用經驗 
+2. 第三方服務與模組使用與介接經驗
+3. 了解版本控制的概念並有 Git 使用經驗,不拘,不拘,不拘","軟體工程師
+、Internet程式設計師","月薪70,000元以上",無需出差外派,2025/12/16,台中市北屯區文心路三段,"https://maps.google.com.tw/?q=%E7%92%9F%E8%B6%8A%E7%A7%91%E6%8A%80%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8@24.1735701,120.6692864&z=17",璟越科技有限公司
+https://www.104.com.tw/job/8vvd8?app_jobsource=m_time4jobs&jobsource=new_map,#遠端工作 #福利香 #制度完善 資深前端軟體工程師,"經驗要求:5年以上前端開發經驗。
+
+1.核心語言:精通 HTML5,CS3,JavaScript(ES6+),並具備深厚的 TypeScript 實
+戰經驗。
+2.框架技能:熟悉至少一種現代前端框架,如[React/Vue/Angular)及其生態系
+(例如:React需要熟悉 Hooks,Redux/Zustand;Vue 需要熟悉 Vue 2/3,Vuex/Pinia, Composition API)
+3.CSS方案:熟悉現代CSS開發方式(如Tailwind CSS, Sass, Styled-compomponents,
+CSS Modules ) ㆍ
+4.構建工具:熟悉Webpack,Vite 或 Rollup 等打包工具的配置與優化。
+5.瀏覽器原理:深刻理解瀏覽器運作原理,包括Cntical Rendering Path(關鍵渲染
+路徑)、Event Loop、Microtasks/Macrotasks 執行順序
+6.優化工具:精通 Lighthouse,WebPageTest, Rollup Visualizer 및 Webpack Bundle
+Analyzer 等效能分析工具。,不拘,HTML、JavaScript、CSS、VueJS、Sass、jQuery、Git、Node.js、ReactJS、Angular
+提升專業能力
+提升專業能力,不拘","軟體工程師
+、前端工程師","月薪85,000元以上取得專屬你的薪水報告","部分遠端，新人訓練要進辦公室,通過新訓後可遠端,每二周開一次實體會議",2026/1/17,台中市北屯區,"https://maps.google.com.tw/?q=%E6%9D%B0%E5%AE%9A%E7%AE%A1%E7%90%86%E9%A1%A7%E5%95%8F%E6%9C%89%E9%99%90%E5%85%AC%E5%8F%B8@24.1815237,120.6861019&z=17",杰定管理顧問有限公司
