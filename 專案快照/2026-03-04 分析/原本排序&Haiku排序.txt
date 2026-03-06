@@ -1,0 +1,31 @@
+原最高
+98 vue
+87 unity遊戲電玩
+78 php
+75 android
+69 nodejs
+
+原最低
+22 golang
+59 django
+61 java
+62 react
+68 c#
+
+
+---
+
+
+最高
+63 unity遊戲電玩●
+48 php●
+46 vue●
+41 android●
+29 react
+
+最低
+4 golang●
+15 c#
+17 java●
+20 django
+20 nodejs
