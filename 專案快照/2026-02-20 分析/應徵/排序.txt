@@ -1,0 +1,17 @@
+原排序：
+105 java
+95 vue
+70 遊戲
+68 react
+62 php
+50 node.js
+49 go
+43 .net
+41 python
+
+AI整理過後排序：
+55 遊戲●
+41 vue●
+30 java●
+28 react
+25 php
