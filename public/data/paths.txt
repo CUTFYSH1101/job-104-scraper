@@ -1,3 +1,12 @@
+./data\10.6公里內 所有工程師\2026-03-09\analysis_results\keywords.csv
+./data\10.6公里內 所有工程師\2026-03-09\claude\10.6公里內 所有工程師.csv
+./data\10.6公里內 所有工程師\2026-03-09\processing\10.6公里內 所有工程師.csv
+./data\10.6公里內 所有工程師\2026-03-10\analysis_results\keywords.csv
+./data\10.6公里內 所有工程師\2026-03-10\claude\10.6公里內 所有工程師.csv
+./data\10.6公里內 所有工程師\2026-03-10\processing\10.6公里內 所有工程師.csv
+./data\10.6公里內 所有工程師\9999-99-99\analysis_results\keywords.csv
+./data\10.6公里內 所有工程師\9999-99-99\claude\merged.csv
+./data\10.6公里內 所有工程師\9999-99-99\processing\merged.csv
 ./data\7.5公里內 所有工程師\2025-04-11\analysis_results\keywords.csv
 ./data\7.5公里內 所有工程師\2025-04-11\claude\6.8公里內 所有工程師.csv
 ./data\7.5公里內 所有工程師\2025-04-11\processing\6.8公里內 所有工程師.csv
@@ -55,6 +64,9 @@
 ./data\9.6公里內 所有工程師\2026-03-06\analysis_results\keywords.csv
 ./data\9.6公里內 所有工程師\2026-03-06\claude\9.6公里內 所有工程師.csv
 ./data\9.6公里內 所有工程師\2026-03-06\processing\9.6公里內 所有工程師.csv
+./data\9.6公里內 所有工程師\2026-03-09\analysis_results\keywords.csv
+./data\9.6公里內 所有工程師\2026-03-09\claude\9.6公里內 所有工程師.csv
+./data\9.6公里內 所有工程師\2026-03-09\processing\9.6公里內 所有工程師.csv
 ./data\9.6公里內 所有工程師\9999-99-99\analysis_results\keywords.csv
 ./data\9.6公里內 所有工程師\9999-99-99\claude\merged.csv
 ./data\9.6公里內 所有工程師\9999-99-99\processing\merged.csv
