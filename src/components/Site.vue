@@ -27,6 +27,11 @@
                 @click="activeTab='bookmark'">
           <i class='fas fa-star h-4 w-4'></i> 書籤清單
         </button>
+        <button class='tab'
+                :class="{active: activeTab==='scrape'}"
+                @click="activeTab='scrape'">
+          <i class='fas fa-star h-4 w-4'></i> 爬取工具
+        </button>
       </div>
       <hr class='border-b-4 border-gray-100'>
       <div class='block'>
@@ -45,6 +50,7 @@ import SearchPanel from '@/components/SearchPanel.vue'
 import JobSearchResult from '@/components/results/JobSearchResult.vue'
 import KeywordCoverageResult from '@/components/results/KeywordCoverageResult.vue'
 import SkillRecommendResult from '@/components/results/SkillRecommendResult.vue'
+import ScrapeResult from '@/components/results/ScrapeResult.vue'
 import BookmarkResult from '@/components/results/BookmarkResult.vue'
 import { jobs } from '@/js/job/jobsLoader.js'
 import JobAtSiteCenter from '@/js/mobile/jobAtSiteCenter.js'
@@ -58,11 +64,12 @@ export default {
     KeywordCoverageResult,
     SkillRecommendResult,
     BookmarkResult,
+    ScrapeResult,
   },
   data() {
     return {
       keyword: '',
-      tabs: ['jobSearch', 'keywordCoverage', 'skillRecommend', 'bookmark'],
+      tabs: ['jobSearch', 'keywordCoverage', 'skillRecommend', 'bookmark', 'scrape'],
       activeTab: 'jobSearch',
       relativeMainHeight: 0,
     }
