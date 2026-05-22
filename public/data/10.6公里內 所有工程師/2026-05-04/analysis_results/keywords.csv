@@ -27,7 +27,6 @@ c#
 c++
 cad
 ci/cd
-cloudwatch
 cmd
 cocos
 code review
@@ -35,7 +34,6 @@ commit
 confluence
 container
 cookie
-csrf
 css
 data mining
 database
@@ -73,7 +71,6 @@ http
 https
 iis
 illustrator
-injection
 internet of things
 ios
 iot
@@ -93,10 +90,8 @@ library
 linux
 list
 llm
-load balancer
 mac
 machine learning
-mariadb
 matlab
 memcached
 microservices
@@ -127,7 +122,6 @@ postman
 power bi
 powerpoint
 puppeteer
-push
 pwa
 python
 pytorch
@@ -188,7 +182,6 @@ word
 wordpress
 wpf
 xml
-xss
 介面
 介面設計
 代理
@@ -222,7 +215,6 @@ xss
 憑證
 抽象
 授權
-推送
 提交
 搜尋
 擴展性
@@ -233,7 +225,6 @@ xss
 日誌
 最佳化
 框架
-標籤
 模型
 模擬
 模組
@@ -255,7 +246,6 @@ xss
 虛擬化
 認證
 資料庫
-資料結構
 資料視覺化
 軟體
 迭代
